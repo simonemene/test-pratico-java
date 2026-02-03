@@ -42,7 +42,7 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(utenteSalvato.codiceFiscale()).isEqualTo(utenteSalvatoEntity.getCodiceFiscale());
 	}
 
-	@Sql(scripts = "sql/service/clienti/insert-utenti.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+	@Sql(scripts = "classpath:sql/service/clienti/insert-utenti.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
 	 ,config = @SqlConfig(transactionMode = SqlConfig.TransactionMode.INFERRED))
 	@Test
 	public void prendiTuttiGliUtenti()
