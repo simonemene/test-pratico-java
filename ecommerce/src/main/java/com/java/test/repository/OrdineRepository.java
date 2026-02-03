@@ -1,4 +1,7 @@
 package com.java.test.repository;
 
-public interface OrdineRepository {
+import com.java.test.entity.OrdineEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrdineRepository extends JpaRepository<OrdineEntity,Long> {
 }
