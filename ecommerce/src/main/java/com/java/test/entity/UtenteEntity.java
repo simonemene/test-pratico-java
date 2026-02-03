@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
-
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -32,6 +32,9 @@ public class UtenteEntity {
 	@Column(unique = true,nullable = false)
 	private String email;
 
+	@Column(name = "UTENTE_ID",unique = true,nullable = false)
+	private String utenteId;
+
 	private String nome;
 
 	private String cognome;
@@ -41,6 +44,12 @@ public class UtenteEntity {
 
 	@OneToMany(mappedBy = "utente",fetch = FetchType.LAZY)
 	private Set<OrdineEntity> ordine = new HashSet<>();
+
+	@PrePersist
+	public void persist()
+	{
+		this.utenteId = UUID.randomUUID().toString();
+	}
 
 	public void aggiungiOrdine(OrdineEntity ordineDaAggiungere)
 	{

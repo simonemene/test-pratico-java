@@ -11,7 +11,7 @@ public class UtenteMapper {
 
 	public UtenteDto toDto(UtenteEntity entity)
 	{
-		return new UtenteDto(entity.getNome(),entity.getCognome(),entity.getEmail(),entity.getCodiceFiscale());
+		return new UtenteDto(entity.getNome(),entity.getCognome(),entity.getEmail(),entity.getCodiceFiscale(),entity.getUtenteId());
 	}
 
 	public UtenteEntity toEntity(UtenteDto dto)
