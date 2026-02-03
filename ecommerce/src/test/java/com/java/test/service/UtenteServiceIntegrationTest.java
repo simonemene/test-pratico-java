@@ -1,6 +1,7 @@
 package com.java.test.service;
 
 import com.java.test.TestjavaApplicationTests;
+import com.java.test.dto.UtenteListResponseDto;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
 import com.java.test.entity.UtenteEntity;
@@ -12,8 +13,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional
 @AutoConfigureTestDatabase
@@ -50,8 +49,13 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 	{
 		//given
 		//when
-		List<UtenteResponseDto> utenti = service.prendiListaClienti();
+		UtenteListResponseDto utenti = service.prendiListaClienti();
 		//then
-		Assertions.assertThat(utenti.size()).isEqualTo(3);
+		Assertions.assertThat(utenti.utenti().size()).isEqualTo(3);
+		UtenteResponseDto utentePaoloRossi = utenti.utenti().stream().filter(utente->utente.email().equals("prova@prova.com")).findFirst().get();
+		Assertions.assertThat(utentePaoloRossi.nome()).isEqualTo("Paolo");
+		Assertions.assertThat(utentePaoloRossi.cognome()).isEqualTo("Rossi");
+		Assertions.assertThat(utentePaoloRossi.codiceFiscale()).isEqualTo("3454RFDFGBNHJUY3");
+		Assertions.assertThat(utentePaoloRossi.utenteId()).isEqualTo("dffgdfgfgbfgbgbgbfgb454534");
 	}
 }

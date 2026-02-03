@@ -1,5 +1,6 @@
 package com.java.test.controller;
 
+import com.java.test.dto.UtenteListResponseDto;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
 import com.java.test.service.IUtenteService;
@@ -34,5 +35,11 @@ public class UtenteController {
 	public ResponseEntity<UtenteResponseDto> prendiInformazioniUtente(@PathVariable String id)
 	{
 		return null;
+	}
+
+	@GetMapping
+	public ResponseEntity<UtenteListResponseDto> prendiUtenti()
+	{
+		return ResponseEntity.ok(service.prendiListaClienti());
 	}
 }

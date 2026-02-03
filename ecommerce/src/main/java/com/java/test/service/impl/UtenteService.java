@@ -1,6 +1,7 @@
 package com.java.test.service.impl;
 
 import com.java.test.annotation.ReadOnlyTransactional;
+import com.java.test.dto.UtenteListResponseDto;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
 import com.java.test.entity.UtenteEntity;
@@ -14,8 +15,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -47,7 +46,7 @@ public class UtenteService implements IUtenteService {
 
 	@ReadOnlyTransactional
 	@Override
-	public List<UtenteResponseDto> prendiListaClienti() {
-		return mapper.toListaDto(repository.findAll());
+	public UtenteListResponseDto prendiListaClienti() {
+		return new UtenteListResponseDto(mapper.toListaDto(repository.findAll()));
 	}
 }
