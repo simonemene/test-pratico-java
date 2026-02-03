@@ -8,6 +8,7 @@ import com.java.test.mapper.UtenteMapper;
 import com.java.test.repository.UtenteRepository;
 import com.java.test.service.IUtenteService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UtenteService implements IUtenteService {
@@ -32,9 +34,11 @@ public class UtenteService implements IUtenteService {
 			utenteSalvato = repository.save(utenteDaSalvare);
 		}catch(DataIntegrityViolationException e)
 		{
-			throw new ApplicationException("L'utente esiste già",e);
+			log.error("Vincolo violato nella creazione utente {}",e.getMessage(),e);
+			throw new ApplicationException("Vincolo violato nella creazione utente",e);
 		}catch(DataAccessException e)
 		{
+			log.error("Errore generico crezione utente {}",e.getMessage(),e);
 			throw new ApplicationException("Errore generico nella crezione utente",e);
 		}
 		return mapper.toDto(utenteSalvato);
