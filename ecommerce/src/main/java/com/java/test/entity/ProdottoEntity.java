@@ -20,10 +20,12 @@ public class ProdottoEntity {
 
 	}
 
-	public ProdottoEntity(BigDecimal prezzo)
+	public ProdottoEntity(BigDecimal prezzo,String nome)
 	{
 		this.prezzo = prezzo;
+	    this.nome = nome;
 	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +33,14 @@ public class ProdottoEntity {
 
 	@Setter(AccessLevel.NONE)
 	@Column(name = "ID_PUBBLICO_PRODOTTO",nullable = false,unique = true,length = 36,updatable = false)
-	private String productId;
+		private String productId;
 
 	@OneToMany(mappedBy = "prodotto", fetch = FetchType.LAZY)
 	private Set<StockEntity> stock = new HashSet<>();
 
 	private BigDecimal prezzo;
+
+	private String nome;
 
 	@PrePersist
 	private void persist()
