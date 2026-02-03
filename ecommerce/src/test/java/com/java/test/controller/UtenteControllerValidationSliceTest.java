@@ -47,4 +47,22 @@ public class UtenteControllerValidationSliceTest {
 						.value("La e-mail non deve essere vuota"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.codiceFiscale").value("Il codice fiscale deve essere lungo 16"));
 	}
+
+	@Test
+	public void controlloValidazioneUtenteRequestEmailErroreFormato() throws Exception {
+		//given
+		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova","345TGFDCFGTR5462");
+		//when
+		//then
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/utente").content(
+						objectMapper.writeValueAsString(request)
+				).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Errore nella validazione dei campi"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("Uno o più campi sono invalidi"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.instance").value("/api/utente"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.length()").value(1))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.email")
+						.value("La mail non rispetta i parametri"));
+	}
 }
