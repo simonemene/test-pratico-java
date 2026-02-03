@@ -11,18 +11,12 @@ public class UtenteMapper {
 
 	public UtenteDto toDto(UtenteEntity entity)
 	{
-		return new UtenteDto(entity.getNome(),entity.getCognome(),entity.getEta(),entity.getEmail(),entity.getCodiceFiscale());
+		return new UtenteDto(entity.getNome(),entity.getCognome(),entity.getEmail(),entity.getCodiceFiscale());
 	}
 
 	public UtenteEntity toEntity(UtenteDto dto)
 	{
-		return UtenteEntity.builder()
-				.email(dto.email())
-				.codiceFiscale(dto.codiceFiscale())
-				.nome(dto.nome())
-				.cognome(dto.cognome())
-				.eta(dto.eta())
-				.build();
+		return new UtenteEntity(dto.email(),dto.nome(),dto.cognome(),dto.codiceFiscale());
 	}
 
 	public List<UtenteDto> toListaDto(List<UtenteEntity> utenti)
