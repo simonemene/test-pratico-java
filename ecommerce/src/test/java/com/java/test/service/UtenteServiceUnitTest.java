@@ -1,7 +1,6 @@
 package com.java.test.service;
 
-import ch.qos.logback.core.ConsoleAppender;
-import com.java.test.dto.UtenteDto;
+import com.java.test.dto.UtenteRequestDto;
 import com.java.test.entity.UtenteEntity;
 import com.java.test.exception.ApplicationException;
 import com.java.test.mapper.UtenteMapper;
@@ -46,7 +45,7 @@ public class UtenteServiceUnitTest {
 	public void creazioneUtenteErrore(CapturedOutput capturedOutput)
 	{
 		//given
-		UtenteDto utente = new UtenteDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S");
+		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S");
 		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S");
 		Mockito.when(mapper.toEntity(utente)).thenReturn(entity);
 		Mockito.when(repository.save(Mockito.any(UtenteEntity.class))).thenThrow(new DataIntegrityViolationException("Vincolo violato nella creazione utente"));
@@ -64,7 +63,7 @@ public class UtenteServiceUnitTest {
 	public void creazioneUtenteErroreGenerico(CapturedOutput capturedOutput)
 	{
 		//given
-		UtenteDto utente = new UtenteDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S");
+		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S");
 		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S");
 		Mockito.when(mapper.toEntity(utente)).thenReturn(entity);
 		Mockito.when(repository.save(Mockito.any(UtenteEntity.class))).thenThrow(new BadSqlGrammarException("","",new SQLException()));

@@ -1,7 +1,8 @@
 package com.java.test.service;
 
 import com.java.test.TestjavaApplicationTests;
-import com.java.test.dto.UtenteDto;
+import com.java.test.dto.UtenteRequestDto;
+import com.java.test.dto.UtenteResponseDto;
 import com.java.test.entity.UtenteEntity;
 import com.java.test.repository.UtenteRepository;
 import org.assertj.core.api.Assertions;
@@ -29,9 +30,9 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 	public void inserisciUtente()
 	{
 		//given
-		UtenteDto utente = new UtenteDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S");
+		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S");
 		//when
-		UtenteDto utenteSalvato = service.creazioneUtente(utente);
+		UtenteResponseDto utenteSalvato = service.creazioneUtente(utente);
 		//then
 		UtenteEntity utenteSalvatoEntity = repository.findByEmail(utenteSalvato.email());
 
@@ -49,7 +50,7 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 	{
 		//given
 		//when
-		List<UtenteDto> utenti = service.prendiListaClienti();
+		List<UtenteResponseDto> utenti = service.prendiListaClienti();
 		//then
 		Assertions.assertThat(utenti.size()).isEqualTo(3);
 	}

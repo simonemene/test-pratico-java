@@ -1,7 +1,8 @@
 package com.java.test.service.impl;
 
 import com.java.test.annotation.ReadOnlyTransactional;
-import com.java.test.dto.UtenteDto;
+import com.java.test.dto.UtenteRequestDto;
+import com.java.test.dto.UtenteResponseDto;
 import com.java.test.entity.UtenteEntity;
 import com.java.test.exception.ApplicationException;
 import com.java.test.mapper.UtenteMapper;
@@ -27,7 +28,7 @@ public class UtenteService implements IUtenteService {
 
 	@Transactional
 	@Override
-	public UtenteDto creazioneUtente(UtenteDto utente) {
+	public UtenteResponseDto creazioneUtente(UtenteRequestDto utente) {
 		UtenteEntity utenteDaSalvare = mapper.toEntity(utente);
 		UtenteEntity utenteSalvato;
 		try {
@@ -46,7 +47,7 @@ public class UtenteService implements IUtenteService {
 
 	@ReadOnlyTransactional
 	@Override
-	public List<UtenteDto> prendiListaClienti() {
+	public List<UtenteResponseDto> prendiListaClienti() {
 		return mapper.toListaDto(repository.findAll());
 	}
 }

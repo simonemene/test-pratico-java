@@ -1,14 +1,15 @@
 package com.java.test.service;
 
-import com.java.test.dto.UtenteDto;
+import com.java.test.dto.UtenteRequestDto;
+import com.java.test.dto.UtenteResponseDto;
 
 import java.util.List;
 
 public interface IUtenteService {
 
-	UtenteDto creazioneUtente(UtenteDto utente);
+	UtenteResponseDto creazioneUtente(UtenteRequestDto utente);
 
-	List<UtenteDto> prendiListaClienti();
+	List<UtenteResponseDto> prendiListaClienti();
 
 
 }
