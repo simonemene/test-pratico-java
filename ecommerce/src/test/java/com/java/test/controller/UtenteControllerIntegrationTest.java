@@ -58,4 +58,21 @@ public class UtenteControllerIntegrationTest {
 		Assertions.assertThat(utentePaoloRossi.utenteId()).isEqualTo("dffgdfgfgbfgbgbgbfgb454534");
 	}
 
+	@Sql(scripts = "classpath:sql/service/clienti/insert-utenti.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Test
+	public void prendiInformazioneUtente()
+	{
+		//given
+		//when
+		ResponseEntity<UtenteResponseDto> response = template.getForEntity("/api/utente/{id}",UtenteResponseDto.class,"dffgdfdddddgbgbfgb454534");
+		//then
+		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		UtenteResponseDto utenteDaControllare = response.getBody();
+		Assertions.assertThat(utenteDaControllare.nome()).isEqualTo("Marco");
+		Assertions.assertThat(utenteDaControllare.cognome()).isEqualTo("Bianchi");
+		Assertions.assertThat(utenteDaControllare.codiceFiscale()).isEqualTo("3454RFDFGBNHJUY2");
+		Assertions.assertThat(utenteDaControllare.email()).isEqualTo("prova2@prova.com");
+	}
+
 }

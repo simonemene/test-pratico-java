@@ -34,7 +34,7 @@ public class UtenteController {
 	@GetMapping("/{id}")
 	public ResponseEntity<UtenteResponseDto> prendiInformazioniUtente(@PathVariable String id)
 	{
-		return null;
+		return ResponseEntity.ok(service.prendiInformazionUtente(id));
 	}
 
 	@GetMapping

@@ -50,6 +50,7 @@ public class UtenteService implements IUtenteService {
 		return new UtenteListResponseDto(mapper.toListaDto(repository.findAll()));
 	}
 
+	@ReadOnlyTransactional
 	@Override
 	public UtenteResponseDto prendiInformazionUtente(String idPubblico) {
 		return mapper.toDto(repository.findByUtenteId(idPubblico));
