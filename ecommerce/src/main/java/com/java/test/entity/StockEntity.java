@@ -1,7 +1,9 @@
 package com.java.test.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "STOCK",
 uniqueConstraints = @UniqueConstraint(
@@ -9,6 +11,18 @@ uniqueConstraints = @UniqueConstraint(
 		columnNames = {"ID_ORDINE","ID_PRODOTTO"}
 ))
 public class StockEntity {
+
+	protected StockEntity()
+	{
+
+	}
+
+	public StockEntity(ProdottoEntity prodotto,int quantita,OrdineEntity ordine)
+	{
+		this.prodotto = prodotto;
+		this.quantita = quantita;
+		this.ordine = ordine;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

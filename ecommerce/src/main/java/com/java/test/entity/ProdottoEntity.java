@@ -2,16 +2,28 @@ package com.java.test.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Setter
+@Getter
 @Entity
 @Table(name = "PRODOTTO")
 public class ProdottoEntity {
+
+	protected ProdottoEntity()
+	{
+
+	}
+
+	public ProdottoEntity(BigDecimal prezzo)
+	{
+		this.prezzo = prezzo;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +34,7 @@ public class ProdottoEntity {
 	private String productId;
 
 	@OneToMany(mappedBy = "prodotto", fetch = FetchType.LAZY)
-	private Set<StockEntity> stock;
+	private Set<StockEntity> stock = new HashSet<>();
 
 	private BigDecimal prezzo;
 

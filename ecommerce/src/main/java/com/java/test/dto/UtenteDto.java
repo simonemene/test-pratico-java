@@ -1,4 +1,4 @@
 package com.java.test.dto;
 
-public record UtenteDto(String username,String nome, String cognome,int eta) {
+public record UtenteDto(String nome, String cognome,int eta,String email,String codiceFiscale) {
 }

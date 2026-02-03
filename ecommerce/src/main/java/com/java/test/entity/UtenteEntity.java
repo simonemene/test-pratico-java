@@ -1,25 +1,50 @@
 package com.java.test.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
+
+@Getter
 @Entity
 @Table(name = "UTENTE")
 public class UtenteEntity {
+
+	protected UtenteEntity()
+	{
+
+	}
+
+	public UtenteEntity(String email,String nome,String cognome,String codiceFiscale)
+	{
+		this.email = email;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.codiceFiscale = codiceFiscale;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column(unique = true,nullable = false)
 	private String email;
 
 	private String nome;
 
 	private String cognome;
 
+	@Column(unique = true,nullable = false)
 	private String codiceFiscale;
 
 	@OneToMany(mappedBy = "utente",fetch = FetchType.LAZY)
-	private Set<OrdineEntity> ordine;
+	private Set<OrdineEntity> ordine = new HashSet<>();
+
+	public void aggiungiOrdine(OrdineEntity ordineDaAggiungere)
+	{
+		ordineDaAggiungere.collegaUtente(this);
+		this.ordine.add(ordineDaAggiungere);
+	}
 }
