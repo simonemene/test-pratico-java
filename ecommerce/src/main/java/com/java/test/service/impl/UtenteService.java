@@ -49,4 +49,9 @@ public class UtenteService implements IUtenteService {
 	public UtenteListResponseDto prendiListaClienti() {
 		return new UtenteListResponseDto(mapper.toListaDto(repository.findAll()));
 	}
+
+	@Override
+	public UtenteResponseDto prendiInformazionUtente(String idPubblico) {
+		return mapper.toDto(repository.findByUtenteId(idPubblico));
+	}
 }

@@ -10,5 +10,7 @@ public interface IUtenteService {
 
 	UtenteListResponseDto prendiListaClienti();
 
+	UtenteResponseDto prendiInformazionUtente(String idPubblico);
+
 
 }
