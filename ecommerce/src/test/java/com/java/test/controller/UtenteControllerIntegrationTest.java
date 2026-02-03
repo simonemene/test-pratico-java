@@ -1,6 +1,7 @@
 package com.java.test.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.java.test.dto.UtenteListResponseDto;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
 import org.assertj.core.api.Assertions;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase
@@ -21,6 +23,7 @@ public class UtenteControllerIntegrationTest {
 	@Autowired
 	private TestRestTemplate template;
 
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
 	public void creazioneUtente() throws JsonProcessingException {
 		//given
@@ -34,6 +37,25 @@ public class UtenteControllerIntegrationTest {
 				.isEqualTo("/api/utente/"+response.getBody().utenteId());
 		Assertions.assertThat(response.getBody()).usingRecursiveComparison().ignoringFields("utenteId").isEqualTo(request);
 
+	}
+
+	@Sql(scripts = "classpath:sql/service/clienti/insert-utenti.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Test
+	public void prendiUtenti()
+	{
+		//given
+		//when
+		ResponseEntity<UtenteListResponseDto> response = template.getForEntity("/api/utente",UtenteListResponseDto.class);
+		//then
+		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		UtenteListResponseDto body = response.getBody();
+		Assertions.assertThat(body.utenti().size()).isEqualTo(3);
+		UtenteResponseDto utentePaoloRossi = body.utenti().stream().filter(utente->utente.email().equals("prova@prova.com")).findFirst().get();
+		Assertions.assertThat(utentePaoloRossi.nome()).isEqualTo("Paolo");
+		Assertions.assertThat(utentePaoloRossi.cognome()).isEqualTo("Rossi");
+		Assertions.assertThat(utentePaoloRossi.codiceFiscale()).isEqualTo("3454RFDFGBNHJUY3");
+		Assertions.assertThat(utentePaoloRossi.utenteId()).isEqualTo("dffgdfgfgbfgbgbgbfgb454534");
 	}
 
 }
