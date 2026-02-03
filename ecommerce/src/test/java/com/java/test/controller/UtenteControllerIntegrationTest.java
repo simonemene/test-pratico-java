@@ -32,6 +32,7 @@ public class UtenteControllerIntegrationTest {
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		Assertions.assertThat(response.getHeaders().getLocation().getPath())
 				.isEqualTo("/api/utente/"+response.getBody().utenteId());
+		Assertions.assertThat(response.getBody()).usingRecursiveComparison().ignoringFields("utenteId").isEqualTo(request);
 
 	}
 
