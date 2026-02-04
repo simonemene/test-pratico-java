@@ -27,7 +27,7 @@ public class ProdottoController {
 		URI path = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
-				.buildAndExpand(prodotto.prodottoId())
+				.buildAndExpand(prodottoCreato.productId())
 				.toUri();
 		return ResponseEntity.created(path).body(prodottoCreato);
 	}
@@ -36,5 +36,11 @@ public class ProdottoController {
 	public ResponseEntity<ProdottoListResponseDto> prendiProdotti()
 	{
 		return ResponseEntity.ok(service.prendiListaProdotti());
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<ProdottoResponseDto> prendiInformazioniProdotto(@PathVariable String id)
+	{
+		return ResponseEntity.ok(service.prendiInformazioniProdotto(id));
 	}
 }

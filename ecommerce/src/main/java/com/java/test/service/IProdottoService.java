@@ -9,4 +9,6 @@ public interface IProdottoService {
 	ProdottoResponseDto inserisciUnProdotto(ProdottoRequestDto prodottoDaInserire);
 
 	ProdottoListResponseDto prendiListaProdotti();
+
+	ProdottoResponseDto prendiInformazioniProdotto(String productId);
 }

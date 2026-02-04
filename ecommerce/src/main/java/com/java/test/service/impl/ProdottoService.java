@@ -50,4 +50,9 @@ public class ProdottoService implements IProdottoService {
 	public ProdottoListResponseDto prendiListaProdotti() {
 		return mapper.toListaDto(repository.findAll());
 	}
+
+	@Override
+	public ProdottoResponseDto prendiInformazioniProdotto(String productId) {
+		return mapper.toDto(repository.findByProductId(productId));
+	}
 }
