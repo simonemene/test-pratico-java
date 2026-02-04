@@ -27,7 +27,7 @@ public class UtenteRepoitorySliceTest {
 		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR");
 		repository.save(utente);
 		//when
-		UtenteEntity utenteTrovato = repository.findByEmail(utente.getEmail());
+		UtenteEntity utenteTrovato = repository.findByEmail(utente.getEmail()).get();
 		//then
 		Assertions.assertThat(utenteTrovato).isNotNull();
 		Assertions.assertThat(utenteTrovato.getNome()).isEqualTo(utente.getNome());
@@ -50,7 +50,7 @@ public class UtenteRepoitorySliceTest {
 				.update();
 
 		//when
-		UtenteEntity utenteTrovato = repository.findByEmail("prova@prova.com");
+		UtenteEntity utenteTrovato = repository.findByEmail("prova@prova.com").get();
 		//then
 		Assertions.assertThat(utenteTrovato).isNotNull();
 		Assertions.assertThat(utenteTrovato.getNome()).isEqualTo("Marco");

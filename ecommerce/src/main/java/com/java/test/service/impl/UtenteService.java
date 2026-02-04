@@ -6,6 +6,7 @@ import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
 import com.java.test.entity.UtenteEntity;
 import com.java.test.exception.ApplicationException;
+import com.java.test.exception.UtenteException;
 import com.java.test.mapper.UtenteMapper;
 import com.java.test.repository.UtenteRepository;
 import com.java.test.service.IUtenteService;
@@ -53,6 +54,8 @@ public class UtenteService implements IUtenteService {
 	@ReadOnlyTransactional
 	@Override
 	public UtenteResponseDto prendiInformazionUtente(String idPubblico) {
-		return mapper.toDto(repository.findByUtenteId(idPubblico));
+		return repository.findByUtenteId(idPubblico)
+				.map(mapper::toDto)
+				.orElseThrow(()->new UtenteException("Utente non trovato per id: " + idPubblico));
 	}
 }

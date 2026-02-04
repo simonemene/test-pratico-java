@@ -4,6 +4,9 @@ import com.java.test.dto.ProdottoListResponseDto;
 import com.java.test.dto.ProdottoRequestDto;
 import com.java.test.dto.ProdottoResponseDto;
 import com.java.test.service.IProdottoService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +23,7 @@ public class ProdottoController {
 
 
 	@PostMapping
-	public ResponseEntity<ProdottoResponseDto> inserisciUnProdotto(@RequestBody
+	public ResponseEntity<ProdottoResponseDto> inserisciUnProdotto(@RequestBody @Valid
 			ProdottoRequestDto prodotto)
 	{
 		ProdottoResponseDto prodottoCreato = service.inserisciUnProdotto(prodotto);
@@ -39,7 +42,9 @@ public class ProdottoController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProdottoResponseDto> prendiInformazioniProdotto(@PathVariable String id)
+	public ResponseEntity<ProdottoResponseDto> prendiInformazioniProdotto(
+			@PathVariable
+	        @NotBlank(message = "L'id del prodotto non può essere vuoto") String id)
 	{
 		return ResponseEntity.ok(service.prendiInformazioniProdotto(id));
 	}

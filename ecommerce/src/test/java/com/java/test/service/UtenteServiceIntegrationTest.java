@@ -40,7 +40,7 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 		//when
 		UtenteResponseDto utenteSalvato = service.creazioneUtente(utente);
 		//then
-		UtenteEntity utenteSalvatoEntity = repository.findByEmail(utenteSalvato.email());
+		UtenteEntity utenteSalvatoEntity = repository.findByEmail(utenteSalvato.email()).get();
 
 		Assertions.assertThat(utenteSalvato).isNotNull();
 		Assertions.assertThat(utenteSalvatoEntity.getId()).isGreaterThan(0L);
@@ -84,7 +84,7 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThatThrownBy(()->utenti.stream().filter(check->check.getCodiceFiscale().equals("DRI456JHKGIT9712")).findFirst().get())
 				.isInstanceOf(NoSuchElementException.class);
 
-		UtenteEntity utenteSalvatoEntity = repository.findByEmail(utenteSalvato.email());
+		UtenteEntity utenteSalvatoEntity = repository.findByEmail(utenteSalvato.email()).get();
 		Assertions.assertThat(utenteSalvato).isNotNull();
 		Assertions.assertThat(utenteSalvatoEntity.getId()).isGreaterThan(0L);
 		Assertions.assertThat(utenteSalvato.nome()).isEqualTo(utenteSalvatoEntity.getNome());

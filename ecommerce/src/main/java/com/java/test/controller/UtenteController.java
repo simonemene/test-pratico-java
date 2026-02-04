@@ -5,6 +5,7 @@ import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
 import com.java.test.service.IUtenteService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class UtenteController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<UtenteResponseDto> prendiInformazioniUtente(@PathVariable String id)
+	public ResponseEntity<UtenteResponseDto> prendiInformazioniUtente(@PathVariable @NotBlank(message = "L'id dell'utente non può essere vuoto") String id)
 	{
 		return ResponseEntity.ok(service.prendiInformazionUtente(id));
 	}

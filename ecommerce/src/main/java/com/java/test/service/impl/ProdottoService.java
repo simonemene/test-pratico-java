@@ -6,6 +6,7 @@ import com.java.test.dto.ProdottoRequestDto;
 import com.java.test.dto.ProdottoResponseDto;
 import com.java.test.entity.ProdottoEntity;
 import com.java.test.exception.ApplicationException;
+import com.java.test.exception.ProdottoException;
 import com.java.test.mapper.ProdottoMapper;
 import com.java.test.repository.ProdottoRepository;
 import com.java.test.service.IProdottoService;
@@ -51,8 +52,12 @@ public class ProdottoService implements IProdottoService {
 		return mapper.toListaDto(repository.findAll());
 	}
 
+	@ReadOnlyTransactional
 	@Override
 	public ProdottoResponseDto prendiInformazioniProdotto(String productId) {
-		return mapper.toDto(repository.findByProductId(productId));
+		return repository.findByProductId(productId)
+				.map(mapper::toDto)
+				.orElseThrow(()->new ProdottoException(
+						"Prodotto non trovato per id " + productId));
 	}
 }

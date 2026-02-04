@@ -1,5 +1,7 @@
 package com.java.test.advice;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +9,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,6 +29,24 @@ public class ControllerAdvice {
 				.getFieldErrors()
 				.stream()
 				.collect(Collectors.toMap(FieldError::getField,
+						valore-> Optional.ofNullable(valore.getDefaultMessage()).orElse("errore sconosciuto"),
+						(campoInErrore,campoNuovoInErrore)->campoInErrore + "; " + campoNuovoInErrore
+
+				));
+		problemDetail.setProperty("errori",errori);
+		return ResponseEntity.badRequest().body(problemDetail);
+	}
+
+	@ExceptionHandler(HandlerMethodValidationException.class)
+	public ResponseEntity<ProblemDetail> validazioneCampiException(HandlerMethodValidationException exception)
+	{
+		String parametroInErrore = exception.getParameterValidationResults().get(0).getMethodParameter().getParameterName();
+		ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+		problemDetail.setTitle("Errore nella validazione dei campi");
+		problemDetail.setDetail("Uno o più campi sono invalidi");
+		Map<String,String> errori = exception.getAllErrors()
+				.stream()
+				.collect(Collectors.toMap(chiave->parametroInErrore,
 						valore-> Optional.ofNullable(valore.getDefaultMessage()).orElse("errore sconosciuto"),
 						(campoInErrore,campoNuovoInErrore)->campoInErrore + "; " + campoNuovoInErrore
 

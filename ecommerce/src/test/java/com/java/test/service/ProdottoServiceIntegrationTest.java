@@ -38,7 +38,7 @@ public class ProdottoServiceIntegrationTest extends TestjavaApplicationTests {
 		//when
 		ProdottoResponseDto prodottoSalvato = service.inserisciUnProdotto(prodotto);
 		//then
-		ProdottoEntity prodottoSalvatoEntity = repository.findByProductId(prodottoSalvato.productId());
+		ProdottoEntity prodottoSalvatoEntity = repository.findByProductId(prodottoSalvato.productId()).get();
 
 		Assertions.assertThat(prodottoSalvato).isNotNull();
 		Assertions.assertThat(prodottoSalvatoEntity.getId()).isGreaterThan(0L);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.test.configuration.SecurityConfiguration;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.service.IUtenteService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -64,5 +65,21 @@ public class UtenteControllerValidationSliceTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.length()").value(1))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.email")
 						.value("La mail non rispetta i parametri"));
+	}
+
+	@Test
+	public void controlloValidazioneUtenteInformazioni() throws Exception {
+		//given
+		//when
+		//then
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/utente/{id}"," ")
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Errore nella validazione dei campi"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("Uno o più campi sono invalidi"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.instance").value(
+						Matchers.startsWith("/api/utente")))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.length()").value(1))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.id").value("L'id dell'utente non può essere vuoto"));
 	}
 }
