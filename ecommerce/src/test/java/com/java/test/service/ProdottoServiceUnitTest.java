@@ -3,11 +3,13 @@ package com.java.test.service;
 import com.java.test.dto.ProdottoRequestDto;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.entity.ProdottoEntity;
+import com.java.test.entity.StockEntity;
 import com.java.test.entity.UtenteEntity;
 import com.java.test.exception.ApplicationException;
 import com.java.test.mapper.ProdottoMapper;
 import com.java.test.mapper.UtenteMapper;
 import com.java.test.repository.ProdottoRepository;
+import com.java.test.repository.StockRepository;
 import com.java.test.repository.UtenteRepository;
 import com.java.test.service.impl.ProdottoService;
 import com.java.test.service.impl.UtenteService;
@@ -37,6 +39,9 @@ public class ProdottoServiceUnitTest {
 	@Mock
 	private ProdottoMapper mapper;
 
+	@Mock
+	private StockRepository stockRepository;
+
 	@InjectMocks
 	private ProdottoService service;
 
@@ -54,14 +59,15 @@ public class ProdottoServiceUnitTest {
 		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer");
 		ProdottoEntity entity = new ProdottoEntity(new BigDecimal("1.2"),"computer");
 		Mockito.when(mapper.toEntity(prodotto)).thenReturn(entity);
-		Mockito.when(repository.save(Mockito.any(ProdottoEntity.class))).thenThrow(new DataIntegrityViolationException("Vincolo violato nella creazione utente"));
+		Mockito.when(stockRepository.save(Mockito.any(StockEntity.class)))
+				.thenThrow(new DataIntegrityViolationException("Vincolo violato nella creazione del prodotto"));
 		//when
 		//then
 		Assertions.assertThatThrownBy(()->service.inserisciUnProdotto(prodotto))
 				.isInstanceOf(ApplicationException.class)
 				.hasMessageContaining("Vincolo violato nella creazione prodotto")
 				.hasCauseInstanceOf(DataIntegrityViolationException.class);
-		Mockito.verify(repository,Mockito.times(1)).save(Mockito.any());
+		Mockito.verify(stockRepository,Mockito.times(1)).save(Mockito.any());
 		Assertions.assertThat(capturedOutput.getOut()).contains("Vincolo violato nella creazione del prodotto ");
 	}
 
@@ -72,14 +78,14 @@ public class ProdottoServiceUnitTest {
 		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer");
 		ProdottoEntity entity = new ProdottoEntity(new BigDecimal("1.2"),"computer");
 		Mockito.when(mapper.toEntity(prodotto)).thenReturn(entity);
-		Mockito.when(repository.save(Mockito.any(ProdottoEntity.class))).thenThrow(new BadSqlGrammarException("","",new SQLException()));
+		Mockito.when(stockRepository.save(Mockito.any(StockEntity.class))).thenThrow(new BadSqlGrammarException("","",new SQLException()));
 		//when
 		//then
 		Assertions.assertThatThrownBy(()->service.inserisciUnProdotto(prodotto))
 				.isInstanceOf(ApplicationException.class)
 				.hasMessageContaining("Errore generico nella crezione del prodotto")
 				.hasCauseInstanceOf(DataAccessException.class);;
-		Mockito.verify(repository,Mockito.times(1)).save(Mockito.any());
+		Mockito.verify(stockRepository,Mockito.times(1)).save(Mockito.any());
 		Assertions.assertThat(capturedOutput.getOut()).contains("Errore generico crezione del prodotto");
 	}
 }

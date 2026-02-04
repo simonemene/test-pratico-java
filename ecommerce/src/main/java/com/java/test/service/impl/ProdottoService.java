@@ -5,10 +5,12 @@ import com.java.test.dto.ProdottoListResponseDto;
 import com.java.test.dto.ProdottoRequestDto;
 import com.java.test.dto.ProdottoResponseDto;
 import com.java.test.entity.ProdottoEntity;
+import com.java.test.entity.StockEntity;
 import com.java.test.exception.ApplicationException;
 import com.java.test.exception.ProdottoException;
 import com.java.test.mapper.ProdottoMapper;
 import com.java.test.repository.ProdottoRepository;
+import com.java.test.repository.StockRepository;
 import com.java.test.service.IProdottoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,14 +28,18 @@ public class ProdottoService implements IProdottoService {
 
 	private final ProdottoMapper mapper;
 
+	private final StockRepository stockRepository;
+
 	@Transactional
 	@Override
 	public ProdottoResponseDto inserisciUnProdotto(
 			ProdottoRequestDto prodottoDaInserire) {
 		ProdottoEntity prodottoDaSalvare = mapper.toEntity(prodottoDaInserire);
-		ProdottoEntity prodottoSalvato;
+		StockEntity stock;
 		try {
-			prodottoSalvato = repository.save(prodottoDaSalvare);
+			StockEntity aggiuntaProdotto = new StockEntity(1);
+			aggiuntaProdotto.collegaProdotto(prodottoDaSalvare);
+			stock = stockRepository.save(aggiuntaProdotto);
 		}catch(DataIntegrityViolationException e)
 		{
 			log.error("Vincolo violato nella creazione del prodotto {}",e.getMessage(),e);
@@ -43,7 +49,7 @@ public class ProdottoService implements IProdottoService {
 			log.error("Errore generico crezione del prodotto {}",e.getMessage(),e);
 			throw new ApplicationException("Errore generico nella crezione del prodotto",e);
 		}
-		return mapper.toDto(prodottoSalvato);
+		return mapper.toDto(stock.getProdotto());
 	}
 
 	@ReadOnlyTransactional
