@@ -36,7 +36,7 @@ public class UtenteService implements IUtenteService {
 		}catch(DataIntegrityViolationException e)
 		{
 			log.error("Vincolo violato nella creazione utente {}",e.getMessage(),e);
-			throw new ApplicationException("Vincolo violato nella creazione utente",e);
+			throw new ApplicationException("Impossibile creare l'utente",e);
 		}catch(DataAccessException e)
 		{
 			log.error("Errore generico crezione utente {}",e.getMessage(),e);

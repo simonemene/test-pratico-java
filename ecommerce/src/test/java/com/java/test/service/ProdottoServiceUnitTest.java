@@ -65,7 +65,7 @@ public class ProdottoServiceUnitTest {
 		//then
 		Assertions.assertThatThrownBy(()->service.inserisciUnProdotto(prodotto))
 				.isInstanceOf(ApplicationException.class)
-				.hasMessageContaining("Vincolo violato nella creazione prodotto")
+				.hasMessageContaining("Impossibile creare il prodotto")
 				.hasCauseInstanceOf(DataIntegrityViolationException.class);
 		Mockito.verify(stockRepository,Mockito.times(1)).save(Mockito.any());
 		Assertions.assertThat(capturedOutput.getOut()).contains("Vincolo violato nella creazione del prodotto ");

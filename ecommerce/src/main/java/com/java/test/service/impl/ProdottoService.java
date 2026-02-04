@@ -44,7 +44,7 @@ public class ProdottoService implements IProdottoService {
 		}catch(DataIntegrityViolationException e)
 		{
 			log.error("Vincolo violato nella creazione del prodotto {}",e.getMessage(),e);
-			throw new ApplicationException("Vincolo violato nella creazione prodotto",e);
+			throw new ApplicationException("Impossibile creare il prodotto",e);
 		}catch(DataAccessException e)
 		{
 			log.error("Errore generico crezione del prodotto {}",e.getMessage(),e);

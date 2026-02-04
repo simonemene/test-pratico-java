@@ -2,6 +2,7 @@ package com.java.test.service.impl;
 
 import com.java.test.dto.OrdineEffettuatoResponseDto;
 import com.java.test.entity.OrdineEntity;
+import com.java.test.entity.ProdottoEntity;
 import com.java.test.entity.StockEntity;
 import com.java.test.entity.UtenteEntity;
 import com.java.test.exception.ApplicationException;
@@ -43,8 +44,7 @@ public class OrdineService implements IOrdineService {
 		OrdineEffettuatoResponseDto dto;
 		try
 		{
-			OrdineEntity ordine = new OrdineEntity(utente);
-			ordine.aggiungiProdotto(stock.getProdotto(),quantita);
+			OrdineEntity ordine = crezioneOrdine(utente,stock.getProdotto(),quantita);
 			ordine = repository.save(ordine);
 			stock.modificaQuantitaMagazzino(quantita);
 			dto = new OrdineEffettuatoResponseDto(prodottoMapper.toDtoStock(stock.getProdotto(),stock),ordine.getOrdineId());
@@ -58,5 +58,12 @@ public class OrdineService implements IOrdineService {
 			throw new ApplicationException("Errore generico nella creazione dell'ordine",e);
 		}
         return dto;
+	}
+
+	private OrdineEntity crezioneOrdine(UtenteEntity utente,ProdottoEntity prodotto,int quantita)
+	{
+		OrdineEntity ordine = new OrdineEntity(utente);
+		ordine.aggiungiProdotto(prodotto,quantita);
+		return ordine;
 	}
 }

@@ -53,7 +53,7 @@ public class UtenteServiceUnitTest {
 		//then
 		Assertions.assertThatThrownBy(()->service.creazioneUtente(utente))
 				.isInstanceOf(ApplicationException.class)
-				.hasMessageContaining("Vincolo violato nella creazione utente")
+				.hasMessageContaining("Impossibile creare l'utente")
 				.hasCauseInstanceOf(DataIntegrityViolationException.class);
 		Mockito.verify(repository,Mockito.times(1)).save(Mockito.any());
 		Assertions.assertThat(capturedOutput.getOut()).contains("Vincolo violato nella creazione utente");
