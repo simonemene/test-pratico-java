@@ -35,6 +35,11 @@ public class OrdineEntity {
 	@JoinColumn(name = "ID_UTENTE",nullable = false)
 	private UtenteEntity utente;
 
+	public void collegaUtente(UtenteEntity utente)
+	{
+		this.utente = utente;
+	}
+
 	public MovimentoEntity aggiungiProdotto(ProdottoEntity prodotto, int quantita)
 	{
 		MovimentoEntity movimento =  new MovimentoEntity(prodotto,quantita,this);
