@@ -40,6 +40,7 @@ public class ProdottoEntity {
 
 	private BigDecimal prezzo;
 
+	@Column(unique = true)
 	private String nome;
 
 	@PrePersist
