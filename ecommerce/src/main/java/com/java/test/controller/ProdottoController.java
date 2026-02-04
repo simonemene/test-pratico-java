@@ -1,14 +1,12 @@
 package com.java.test.controller;
 
+import com.java.test.dto.ProdottoListResponseDto;
 import com.java.test.dto.ProdottoRequestDto;
 import com.java.test.dto.ProdottoResponseDto;
 import com.java.test.service.IProdottoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -32,5 +30,11 @@ public class ProdottoController {
 				.buildAndExpand(prodotto.prodottoId())
 				.toUri();
 		return ResponseEntity.created(path).body(prodottoCreato);
+	}
+
+	@GetMapping
+	public ResponseEntity<ProdottoListResponseDto> prendiProdotti()
+	{
+		return ResponseEntity.ok(service.prendiListaProdotti());
 	}
 }
