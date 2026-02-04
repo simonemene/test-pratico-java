@@ -16,6 +16,7 @@ public class StockEntity {
 	private int quantita;
 
 	@OneToOne(optional = false,cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "PRODOTTO_ID",unique = true,nullable = false)
 	private ProdottoEntity prodotto;
 
 	public StockEntity(int quantita)

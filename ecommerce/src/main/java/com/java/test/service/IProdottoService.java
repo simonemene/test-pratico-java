@@ -1,5 +1,6 @@
 package com.java.test.service;
 
+import com.java.test.dto.ProdottoConQuantitaResponseDto;
 import com.java.test.dto.ProdottoListResponseDto;
 import com.java.test.dto.ProdottoRequestDto;
 import com.java.test.dto.ProdottoResponseDto;
@@ -10,5 +11,5 @@ public interface IProdottoService {
 
 	ProdottoListResponseDto prendiListaProdotti();
 
-	ProdottoResponseDto prendiInformazioniProdotto(String productId);
+	ProdottoConQuantitaResponseDto prendiInformazioniProdotto(String productId);
 }

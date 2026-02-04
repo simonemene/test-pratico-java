@@ -1,6 +1,7 @@
 package com.java.test.service.impl;
 
 import com.java.test.annotation.ReadOnlyTransactional;
+import com.java.test.dto.ProdottoConQuantitaResponseDto;
 import com.java.test.dto.ProdottoListResponseDto;
 import com.java.test.dto.ProdottoRequestDto;
 import com.java.test.dto.ProdottoResponseDto;
@@ -60,9 +61,9 @@ public class ProdottoService implements IProdottoService {
 
 	@ReadOnlyTransactional
 	@Override
-	public ProdottoResponseDto prendiInformazioniProdotto(String productId) {
-		return repository.findByProductId(productId)
-				.map(mapper::toDto)
+	public ProdottoConQuantitaResponseDto prendiInformazioniProdotto(String productId) {
+		return stockRepository.findByProdotto_ProductId(productId)
+				.map(prodotto->mapper.toDtoStock(prodotto.getProdotto(),prodotto))
 				.orElseThrow(()->new ProdottoException(
 						"Prodotto non trovato per id " + productId));
 	}

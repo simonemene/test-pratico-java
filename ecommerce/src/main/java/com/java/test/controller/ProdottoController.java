@@ -1,5 +1,6 @@
 package com.java.test.controller;
 
+import com.java.test.dto.ProdottoConQuantitaResponseDto;
 import com.java.test.dto.ProdottoListResponseDto;
 import com.java.test.dto.ProdottoRequestDto;
 import com.java.test.dto.ProdottoResponseDto;
@@ -42,7 +43,7 @@ public class ProdottoController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProdottoResponseDto> prendiInformazioniProdotto(
+	public ResponseEntity<ProdottoConQuantitaResponseDto> prendiInformazioniProdotto(
 			@PathVariable
 	        @NotBlank(message = "L'id del prodotto non può essere vuoto") String id)
 	{
