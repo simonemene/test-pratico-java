@@ -21,7 +21,7 @@ public class OrdineEntity {
 	private long id;
 
 	@OneToMany(mappedBy = "ordine", fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
-	private Set<StockEntity> stock = new HashSet<>();
+	private Set<MovimentoEntity> movimento = new HashSet<>();
 
 	@ManyToOne
 	@JoinColumn(name = "ID_UTENTE",nullable = false)
@@ -32,10 +32,10 @@ public class OrdineEntity {
 		this.utente = utente;
 	}
 
-	public StockEntity aggiungiProdotto(ProdottoEntity prodotto, int quantita)
+	public MovimentoEntity aggiungiProdotto(ProdottoEntity prodotto, int quantita)
 	{
-		StockEntity stock =  new StockEntity(prodotto,quantita,this);
-		this.stock.add(stock);
-		return stock;
+		MovimentoEntity movimento =  new MovimentoEntity(prodotto,quantita,this);
+		this.movimento.add(movimento);
+		return movimento;
 	}
 }

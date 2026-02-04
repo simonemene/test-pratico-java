@@ -5,19 +5,19 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "STOCK",
+@Table(name = "MOVIMENTO",
 uniqueConstraints = @UniqueConstraint(
-		name = "sotck_ordine_prodotto",
+		name = "movimento_ordine_prodotto",
 		columnNames = {"ID_ORDINE","ID_PRODOTTO"}
 ))
-public class StockEntity {
+public class MovimentoEntity {
 
-	protected StockEntity()
+	protected MovimentoEntity()
 	{
 
 	}
 
-	public StockEntity(ProdottoEntity prodotto,int quantita,OrdineEntity ordine)
+	public MovimentoEntity(ProdottoEntity prodotto,int quantita,OrdineEntity ordine)
 	{
 		this.prodotto = prodotto;
 		this.quantita = quantita;

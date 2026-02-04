@@ -36,7 +36,7 @@ public class ProdottoEntity {
 		private String productId;
 
 	@OneToMany(mappedBy = "prodotto", fetch = FetchType.LAZY)
-	private Set<StockEntity> stock = new HashSet<>();
+	private Set<MovimentoEntity> movimento = new HashSet<>();
 
 	private BigDecimal prezzo;
 
