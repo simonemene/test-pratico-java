@@ -33,7 +33,7 @@ public class ProdottoEntity {
 
 	@Setter(AccessLevel.NONE)
 	@Column(name = "ID_PUBBLICO_PRODOTTO",nullable = false,unique = true,length = 36,updatable = false)
-		private String productId;
+	private String productId;
 
 	@OneToMany(mappedBy = "prodotto", fetch = FetchType.LAZY)
 	private Set<MovimentoEntity> movimento = new HashSet<>();

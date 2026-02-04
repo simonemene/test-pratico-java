@@ -1,5 +1,7 @@
 package com.java.test.service.impl;
 
+import com.java.test.annotation.ReadOnlyTransactional;
+import com.java.test.dto.ProdottoListResponseDto;
 import com.java.test.dto.ProdottoRequestDto;
 import com.java.test.dto.ProdottoResponseDto;
 import com.java.test.entity.ProdottoEntity;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ public class ProdottoService implements IProdottoService {
 
 	private final ProdottoMapper mapper;
 
+	@Transactional
 	@Override
 	public ProdottoResponseDto inserisciUnProdotto(
 			ProdottoRequestDto prodottoDaInserire) {
@@ -39,5 +43,11 @@ public class ProdottoService implements IProdottoService {
 			throw new ApplicationException("Errore generico nella crezione del prodotto",e);
 		}
 		return mapper.toDto(prodottoSalvato);
+	}
+
+	@ReadOnlyTransactional
+	@Override
+	public ProdottoListResponseDto prendiListaProdotti() {
+		return mapper.toListaDto(repository.findAll());
 	}
 }
