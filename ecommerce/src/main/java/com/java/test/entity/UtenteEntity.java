@@ -50,10 +50,4 @@ public class UtenteEntity {
 	{
 		this.utenteId = UUID.randomUUID().toString();
 	}
-
-	public void aggiungiOrdine(OrdineEntity ordineDaAggiungere)
-	{
-		ordineDaAggiungere.collegaUtente(this);
-		this.ordine.add(ordineDaAggiungere);
-	}
 }
