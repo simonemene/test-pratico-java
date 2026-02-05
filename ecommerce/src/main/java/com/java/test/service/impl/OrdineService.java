@@ -6,6 +6,7 @@ import com.java.test.dto.ProdottoConQuantitaResponseDto;
 import com.java.test.entity.*;
 import com.java.test.exception.ApplicationException;
 import com.java.test.exception.MagazzinoException;
+import com.java.test.exception.ProdottoException;
 import com.java.test.exception.UtenteException;
 import com.java.test.mapper.ProdottoMapper;
 import com.java.test.repository.OrdineRepository;
@@ -38,13 +39,14 @@ public class OrdineService implements IOrdineService {
 
 	@Transactional
 	@Override
-	public OrdineEffettuatoResponseDto effettuaOrdine(String utenteId, Map<String,Integer> prodotti) {
-
-
-		List<ProdottoEntity> daAggiungere = new ArrayList<>();
-
+	public OrdineEffettuatoResponseDto effettuaOrdine(String utenteId, Map<String,Integer> prodotti)
+	{
+		if(prodotti.isEmpty())
+		{
+			throw new ProdottoException("Nessun prodotto per l'ordine effettuato dall'utente","");
+		}
 		UtenteEntity utente = utenteRepository.findByUtenteId(utenteId)
-				.orElseThrow(()->new UtenteException("Nessun utente trovato per id: " + utenteId));
+				.orElseThrow(()->new UtenteException("Nessun utente trovato",utenteId));
 		OrdineEntity ordine = new OrdineEntity(utente);
 		OrdineEffettuatoResponseDto dto;
 		try
@@ -94,10 +96,7 @@ public class OrdineService implements IOrdineService {
 		int elementiModificati = stockRepository.modificaQuantitaProdotto(valore.getValue(),valore.getKey());
 		if(elementiModificati == 0)
 		{
-			log.warn("""
-					[ATTENZIONE] Gli elementi modificati non combaciano con il numero di prodotti attesi
-					""");
-			throw new MagazzinoException("Errore: il prodotto non ha giacenze in magazzino");
+			throw new MagazzinoException("Errore: il prodotto non ha giacenze in magazzino",valore.getKey(),valore.getValue());
 		}
 	}
 

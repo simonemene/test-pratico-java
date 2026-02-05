@@ -1,7 +1,14 @@
 package com.java.test.exception;
 
+import lombok.Getter;
+
+@Getter
 public class ProdottoException extends RuntimeException {
-	public ProdottoException(String message) {
+
+	private final String productId;
+
+	public ProdottoException(String message,String productId) {
 		super(message);
+		this.productId = productId;
 	}
 }

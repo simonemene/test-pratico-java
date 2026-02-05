@@ -65,6 +65,6 @@ public class ProdottoService implements IProdottoService {
 		return stockRepository.findByProdotto_ProductId(productId)
 				.map(prodotto->mapper.toDtoStock(prodotto.getProdotto(),prodotto))
 				.orElseThrow(()->new ProdottoException(
-						"Prodotto non trovato per id " + productId));
+						"Prodotto non trovato",productId));
 	}
 }

@@ -56,6 +56,6 @@ public class UtenteService implements IUtenteService {
 	public UtenteResponseDto prendiInformazionUtente(String idPubblico) {
 		return repository.findByUtenteId(idPubblico)
 				.map(mapper::toDto)
-				.orElseThrow(()->new UtenteException("Utente non trovato per id: " + idPubblico));
+				.orElseThrow(()->new UtenteException("Utente non trovato",idPubblico));
 	}
 }

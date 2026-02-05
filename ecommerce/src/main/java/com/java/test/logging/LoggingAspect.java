@@ -1,0 +1,88 @@
+package com.java.test.logging;
+
+import com.java.test.exception.ApplicationException;
+import com.java.test.exception.MagazzinoException;
+import com.java.test.exception.ProdottoException;
+import com.java.test.exception.UtenteException;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+
+@Slf4j
+@Component
+@Aspect
+public class LoggingAspect {
+
+	@AfterThrowing(value = "execution(* com.java.test.service..* *)",throwing = "ex")
+	public void logggingMagazzino( JoinPoint joinPoint, Throwable ex)
+	{
+        switch(ex)
+		{
+		case MagazzinoException ma->
+
+			log.warn("""
+				[ERRORE MAGAZZINO] :
+				[CLASSE] -> {}
+				[METODO] -> {}
+				[PARAMETRI METODO] -> {}
+				[PARAMETRI ERRORE] -> id prodotto {}, quantita = {}
+				""",
+					joinPoint.getTarget().getClass().getSimpleName(),
+					joinPoint.getSignature(),
+					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),
+					ma.getProductId(),
+					ma.getQuantita());
+
+		case ApplicationException ap ->
+
+			log.error("""
+				[ERRORE GENERICO] :
+				[CLASSE] -> {}
+				[METODO] -> {}
+				[PARAMETRI METODO] -> {}
+				""",
+					joinPoint.getTarget().getClass().getSimpleName(),
+					joinPoint.getSignature(),
+					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),ap);
+
+
+		case UtenteException ut ->
+
+			log.warn("""
+				[ERRORE UTENTE] :
+				[CLASSE] -> {}
+				[METODO] -> {}
+				[PARAMETRI METODO] -> {}
+				[PARAMETRI ERRORE] -> utente id {}
+				""",
+					joinPoint.getTarget().getClass().getSimpleName(),
+					joinPoint.getSignature(),
+					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),
+					ut.getUtenteId());
+
+
+		case ProdottoException p ->
+
+			log.warn("""
+				[ERRORE PRODOTTO] :
+				[CLASSE] -> {}
+				[METODO] -> {}
+				[PARAMETRI METODO] -> {}
+				[PARAMETRI ERRORE] -> id prodotto {}
+				""",
+					joinPoint.getTarget().getClass().getSimpleName(),
+					joinPoint.getSignature(),
+					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),
+					p.getProductId());
+		default->
+			log.error("""
+					[ATTENZIONE] ERRORE NON PREVISTO
+					""",ex);
+		}
+
+	}
+}

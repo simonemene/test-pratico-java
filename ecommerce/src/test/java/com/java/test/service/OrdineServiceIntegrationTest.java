@@ -57,10 +57,15 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(prodotto.nome()).isEqualTo("CELLULARE");
 		Assertions.assertThat(prodotto.prezzo()).isEqualTo(new BigDecimal("222.32"));
 
-		StockEntity stock = stockRepository.findByProdotto_ProductId("dgfgdfgdfaaa4345").get();
-		Assertions.assertThat(stock.getProdotto().getNome()).isEqualTo("CELLULARE");
-		Assertions.assertThat(stock.getProdotto().getPrezzo()).isEqualTo(new BigDecimal("222.32"));
-		Assertions.assertThat(stock.getQuantita()).isEqualTo(1);
+		StockEntity stockCellulare = stockRepository.findByProdotto_ProductId("dgfgdfgdfaaa4345").get();
+		Assertions.assertThat(stockCellulare.getProdotto().getNome()).isEqualTo("CELLULARE");
+		Assertions.assertThat(stockCellulare.getProdotto().getPrezzo()).isEqualTo(new BigDecimal("222.32"));
+		Assertions.assertThat(stockCellulare.getQuantita()).isEqualTo(1);
+
+		StockEntity stockCaricaBatterie = stockRepository.findByProdotto_ProductId("dgfgdwwdf454345").get();
+		Assertions.assertThat(stockCaricaBatterie.getProdotto().getNome()).isEqualTo("CARICA BATTERIE");
+		Assertions.assertThat(stockCaricaBatterie.getProdotto().getPrezzo()).isEqualTo(new BigDecimal("10.30"));
+		Assertions.assertThat(stockCaricaBatterie.getQuantita()).isEqualTo(6);
 
 	}
 }

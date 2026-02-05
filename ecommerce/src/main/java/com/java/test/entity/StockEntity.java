@@ -40,7 +40,7 @@ public class StockEntity {
 		int nuovaQuantita = quantita - diminuzione;
 		if(nuovaQuantita <= 0)
 		{
-			throw new MagazzinoException(String.format("Errore prodotto %s, non puoi diminuire la quantità di %s elementi",this.prodotto.getId(),diminuzione));
+			throw new MagazzinoException("Non è stato possibile diminuire la quantità del magazzino",this.prodotto.getProductId(),this.quantita);
 		}
 		this.quantita = nuovaQuantita;
 		return this.quantita;

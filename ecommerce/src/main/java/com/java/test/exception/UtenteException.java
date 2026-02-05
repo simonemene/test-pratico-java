@@ -1,7 +1,14 @@
 package com.java.test.exception;
 
-public class UtenteException extends RuntimeException {
-	public UtenteException(String message) {
+import lombok.Getter;
+
+@Getter
+public class UtenteException extends RuntimeException
+{
+	private final String utenteId;
+
+	public UtenteException(String message,String utenteId) {
 		super(message);
+		this.utenteId = utenteId;
 	}
 }
