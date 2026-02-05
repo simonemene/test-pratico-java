@@ -21,5 +21,7 @@ public class OrdineRepositorySliceTest {
         //given
 
         //when
+
+        //then
     }
 }
