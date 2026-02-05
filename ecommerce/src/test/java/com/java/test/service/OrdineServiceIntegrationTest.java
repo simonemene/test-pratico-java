@@ -15,7 +15,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @AutoConfigureTestDatabase
 public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
@@ -40,7 +42,6 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 	{
 		//given
 		UtenteEntity utente = utenteRepository.findByUtenteId("dffgdfdddddgbgbfgb454534").get();
-		StockEntity stock = stockRepository.findByProdotto_ProductId("rgvbdfgdf454345").get();
 		//when
 		OrdineEffettuatoResponseDto response = service.effettuaOrdine(utente.getUtenteId(),
 				Map.of(
@@ -50,6 +51,16 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		));
 		//then
 		Assertions.assertThat(response).isNotNull();
+		Assertions.assertThat(response.prodotto().prodottoModificati().size()).isEqualTo(2);
+		ProdottoConQuantitaResponseDto prodotto = response.prodotto().prodottoModificati().stream()
+				.filter(prod->prod.productId().equals("dgfgdfgdfaaa4345")).findFirst().get();
+		Assertions.assertThat(prodotto.nome()).isEqualTo("CELLULARE");
+		Assertions.assertThat(prodotto.prezzo()).isEqualTo(new BigDecimal("222.32"));
+
+		StockEntity stock = stockRepository.findByProdotto_ProductId("dgfgdfgdfaaa4345").get();
+		Assertions.assertThat(stock.getProdotto().getNome()).isEqualTo("CELLULARE");
+		Assertions.assertThat(stock.getProdotto().getPrezzo()).isEqualTo(new BigDecimal("222.32"));
+		Assertions.assertThat(stock.getQuantita()).isEqualTo(1);
 
 	}
 }
