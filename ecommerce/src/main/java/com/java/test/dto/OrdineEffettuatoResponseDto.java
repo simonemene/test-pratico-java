@@ -1,4 +1,4 @@
 package com.java.test.dto;
 
-public record OrdineEffettuatoResponseDto(ProdottoConQuantitaResponseDto prodotto, String idPubblico) {
+public record OrdineEffettuatoResponseDto(ProdottoConQuantitaListaDto prodotto, String idPubblico) {
 }

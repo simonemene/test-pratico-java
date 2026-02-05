@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -34,6 +36,12 @@ public class OrdineEntity {
 	@ManyToOne
 	@JoinColumn(name = "ID_UTENTE",nullable = false)
 	private UtenteEntity utente;
+
+	@PrePersist
+	public void init()
+	{
+		this.ordineId = UUID.randomUUID().toString();
+	}
 
 	public void collegaUtente(UtenteEntity utente)
 	{

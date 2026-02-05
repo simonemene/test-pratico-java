@@ -1,12 +1,11 @@
 package com.java.test.service.impl;
 
 import com.java.test.dto.OrdineEffettuatoResponseDto;
-import com.java.test.entity.OrdineEntity;
-import com.java.test.entity.ProdottoEntity;
-import com.java.test.entity.StockEntity;
-import com.java.test.entity.UtenteEntity;
+import com.java.test.dto.ProdottoConQuantitaListaDto;
+import com.java.test.dto.ProdottoConQuantitaResponseDto;
+import com.java.test.entity.*;
 import com.java.test.exception.ApplicationException;
-import com.java.test.exception.ProdottoException;
+import com.java.test.exception.MagazzinoException;
 import com.java.test.exception.UtenteException;
 import com.java.test.mapper.ProdottoMapper;
 import com.java.test.repository.OrdineRepository;
@@ -19,6 +18,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,19 +38,38 @@ public class OrdineService implements IOrdineService {
 
 	@Transactional
 	@Override
-	public OrdineEffettuatoResponseDto effettuaOrdine(String utenteId,String prodottoId, int quantita) {
+	public OrdineEffettuatoResponseDto effettuaOrdine(String utenteId, Map<String,Integer> prodotti) {
 
-		StockEntity stock = stockRepository.findByProdotto_ProductId(prodottoId)
-				.orElseThrow(()-> new ProdottoException("Nessun prodotto trovato per id: " + prodottoId));
+
+		List<ProdottoEntity> daAggiungere = new ArrayList<>();
+
 		UtenteEntity utente = utenteRepository.findByUtenteId(utenteId)
 				.orElseThrow(()->new UtenteException("Nessun utente trovato per id: " + utenteId));
+		OrdineEntity ordine = new OrdineEntity(utente);
 		OrdineEffettuatoResponseDto dto;
 		try
 		{
-			OrdineEntity ordine = crezioneOrdine(utente,stock.getProdotto(),quantita);
-			ordine = repository.save(ordine);
-			stock.modificaQuantitaMagazzino(quantita);
-			dto = new OrdineEffettuatoResponseDto(prodottoMapper.toDtoStock(stock.getProdotto(),stock),ordine.getOrdineId());
+            for(var valore : prodotti.entrySet())
+			{
+				modificaProdottiEControllo(valore);
+			}
+
+			List<StockEntity> prodottiDaStock = stockRepository.findByProdotto_ProductIdIn(prodotti.keySet().stream().toList());
+			List<ProdottoConQuantitaResponseDto> listProdotti = new ArrayList<>();
+
+			for(StockEntity entity : prodottiDaStock) {
+
+				ordine.aggiungiProdotto(entity.getProdotto(),prodotti.get(entity.getProdotto().getProductId()));
+			}
+				ordine = repository.save(ordine);
+
+				for(MovimentoEntity movimento : ordine.getMovimento())
+				{
+					listProdotti.add(creazioneProdotto(movimento));
+				}
+			dto = new OrdineEffettuatoResponseDto(new ProdottoConQuantitaListaDto(listProdotti),ordine.getOrdineId());
+
+
 		}catch(DataIntegrityViolationException e)
 		{
 			log.error("Vincolo violato nella creazione dell'ordine {}",e.getMessage(),e);
@@ -60,10 +82,23 @@ public class OrdineService implements IOrdineService {
         return dto;
 	}
 
-	private OrdineEntity crezioneOrdine(UtenteEntity utente,ProdottoEntity prodotto,int quantita)
+
+	private ProdottoConQuantitaResponseDto creazioneProdotto(MovimentoEntity movimento)
 	{
-		OrdineEntity ordine = new OrdineEntity(utente);
-		ordine.aggiungiProdotto(prodotto,quantita);
-		return ordine;
+		return prodottoMapper.toDtoStock(movimento.getProdotto(),movimento.getProdotto()
+				.getStocK());
 	}
+
+	private void modificaProdottiEControllo(Map.Entry<String, Integer> valore)
+	{
+		int elementiModificati = stockRepository.modificaQuantitaProdotto(valore.getValue(),valore.getKey());
+		if(elementiModificati == 0)
+		{
+			log.warn("""
+					[ATTENZIONE] Gli elementi modificati non combaciano con il numero di prodotti attesi
+					""");
+			throw new MagazzinoException("Errore: il prodotto non ha giacenze in magazzino");
+		}
+	}
+
 }
