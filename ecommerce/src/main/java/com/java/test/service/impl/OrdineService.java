@@ -1,16 +1,13 @@
 package com.java.test.service.impl;
 
-import com.java.test.dto.OrdineEffettuatoResponseDto;
-import com.java.test.dto.ProdottoConQuantitaListaDto;
-import com.java.test.dto.ProdottoConQuantitaResponseDto;
+import com.java.test.annotation.ReadOnlyTransactional;
+import com.java.test.dto.*;
 import com.java.test.entity.MovimentoEntity;
 import com.java.test.entity.OrdineEntity;
 import com.java.test.entity.StockEntity;
 import com.java.test.entity.UtenteEntity;
-import com.java.test.exception.ApplicationException;
-import com.java.test.exception.MagazzinoException;
-import com.java.test.exception.ProdottoException;
-import com.java.test.exception.UtenteException;
+import com.java.test.exception.*;
+import com.java.test.mapper.OrdineMapper;
 import com.java.test.mapper.ProdottoMapper;
 import com.java.test.repository.OrdineRepository;
 import com.java.test.repository.StockRepository;
@@ -38,6 +35,8 @@ public class OrdineService implements IOrdineService {
 	private final StockRepository stockRepository;
 
 	private final ProdottoMapper prodottoMapper;
+
+	private final OrdineMapper ordineMapper;
 
 	@Transactional
 	@Override
@@ -89,6 +88,18 @@ public class OrdineService implements IOrdineService {
         return dto;
 	}
 
+	@ReadOnlyTransactional
+	@Override
+	public OrdineResponseDto ricercaOrdinePerId(String id) {
+		OrdineEntity ordine = repository.findByOrdineId(id).orElseThrow(()->new OrdineException("Nessun ordine presente",id));
+		return ordineMapper.toDto(id,ordine.getMovimento().stream().toList());
+	}
+
+	@ReadOnlyTransactional
+	@Override
+	public OrdiniResponseDto ricercaTuttiGliOrdini() {
+		return ordineMapper.toListaDto(repository.findAll().stream().toList());
+	}
 
 	private ProdottoConQuantitaResponseDto creazioneProdotto(MovimentoEntity movimento)
 	{

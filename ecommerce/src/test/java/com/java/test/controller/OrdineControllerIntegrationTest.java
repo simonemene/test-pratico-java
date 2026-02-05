@@ -3,6 +3,8 @@ package com.java.test.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.java.test.dto.OrdineEffettuatoResponseDto;
 import com.java.test.dto.OrdineRequestDto;
+import com.java.test.entity.OrdineEntity;
+import com.java.test.repository.OrdineRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class OrdineControllerIntegrationTest {
 	@Autowired
 	private TestRestTemplate template;
 
+	@Autowired
+	private OrdineRepository repository;
+
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine.sql")
 	@Test
@@ -38,6 +43,8 @@ public class OrdineControllerIntegrationTest {
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		Assertions.assertThat(response.getHeaders().getLocation().getPath())
 				.isEqualTo("/api/ordine/"+response.getBody().idPubblico());
+
+
 
 	}
 }
