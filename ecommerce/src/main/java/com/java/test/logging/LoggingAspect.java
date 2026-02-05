@@ -26,11 +26,13 @@ public class LoggingAspect {
 
 			log.warn("""
 				[ERRORE MAGAZZINO] :
+				[MESSAGGIO] -> {}
 				[CLASSE] -> {}
 				[METODO] -> {}
 				[PARAMETRI METODO] -> {}
 				[PARAMETRI ERRORE] -> id prodotto {}, quantita = {}
 				""",
+					ma.getMessage(),
 					joinPoint.getTarget().getClass().getSimpleName(),
 					joinPoint.getSignature(),
 					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),
@@ -41,10 +43,12 @@ public class LoggingAspect {
 
 			log.error("""
 				[ERRORE GENERICO] :
+				[MESSAGGIO] -> {}
 				[CLASSE] -> {}
 				[METODO] -> {}
 				[PARAMETRI METODO] -> {}
 				""",
+					ap.getMessage(),
 					joinPoint.getTarget().getClass().getSimpleName(),
 					joinPoint.getSignature(),
 					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),ap);
@@ -54,11 +58,13 @@ public class LoggingAspect {
 
 			log.warn("""
 				[ERRORE UTENTE] :
+				[MESSAGGIO] -> {}
 				[CLASSE] -> {}
 				[METODO] -> {}
 				[PARAMETRI METODO] -> {}
 				[PARAMETRI ERRORE] -> utente id {}
 				""",
+					ut.getMessage(),
 					joinPoint.getTarget().getClass().getSimpleName(),
 					joinPoint.getSignature(),
 					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),
@@ -69,11 +75,13 @@ public class LoggingAspect {
 
 			log.warn("""
 				[ERRORE PRODOTTO] :
+				[MESSAGGIO] -> {}
 				[CLASSE] -> {}
 				[METODO] -> {}
 				[PARAMETRI METODO] -> {}
 				[PARAMETRI ERRORE] -> id prodotto {}
 				""",
+					p.getMessage(),
 					joinPoint.getTarget().getClass().getSimpleName(),
 					joinPoint.getSignature(),
 					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),

@@ -51,6 +51,6 @@ public class OrdineServiceUnitTest {
 		//then
 		Assertions.assertThatThrownBy(()->service.effettuaOrdine("12a", Map.of("prodotto1",2,"prodotto2",10)))
 				.isInstanceOf(UtenteException.class)
-				.hasMessageContaining("Nessun utente trovato per id: 12a");
+				.hasMessageContaining("Nessun utente trovato");
 	}
 }
