@@ -3,7 +3,10 @@ package com.java.test.service.impl;
 import com.java.test.dto.OrdineEffettuatoResponseDto;
 import com.java.test.dto.ProdottoConQuantitaListaDto;
 import com.java.test.dto.ProdottoConQuantitaResponseDto;
-import com.java.test.entity.*;
+import com.java.test.entity.MovimentoEntity;
+import com.java.test.entity.OrdineEntity;
+import com.java.test.entity.StockEntity;
+import com.java.test.entity.UtenteEntity;
 import com.java.test.exception.ApplicationException;
 import com.java.test.exception.MagazzinoException;
 import com.java.test.exception.ProdottoException;
@@ -14,17 +17,16 @@ import com.java.test.repository.StockRepository;
 import com.java.test.repository.UtenteRepository;
 import com.java.test.service.IOrdineService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class OrdineService implements IOrdineService {
@@ -57,6 +59,11 @@ public class OrdineService implements IOrdineService {
 			}
 
 			List<StockEntity> prodottiDaStock = stockRepository.findByProdotto_ProductIdIn(prodotti.keySet().stream().toList());
+			if(prodottiDaStock.isEmpty())
+			{
+				throw new ProdottoException("Non riesco a trovare i prodotti per l'ordine nel sistema",
+						Arrays.toString(prodotti.keySet().toArray()));
+			}
 			List<ProdottoConQuantitaResponseDto> listProdotti = new ArrayList<>();
 
 			for(StockEntity entity : prodottiDaStock) {
@@ -74,11 +81,9 @@ public class OrdineService implements IOrdineService {
 
 		}catch(DataIntegrityViolationException e)
 		{
-			log.error("Vincolo violato nella creazione dell'ordine {}",e.getMessage(),e);
-			throw new ApplicationException("Impossibile creare l'ordine",e);
+			throw new ApplicationException("Vincolo violato nella creazione l'ordine",e);
 		}catch(DataAccessException e)
 		{
-			log.error("Errore generico crezione dell'ordine {}",e.getMessage(),e);
 			throw new ApplicationException("Errore generico nella creazione dell'ordine",e);
 		}
         return dto;
