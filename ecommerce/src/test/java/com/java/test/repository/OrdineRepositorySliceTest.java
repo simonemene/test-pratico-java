@@ -12,7 +12,6 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase
 public class OrdineRepositorySliceTest {
-
     @Autowired
     private OrdineRepository repository;
 
@@ -22,7 +21,5 @@ public class OrdineRepositorySliceTest {
         //given
 
         //when
-
-        //then
     }
 }
