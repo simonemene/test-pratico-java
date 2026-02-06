@@ -2,28 +2,21 @@ package com.java.test.service.impl;
 
 import com.java.test.annotation.ReadOnlyTransactional;
 import com.java.test.dto.*;
-import com.java.test.entity.MovimentoEntity;
-import com.java.test.entity.OrdineEntity;
-import com.java.test.entity.StockEntity;
-import com.java.test.entity.UtenteEntity;
+import com.java.test.entity.*;
+import com.java.test.enums.StatoOrdineEnum;
 import com.java.test.exception.*;
 import com.java.test.mapper.OrdineMapper;
 import com.java.test.mapper.ProdottoMapper;
-import com.java.test.repository.OrdineRepository;
-import com.java.test.repository.StockRepository;
-import com.java.test.repository.UtenteRepository;
+import com.java.test.repository.*;
 import com.java.test.service.IOrdineService;
-import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -38,6 +31,9 @@ public class OrdineService implements IOrdineService {
 	private final ProdottoMapper prodottoMapper;
 
 	private final OrdineMapper ordineMapper;
+
+	private final ProdottoRepository prodottoRepository;
+	private final MovimentoRepository movimentoRepository;
 
 	@Transactional
 	@Override
@@ -105,20 +101,59 @@ public class OrdineService implements IOrdineService {
 	@Transactional
 	@Override
 	public OrdineResponseDto modificaProdotti(String id, Map<String, Integer> prodotti) {
-		OrdineEntity ordine = repository.findByOrdineId(id).orElseThrow(()->new OrdineException(
-				"L'ordine non è presente",id
-		));
-		return null;
+		OrdineEntity ordine = controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
+		Set<MovimentoEntity> movimenti = ordine.getMovimento();
+		for(MovimentoEntity movimento: movimenti)
+		{
+			Integer quantita = prodotti.get(movimento.getProdotto().getProductId());
+			if(null != quantita)
+			{
+				if(quantita < 0)
+				{
+					throw new ProdottoException("Errore: il prodotto da modificare ha quantità negativa",movimento.getProdotto().getProductId());
+				}else if(quantita == 0)
+				{
+					continue;
+				}
+				int nuovaQuantita = quantita + movimento.getQuantita();
+				int modifica = stockRepository.modificaQuantitaProdotto(quantita,movimento.getProdotto().getProductId());
+				if(modifica == 0)
+				{
+					throw new MagazzinoException("Errore: il prodotto non ha giacenze in magazzino",movimento.getProdotto()
+							.getProductId(), nuovaQuantita);
+				}
+				movimento.modificaQuantita(nuovaQuantita);
+			}
+
+		}
+		return ordineMapper.toDto(ordine.getOrdineId(),movimenti.stream().toList());
 	}
 
+	@Transactional
 	@Override
-	public OrdineResponseDto eliminaProdotti(String id, Map<String, Integer> prodotti) {
-		return null;
+	public OrdineEliminatiProdottiResponseDto eliminaProdotti(String id, List<String> idPubbliciProdotti) {
+		controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
+		int modificati = repository.eliminaOrdiniSoftDelete(id,idPubbliciProdotti);
+		if(modificati != idPubbliciProdotti.size())
+		{
+			throw new ProdottoException("Prodotti invalidi durante l'eliminazione dall'ordine",idPubbliciProdotti.toString());
+		}
+		return new OrdineEliminatiProdottiResponseDto(id,idPubbliciProdotti);
 	}
 
+	@Transactional
 	@Override
 	public OrdineResponseDto inserisciProdotti(String id, Map<String, Integer> prodotti) {
-		return null;
+		OrdineEntity ordine = controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
+		for(var valore : prodotti.entrySet())
+		{
+			esistenzaProdottoOrdine(id,valore.getKey());
+			modificaProdottiEControllo(valore);
+			ProdottoEntity prodotto = prodottoRepository.findByProductId(valore.getKey())
+					.orElseThrow(()->new ProdottoException("Il prodotto da aggiungere non esiste",valore.getKey()));
+			ordine.aggiungiProdotto(prodotto,valore.getValue());
+		}
+		return ordineMapper.toDto(ordine.getOrdineId(), ordine.getMovimento().stream().toList());
 	}
 
 	private ProdottoConQuantitaResponseDto creazioneProdotto(MovimentoEntity movimento)
@@ -133,6 +168,21 @@ public class OrdineService implements IOrdineService {
 		if(elementiModificati == 0)
 		{
 			throw new MagazzinoException("Errore: il prodotto non ha giacenze in magazzino",valore.getKey(),valore.getValue());
+		}
+	}
+
+	private OrdineEntity controlloEsistenzaOrdine(String id,StatoOrdineEnum stato)
+	{
+		return repository.findByOrdineIdAndStatoOrdine(id, stato).orElseThrow(()->new OrdineException(
+				"L'ordine non è presente o ha uno stato invalido",id
+		));
+	}
+
+	private void esistenzaProdottoOrdine(String idOrdine,String idProdotto)
+	{
+		if(movimentoRepository.existsOrdine_OrdineIdAndProdotto_ProductId(idOrdine,idProdotto))
+		{
+			throw new MovimentoException("Il prodotto è già presente nell'ordine, non puoi aggiungerlo",idOrdine,idProdotto);
 		}
 	}
 

@@ -21,4 +21,11 @@ public interface StockRepository extends JpaRepository<StockEntity,Long> {
 					" WHERE (s.quantita - :quantita) >= 0 AND s.prodotto.productId = :prodottoId"
 	)
 	int modificaQuantitaProdotto(@Param("quantita") int quantita,@Param("prodottoId") String prodottoId);
+
+	@Modifying
+	@Query(
+			"UPDATE StockEntity s SET s.quantita = s.quantita + :quantita" +
+					" WHERE s.prodotto.productId = :prodottoId"
+	)
+	int aggiungiQuantitaProdotto(@Param("quantita") int quantita,@Param("prodottoId") String prodottoId);
 }

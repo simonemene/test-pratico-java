@@ -62,4 +62,9 @@ public class OrdineEntity  extends AuditEntity{
 		this.movimento.add(movimento);
 		return movimento;
 	}
+
+	public void sostituisciProdotti(Set<MovimentoEntity> listaMovimenti)
+	{
+		this.movimento = listaMovimenti;
+	}
 }

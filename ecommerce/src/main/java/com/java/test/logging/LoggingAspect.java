@@ -85,7 +85,7 @@ public class LoggingAspect {
 					joinPoint.getTarget().getClass().getSimpleName(),
 					joinPoint.getSignature(),
 					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),
-					p.getProductId());
+					Arrays.toString(p.getProductId()));
 		default->
 			log.error("""
 					[ATTENZIONE] ERRORE NON PREVISTO
