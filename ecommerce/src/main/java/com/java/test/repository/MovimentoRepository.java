@@ -6,5 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MovimentoRepository extends JpaRepository<MovimentoEntity,Long> {
 
-	boolean existsOrdine_OrdineIdAndProdotto_ProductId(String idOrdine,String idProdotto);
+	boolean existsByOrdine_OrdineIdAndProdotto_ProductId(
+			String idOrdine,
+			String idProdotto
+	);
+
 }

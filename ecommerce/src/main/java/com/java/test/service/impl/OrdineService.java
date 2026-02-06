@@ -180,7 +180,7 @@ public class OrdineService implements IOrdineService {
 
 	private void esistenzaProdottoOrdine(String idOrdine,String idProdotto)
 	{
-		if(movimentoRepository.existsOrdine_OrdineIdAndProdotto_ProductId(idOrdine,idProdotto))
+		if(movimentoRepository.existsByOrdine_OrdineIdAndProdotto_ProductId(idOrdine,idProdotto))
 		{
 			throw new MovimentoException("Il prodotto è già presente nell'ordine, non puoi aggiungerlo",idOrdine,idProdotto);
 		}

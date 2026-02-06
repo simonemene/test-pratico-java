@@ -21,6 +21,7 @@ public interface OrdineRepository extends JpaRepository<OrdineEntity,Long> {
     UPDATE OrdineEntity o
     SET o.flgAnnullo = 'S'
     WHERE o.ordineId = :idOrdine
+      AND o.flgAnnullo != 'S'
       AND EXISTS (
           SELECT 1
           FROM MovimentoEntity m
