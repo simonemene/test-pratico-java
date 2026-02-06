@@ -70,4 +70,21 @@ public class OrdineControllerValidationTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori['prodotti[prodotto]']").value(
 						"La quantità di prodotto non può essere minore di 0"));
 	}
+
+
+	@Test
+	public void controlloValidazioneOrdineInformazioni() throws Exception {
+		//given
+		//when
+		//then
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/ordine/{id}"," ")
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest())
+				.andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Errore nella validazione dei campi"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("Uno o più campi sono invalidi"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.instance").value(
+						Matchers.startsWith("/api/ordine")))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.length()").value(1))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.id").value("L'id dell'ordine non può essere vuoto"));
+	}
 }
