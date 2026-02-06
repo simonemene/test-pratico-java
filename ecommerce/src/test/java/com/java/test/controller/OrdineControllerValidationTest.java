@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.test.configuration.SecurityConfiguration;
 import com.java.test.dto.OrdineRequestDto;
 import com.java.test.service.IOrdineService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -45,7 +46,10 @@ public class OrdineControllerValidationTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.length()").value(2))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.utenteId").value("l'utente non può essere vuoto"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.prodotti").value(
-						"L'elenco dei prodotti non può essere vuoto; Elenco dei prodotto deve esistere"));
+						Matchers.allOf(Matchers.containsString(
+						"L'elenco dei prodotti non può essere vuoto"),
+								Matchers.containsString("Elenco dei prodotto deve esistere"))
+				));
 	}
 
 	@Test
