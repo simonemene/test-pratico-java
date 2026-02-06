@@ -16,18 +16,16 @@ public interface OrdineRepository extends JpaRepository<OrdineEntity,Long> {
 
 	Optional<OrdineEntity> findByOrdineIdAndStatoOrdine(String id, StatoOrdineEnum stato);
 
-	@Modifying
+	@Modifying()
 	@Query("""
-    UPDATE OrdineEntity o
-    SET o.flgAnnullo = 'S'
-    WHERE o.ordineId = :idOrdine
-      AND o.flgAnnullo != 'S'
-      AND EXISTS (
-          SELECT 1
-          FROM MovimentoEntity m
-          WHERE m.ordine = o
-            AND m.prodotto.productId IN :idPubbliciProdotti
-      )
-    """)
-	int eliminaOrdiniSoftDelete(@Param("idOrdine") String idOrdine,@Param("idPubbliciProdotti") List<String> idPubbliciProdotti);
+    UPDATE MovimentoEntity m
+    SET m.flgAnnullo = 'S'
+    WHERE m.ordine.ordineId = :idOrdine
+      AND m.prodotto.productId IN (:idPubbliciProdotti)
+      AND (m.flgAnnullo IS NULL OR m.flgAnnullo <> 'S')
+""")
+	int eliminaProdottiOrdine(
+			@Param("idOrdine") String idOrdine,
+			@Param("idPubbliciProdotti") List<String> idPubbliciProdotti
+	);
 }

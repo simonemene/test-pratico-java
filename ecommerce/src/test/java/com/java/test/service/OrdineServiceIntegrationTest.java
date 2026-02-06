@@ -13,6 +13,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -152,17 +153,26 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(stock.getQuantita()).isEqualTo(10);
 	}
 
-	@Transactional
-	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
 	public void eliminaProdottiDaOrdine()
 	{
 		//given
-
+		String id = "564W";
+		List<String> prodotti = List.of("dgfgdfgdf45mnbv");
 		//when
-
+		service.eliminaProdotti(id,prodotti);
 		//then
+		Assertions.assertThat(jdbcClient.sql("SELECT FLG_ANNULLO FROM MOVIMENTO WHERE " +
+								"ID_PRODOTTO = (SELECT ID FROM PRODOTTO WHERE ID_PUBBLICO_PRODOTTO =?)" +
+								" AND ID_ORDINE = (SELECT ID FROM ORDINE WHERE ORDINE_ID=?)")
+						.param(1,"dgfgdfgdf45mnbv")
+						.param(2,id)
+						.query().singleValue())
+				.isEqualTo("S");
+		StockEntity stock = stockRepository.findByProdotto_ProductId("dgfgdfgdf45mnbv").get();
+		Assertions.assertThat(stock.getQuantita()).isEqualTo(22);
 	}
 
 	@Transactional

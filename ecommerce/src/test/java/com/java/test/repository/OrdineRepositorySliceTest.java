@@ -58,4 +58,15 @@ public class OrdineRepositorySliceTest {
         Assertions.assertThat(repository.findByOrdineIdAndStatoOrdine("123A",
                 StatoOrdineEnum.CONSEGNATO)).isNotPresent();
     }
+
+    @Sql(scripts = "classpath:sql/service/ordini/insert-ordini-stato.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Test
+    public void modificaOrdineSoftDelete()
+    {
+        //given
+        //when
+        //then
+        Assertions.assertThat(repository.eliminaProdottiOrdine("123A",
+                List.of("rgvbdfgdf454345"))).isEqualTo(1);
+    }
 }

@@ -133,10 +133,16 @@ public class OrdineService implements IOrdineService {
 	@Override
 	public OrdineEliminatiProdottiResponseDto eliminaProdotti(String id, List<String> idPubbliciProdotti) {
 		controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
-		int modificati = repository.eliminaOrdiniSoftDelete(id,idPubbliciProdotti);
+		int modificati = repository.eliminaProdottiOrdine(id,idPubbliciProdotti);
 		if(modificati != idPubbliciProdotti.size())
 		{
 			throw new ProdottoException("Prodotti invalidi durante l'eliminazione dall'ordine",idPubbliciProdotti.toString());
+		}
+		for(String prodotto : idPubbliciProdotti)
+		{
+			MovimentoEntity movimento = movimentoRepository.findByOrdine_OrdineIdAndProdotto_ProductId(id,prodotto)
+					.orElseThrow(()->new MovimentoException("Non trovo il movimento da sistemare per eliminazione prodotti",id,prodotto));
+			movimento.getProdotto().getStocK().aumentaQuantitaMagazzino(movimento.getQuantita());
 		}
 		return new OrdineEliminatiProdottiResponseDto(id,idPubbliciProdotti);
 	}
