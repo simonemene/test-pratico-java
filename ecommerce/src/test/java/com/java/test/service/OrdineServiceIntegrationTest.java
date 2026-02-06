@@ -209,34 +209,43 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 	{
 		//given
 		String id = "564W";
-		Map<String, Integer> prodotti = Map.of("dgfgdfgdfaaa4345",2);
 		Assertions.assertThat(jdbcClient.sql("SELECT FLG_ANNULLO FROM ORDINE WHERE " +
 								"  ORDINE_ID = ?")
 						.param(1,id)
 						.query().singleValue())
 				.isEqualTo("N");
-		Assertions.assertThat(jdbcClient.sql("SELECT FLG_ANNULLO FROM prodotto WHERE " +
-								"  ID_PUBBLICO_PRODOTTO")
-						.param(1,id)
+		Assertions.assertThat(jdbcClient.sql("SELECT M.FLG_ANNULLO FROM MOVIMENTO AS M JOIN PRODOTTO AS P ON P.ID = M.ID_PRODOTTO  " +
+								"   WHERE P.ID_PUBBLICO_PRODOTTO= ?")
+						.param(1,"dgfgdfgdf45mnbv")
+						.query().singleValue())
+				.isEqualTo("N");
+		Assertions.assertThat(jdbcClient.sql("SELECT M.FLG_ANNULLO FROM MOVIMENTO AS M JOIN PRODOTTO AS P ON P.ID = M.ID_PRODOTTO  " +
+								"   WHERE P.ID_PUBBLICO_PRODOTTO= ?")
+						.param(1,"dgfgdfgdfaaa4345")
 						.query().singleValue())
 				.isEqualTo("N");
 		//when
-		service.inserisciProdotti(id,prodotti);
+		service.cancellazioneOrdine(id);
 		//then
-		Assertions.assertThat(jdbcClient.sql("SELECT COUNT(*) FROM MOVIMENTO WHERE " +
-								"  ID_ORDINE = (SELECT ID FROM ORDINE WHERE ORDINE_ID=?)")
+		Assertions.assertThat(jdbcClient.sql("SELECT FLG_ANNULLO FROM ORDINE WHERE " +
+								"  ORDINE_ID = ?")
 						.param(1,id)
 						.query().singleValue())
-				.isEqualTo(3L);
-		Assertions.assertThat(jdbcClient.sql("SELECT QUANTITA FROM MOVIMENTO WHERE " +
-								"ID_PRODOTTO = (SELECT ID FROM PRODOTTO WHERE ID_PUBBLICO_PRODOTTO =?)" +
-								" AND ID_ORDINE = (SELECT ID FROM ORDINE WHERE ORDINE_ID=?)")
-						.param(1,"rgvbdfgdf454345")
-						.param(2,id)
+				.isEqualTo("S");
+		Assertions.assertThat(jdbcClient.sql("SELECT M.FLG_ANNULLO FROM MOVIMENTO AS M JOIN PRODOTTO AS P ON P.ID = M.ID_PRODOTTO  " +
+								"   WHERE P.ID_PUBBLICO_PRODOTTO= ?")
+						.param(1,"dgfgdfgdf45mnbv")
 						.query().singleValue())
-				.isEqualTo(2);
-		StockEntity stock = stockRepository.findByProdotto_ProductId("rgvbdfgdf454345").get();
-		Assertions.assertThat(stock.getQuantita()).isEqualTo(3);
+				.isEqualTo("S");
+		Assertions.assertThat(jdbcClient.sql("SELECT M.FLG_ANNULLO FROM MOVIMENTO AS M JOIN PRODOTTO AS P ON P.ID = M.ID_PRODOTTO  " +
+								"   WHERE P.ID_PUBBLICO_PRODOTTO= ?")
+						.param(1,"dgfgdfgdfaaa4345")
+						.query().singleValue())
+				.isEqualTo("S");
+		StockEntity stock = stockRepository.findByProdotto_ProductId("dgfgdfgdf45mnbv").get();
+		Assertions.assertThat(stock.getQuantita()).isEqualTo(22);
+		StockEntity stock2 = stockRepository.findByProdotto_ProductId("dgfgdfgdfaaa4345").get();
+		Assertions.assertThat(stock2.getQuantita()).isEqualTo(5);
 	}
 
 
