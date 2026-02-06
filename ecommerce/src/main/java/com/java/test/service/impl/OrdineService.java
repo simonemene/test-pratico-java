@@ -102,6 +102,24 @@ public class OrdineService implements IOrdineService {
 		return ordineMapper.toListaDto(repository.findAll().stream().toList());
 	}
 
+	@Transactional
+	@Override
+	public OrdineResponseDto modificaProdotti(String id, Map<String, Integer> prodotti) {
+		OrdineEntity ordine = repository.findByOrdineId(id).orElseThrow(()->new OrdineException(
+				"L'ordine non è presente",id
+		));
+		return null;
+	}
+
+	@Override
+	public OrdineResponseDto eliminaProdotti(String id, Map<String, Integer> prodotti) {
+		return null;
+	}
+
+	@Override
+	public OrdineResponseDto inserisciProdotti(String id, Map<String, Integer> prodotti) {
+		return null;
+	}
 
 	private ProdottoConQuantitaResponseDto creazioneProdotto(MovimentoEntity movimento)
 	{

@@ -13,4 +13,10 @@ public interface IOrdineService {
 	OrdineResponseDto ricercaOrdinePerId(String id);
 
 	OrdiniResponseDto ricercaTuttiGliOrdini();
+
+	OrdineResponseDto modificaProdotti(String id,Map<String,Integer> prodotti);
+
+	OrdineResponseDto eliminaProdotti(String id,Map<String,Integer> prodotti);
+
+	OrdineResponseDto inserisciProdotti(String id,Map<String,Integer> prodotti);
 }
