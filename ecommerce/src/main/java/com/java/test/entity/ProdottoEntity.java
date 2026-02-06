@@ -43,6 +43,9 @@ public class ProdottoEntity  extends AuditEntity{
 
 	private BigDecimal prezzo;
 
+	@Version
+	private int version;
+
 	@Column(unique = true)
 	private String nome;
 

@@ -13,6 +13,7 @@ import com.java.test.repository.OrdineRepository;
 import com.java.test.repository.StockRepository;
 import com.java.test.repository.UtenteRepository;
 import com.java.test.service.IOrdineService;
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -100,6 +101,7 @@ public class OrdineService implements IOrdineService {
 	public OrdiniResponseDto ricercaTuttiGliOrdini() {
 		return ordineMapper.toListaDto(repository.findAll().stream().toList());
 	}
+
 
 	private ProdottoConQuantitaResponseDto creazioneProdotto(MovimentoEntity movimento)
 	{

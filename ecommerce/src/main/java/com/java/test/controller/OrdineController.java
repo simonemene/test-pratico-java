@@ -45,4 +45,29 @@ public class OrdineController {
 	{
 		return ResponseEntity.ok(service.ricercaOrdinePerId(id));
 	}
+
+	@PutMapping("/{id}/prodotti")
+	public ResponseEntity<OrdineResponseDto> modificaProdotti(@PathVariable String id,@RequestBody OrdineRequestDto prodottiModificati)
+	{
+		return null;
+	}
+
+	@DeleteMapping("/{id}/prodotti")
+	public ResponseEntity<OrdineResponseDto> eliminaProdotti(@PathVariable String id,@RequestBody OrdineRequestDto prodottiEliminati)
+	{
+		return null;
+	}
+
+	@PostMapping("/{id}/prodotti")
+	public ResponseEntity<OrdineResponseDto> inserisciProdotti(@PathVariable String id,@RequestBody OrdineRequestDto inserimentoProdotti)
+	{
+		return null;
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<OrdineResponseDto> eliminaOrdine(@PathVariable String id)
+	{
+		return null;
+	}
+
 }

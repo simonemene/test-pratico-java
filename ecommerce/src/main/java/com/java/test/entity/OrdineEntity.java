@@ -1,10 +1,10 @@
 package com.java.test.entity;
 
+import com.java.test.enums.StatoOrdineEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,10 +37,18 @@ public class OrdineEntity  extends AuditEntity{
 	@JoinColumn(name = "ID_UTENTE",nullable = false)
 	private UtenteEntity utente;
 
+	@Version
+	private int version;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name =  "STATO")
+	private StatoOrdineEnum statoOrdine;
+
 	@PrePersist
 	public void init()
 	{
 		this.ordineId = UUID.randomUUID().toString();
+		this.statoOrdine = StatoOrdineEnum.CREATO;
 	}
 
 	public void collegaUtente(UtenteEntity utente)

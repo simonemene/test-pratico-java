@@ -42,6 +42,9 @@ public class UtenteEntity  extends AuditEntity{
 	@Column(unique = true,nullable = false)
 	private String codiceFiscale;
 
+	@Version
+	private int version;
+
 	@OneToMany(mappedBy = "utente",fetch = FetchType.LAZY)
 	private Set<OrdineEntity> ordine = new HashSet<>();
 
