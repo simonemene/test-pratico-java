@@ -2,8 +2,6 @@ package com.java.test.service;
 
 import com.java.test.TestjavaApplicationTests;
 import com.java.test.dto.*;
-import com.java.test.entity.MovimentoEntity;
-import com.java.test.entity.OrdineEntity;
 import com.java.test.entity.StockEntity;
 import com.java.test.entity.UtenteEntity;
 import com.java.test.repository.OrdineRepository;
@@ -13,10 +11,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -77,6 +73,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 
 
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-singolo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
 	public void ricercaOrdinePerId()
 	{
@@ -97,6 +94,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 	}
 
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
 	public void ricercaTuttiGliOrdini()
 	{

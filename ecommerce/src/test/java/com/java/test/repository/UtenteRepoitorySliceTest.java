@@ -40,13 +40,14 @@ public class UtenteRepoitorySliceTest {
 	public void trovaUtenteTramiteIdPubblico()
 	{
 		//given
-		jdbcClient.sql("INSERT INTO UTENTE(EMAIL,NOME,COGNOME,CODICE_FISCALE,UTENTE_ID) VALUES" +
-				"(?,?,?,?,?)")
+		jdbcClient.sql("INSERT INTO UTENTE(EMAIL,NOME,COGNOME,CODICE_FISCALE,UTENTE_ID,VERSION) VALUES" +
+				"(?,?,?,?,?,?)")
 				.param(1,"prova@prova.com")
 				.param(2,"Marco")
 				.param(3,"Rossi")
 				.param(4,"345RTGFHYUJHNBBF")
 				.param(5,"12A")
+				.param(6,1)
 				.update();
 
 		//when
