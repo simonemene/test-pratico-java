@@ -28,4 +28,16 @@ public interface OrdineRepository extends JpaRepository<OrdineEntity,Long> {
 			@Param("idOrdine") String idOrdine,
 			@Param("idPubbliciProdotti") List<String> idPubbliciProdotti
 	);
+
+	@Modifying
+	@Query("""
+    UPDATE OrdineEntity o
+    SET o.flgAnnullo = 'S'
+    WHERE o.ordineId = :idOrdine
+      AND (o.flgAnnullo IS NULL OR o.flgAnnullo <> 'S')
+""")
+	int eliminaOrdine(String idOrdine);
+
+
+
 }

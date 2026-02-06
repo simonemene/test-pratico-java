@@ -162,6 +162,25 @@ public class OrdineService implements IOrdineService {
 		return ordineMapper.toDto(ordine.getOrdineId(), ordine.getMovimento().stream().toList());
 	}
 
+	@Transactional
+	@Override
+	public void cancellazioneOrdine(String id) {
+         List<String> prodottiOrdine = movimentoRepository.elencoProdottiOrdine(id);
+		int eliminaProdotti= repository.eliminaProdottiOrdine(id,prodottiOrdine);
+		if(eliminaProdotti != prodottiOrdine.size())
+		{
+			throw new OrdineException("Non sono riuscito a cancellare l'ordine", id);
+		}
+
+		 int ordine = repository.eliminaOrdine(id);
+		 if(ordine == 0)
+		 {
+			 throw new OrdineException("Non sono riuscito a cancellare l'ordine", id);
+		 }
+	}
+
+
+
 	private ProdottoConQuantitaResponseDto creazioneProdotto(MovimentoEntity movimento)
 	{
 		return prodottoMapper.toDtoStock(movimento.getProdotto(),movimento.getProdotto()
