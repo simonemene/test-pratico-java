@@ -1,11 +1,7 @@
 package com.java.test.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.java.test.dto.OrdineEffettuatoResponseDto;
-import com.java.test.dto.OrdineRequestDto;
-import com.java.test.entity.MovimentoEntity;
-import com.java.test.entity.OrdineEntity;
-import com.java.test.entity.StockEntity;
+import com.java.test.dto.*;
 import com.java.test.repository.OrdineRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,15 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
+@Sql(scripts = "classpath:sql/service/ordini/insert-ordine.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -33,7 +33,10 @@ public class OrdineControllerIntegrationTest {
 	@Autowired
 	private OrdineRepository repository;
 
-	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Autowired
+	private JdbcClient jdbcClient;
+
+
 	@Test
 	public void creazioneOrdine() throws JsonProcessingException {
 		//given
@@ -47,6 +50,81 @@ public class OrdineControllerIntegrationTest {
 		Assertions.assertThat(response.getHeaders().getLocation().getPath())
 				.isEqualTo("/api/ordine/"+response.getBody().idPubblico());
 		Assertions.assertThat(repository.findByOrdineId(response.getBody().idPubblico()).get()).isNotNull();
+
+	}
+
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Test
+	public void modificaOrdine()
+	{
+		//given
+		OrdineRequestDto request = new OrdineRequestDto("564W",
+				Map.of("dgfgdfgdf45mnbv",2));
+		String id = "564W";
+
+		//when
+		ResponseEntity<OrdineResponseDto> response =
+				template.exchange(
+						"/api/ordine/{id}/prodotti",
+						HttpMethod.PUT,
+						new HttpEntity<>(request),
+						OrdineResponseDto.class,
+						id
+				);
+		//then
+		Assertions.assertThat(response.getBody().idPubblicoOrdine()).isEqualTo(id);
+		List<MovimentoResponseDto> movimenti = response.getBody().movimenti();
+		Assertions.assertThat(movimenti.size()).isEqualTo(2);
+		MovimentoResponseDto movimento = movimenti.stream().filter(mov->mov.nomeProdotto().equals("COMPUTER")).findFirst().get();
+		Assertions.assertThat(movimento.quantitaOrdinata()).isEqualTo(12);
+	}
+
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Test
+	public void cancellaProdottiOrdine()
+	{
+         //given
+		OrdiniCancellatiRequestDto prodotti = new OrdiniCancellatiRequestDto(List.of("dgfgdfgdf45mnbv"));
+		String id = "564W";
+		Assertions.assertThat(jdbcClient.sql("SELECT FLG_ANNULLO FROM MOVIMENTO WHERE " +
+						"ID_PRODOTTO = (SELECT ID FROM PRODOTTO WHERE ID_PUBBLICO_PRODOTTO =?)" +
+						" AND ID_ORDINE = (SELECT ID FROM ORDINE WHERE ORDINE_ID=?)")
+				.param(1,"dgfgdfgdf45mnbv")
+				.param(2,id)
+				.query().singleValue())
+				.isEqualTo("N");
+		//when
+				template.exchange(
+						"/api/ordine/{id}/prodotti",
+						HttpMethod.DELETE,
+						new HttpEntity<>(prodotti),
+						OrdineResponseDto.class,
+						id
+				);
+		//then
+		Assertions.assertThat(jdbcClient.sql("SELECT FLG_ANNULLO FROM MOVIMENTO WHERE " +
+								"ID_PRODOTTO = (SELECT ID FROM PRODOTTO WHERE ID_PUBBLICO_PRODOTTO =?)" +
+								" AND ID_ORDINE = (SELECT ID FROM ORDINE WHERE ORDINE_ID=?)")
+						.param(1,"dgfgdfgdf45mnbv")
+						.param(2,id)
+						.query().singleValue())
+				.isEqualTo("S");
+		Assertions.assertThat(jdbcClient.sql("SELECT QUANTITA FROM STOCK WHERE " +
+								"PRODOTTO_ID = (SELECT ID FROM PRODOTTO WHERE ID_PUBBLICO_PRODOTTO =?)")
+						.param(1,"dgfgdfgdf45mnbv")
+						.query().singleValue())
+				.isEqualTo(22);
+	}
+
+	@Test
+	public void inserisciProdottoOrdine()
+	{
+
+	}
+
+	@Test
+	public void cancellaOrdine()
+	{
 
 	}
 }
