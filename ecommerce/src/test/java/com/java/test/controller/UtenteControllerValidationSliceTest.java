@@ -1,6 +1,7 @@
 package com.java.test.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.java.test.configuration.JpaConfiguration;
 import com.java.test.configuration.SecurityConfiguration;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.service.IUtenteService;
@@ -16,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(value = UtenteController.class)
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class})
 public class UtenteControllerValidationSliceTest {
 
 	@Autowired

@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Table(name = "STOCK")
 @Entity
-public class StockEntity {
+public class StockEntity  extends AuditEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

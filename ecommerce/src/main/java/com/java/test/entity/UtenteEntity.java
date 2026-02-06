@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @Entity
 @Table(name = "UTENTE")
-public class UtenteEntity {
+public class UtenteEntity  extends AuditEntity{
 
 	protected UtenteEntity()
 	{

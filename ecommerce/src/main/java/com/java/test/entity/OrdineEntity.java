@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Entity
 @Table(name = "ORDINE")
-public class OrdineEntity {
+public class OrdineEntity  extends AuditEntity{
 
 	protected OrdineEntity()
 	{

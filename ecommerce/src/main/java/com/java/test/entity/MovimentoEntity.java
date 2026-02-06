@@ -10,7 +10,7 @@ uniqueConstraints = @UniqueConstraint(
 		name = "movimento_ordine_prodotto",
 		columnNames = {"ID_ORDINE","ID_PRODOTTO"}
 ))
-public class MovimentoEntity {
+public class MovimentoEntity extends AuditEntity{
 
 	protected MovimentoEntity()
 	{
