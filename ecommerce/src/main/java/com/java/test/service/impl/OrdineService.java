@@ -165,8 +165,19 @@ public class OrdineService implements IOrdineService {
 	@Transactional
 	@Override
 	public void cancellazioneOrdine(String id) {
-         List<String> prodottiOrdine = movimentoRepository.elencoProdottiOrdine(id);
-		int eliminaProdotti= repository.eliminaProdottiOrdine(id,prodottiOrdine);
+		List<MovimentoEntity> movimenti = movimentoRepository.findByOrdine_OrdineId(id);
+         List<String> prodottiOrdine = movimenti.stream().map(mov->mov.getProdotto().getProductId()).toList();
+		 for(MovimentoEntity movimento : movimenti)
+		 {
+			 int aggiunta = stockRepository.aggiungiQuantitaProdotto(movimento.getQuantita(),movimento.getProdotto().getProductId());
+			 if(aggiunta == 0)
+			 {
+				 throw new MagazzinoException("Non sono riuscito a modificare il magazzino per la cancellazione dell'ordine",movimento.getProdotto().getProductId(),
+						 movimento.getQuantita());
+			 }
+		 }
+		int eliminaProdotti= repository.eliminaProdottiOrdine(id,movimenti.stream().map(mov->mov.getProdotto().getProductId()).toList());
+
 		if(eliminaProdotti != prodottiOrdine.size())
 		{
 			throw new OrdineException("Non sono riuscito a cancellare l'ordine", id);

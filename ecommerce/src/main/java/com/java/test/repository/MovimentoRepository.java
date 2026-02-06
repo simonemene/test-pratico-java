@@ -18,6 +18,8 @@ public interface MovimentoRepository extends JpaRepository<MovimentoEntity,Long>
 
 	Optional<MovimentoEntity> findByOrdine_OrdineIdAndProdotto_ProductId(String id,String prodotto);
 
+	List<MovimentoEntity> findByOrdine_OrdineId(String id);
+
 	@Query
 			("""
 					SELECT m.prodotto.productId

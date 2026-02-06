@@ -202,6 +202,43 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(stock.getQuantita()).isEqualTo(3);
 	}
 
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Test
+	public void cancellaOrdine()
+	{
+		//given
+		String id = "564W";
+		Map<String, Integer> prodotti = Map.of("dgfgdfgdfaaa4345",2);
+		Assertions.assertThat(jdbcClient.sql("SELECT FLG_ANNULLO FROM ORDINE WHERE " +
+								"  ORDINE_ID = ?")
+						.param(1,id)
+						.query().singleValue())
+				.isEqualTo("N");
+		Assertions.assertThat(jdbcClient.sql("SELECT FLG_ANNULLO FROM prodotto WHERE " +
+								"  ID_PUBBLICO_PRODOTTO")
+						.param(1,id)
+						.query().singleValue())
+				.isEqualTo("N");
+		//when
+		service.inserisciProdotti(id,prodotti);
+		//then
+		Assertions.assertThat(jdbcClient.sql("SELECT COUNT(*) FROM MOVIMENTO WHERE " +
+								"  ID_ORDINE = (SELECT ID FROM ORDINE WHERE ORDINE_ID=?)")
+						.param(1,id)
+						.query().singleValue())
+				.isEqualTo(3L);
+		Assertions.assertThat(jdbcClient.sql("SELECT QUANTITA FROM MOVIMENTO WHERE " +
+								"ID_PRODOTTO = (SELECT ID FROM PRODOTTO WHERE ID_PUBBLICO_PRODOTTO =?)" +
+								" AND ID_ORDINE = (SELECT ID FROM ORDINE WHERE ORDINE_ID=?)")
+						.param(1,"rgvbdfgdf454345")
+						.param(2,id)
+						.query().singleValue())
+				.isEqualTo(2);
+		StockEntity stock = stockRepository.findByProdotto_ProductId("rgvbdfgdf454345").get();
+		Assertions.assertThat(stock.getQuantita()).isEqualTo(3);
+	}
+
 
 
 
