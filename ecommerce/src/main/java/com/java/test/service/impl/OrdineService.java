@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -164,7 +163,7 @@ public class OrdineService implements IOrdineService {
 
 	@Transactional
 	@Override
-	public void cancellazioneOrdine(String id) {
+	public String cancellazioneOrdine(String id) {
 		List<MovimentoEntity> movimenti = movimentoRepository.findByOrdine_OrdineId(id);
          List<String> prodottiOrdine = movimenti.stream().map(mov->mov.getProdotto().getProductId()).toList();
 		 for(MovimentoEntity movimento : movimenti)
@@ -188,6 +187,7 @@ public class OrdineService implements IOrdineService {
 		 {
 			 throw new OrdineException("Non sono riuscito a cancellare l'ordine", id);
 		 }
+		 return id;
 	}
 
 

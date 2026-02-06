@@ -1,13 +1,11 @@
 package com.java.test.controller;
 
-import com.java.test.dto.OrdineEffettuatoResponseDto;
-import com.java.test.dto.OrdineRequestDto;
-import com.java.test.dto.OrdineResponseDto;
-import com.java.test.dto.OrdiniResponseDto;
+import com.java.test.dto.*;
 import com.java.test.service.IOrdineService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -49,25 +47,25 @@ public class OrdineController {
 	@PutMapping("/{id}/prodotti")
 	public ResponseEntity<OrdineResponseDto> modificaProdotti(@PathVariable String id,@RequestBody OrdineRequestDto prodottiModificati)
 	{
-		return null;
+		return ResponseEntity.ok(service.modificaProdotti(id,prodottiModificati.prodotti()));
 	}
 
 	@DeleteMapping("/{id}/prodotti")
-	public ResponseEntity<OrdineResponseDto> eliminaProdotti(@PathVariable String id,@RequestBody OrdineRequestDto prodottiEliminati)
+	public ResponseEntity<OrdineEliminatiProdottiResponseDto> eliminaProdotti(@PathVariable String id,@RequestBody OrdiniCancellatiRequestDto prodottiEliminati)
 	{
-		return null;
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.eliminaProdotti(id,prodottiEliminati.prodotti()));
 	}
 
 	@PostMapping("/{id}/prodotti")
 	public ResponseEntity<OrdineResponseDto> inserisciProdotti(@PathVariable String id,@RequestBody OrdineRequestDto inserimentoProdotti)
 	{
-		return null;
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.inserisciProdotti(id,inserimentoProdotti.prodotti()));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<OrdineResponseDto> eliminaOrdine(@PathVariable String id)
+	public ResponseEntity<String> eliminaOrdine(@PathVariable String id)
 	{
-		return null;
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.cancellazioneOrdine(id));
 	}
 
 }

@@ -22,5 +22,5 @@ public interface IOrdineService {
 
 	OrdineResponseDto inserisciProdotti(String id,Map<String,Integer> prodotti);
 
-	void cancellazioneOrdine(String id);
+	String cancellazioneOrdine(String id);
 }
