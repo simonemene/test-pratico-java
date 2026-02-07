@@ -2,6 +2,8 @@ package com.java.test.repository;
 
 import com.java.test.entity.OrdineEntity;
 import com.java.test.enums.StatoOrdineEnum;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,6 +40,5 @@ public interface OrdineRepository extends JpaRepository<OrdineEntity,Long> {
 """)
 	int eliminaOrdine(String idOrdine);
 
-
-
+	Page<OrdineEntity> findAll(Pageable pageable);
 }

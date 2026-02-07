@@ -1,7 +1,8 @@
 package com.java.test.repository;
 
 import com.java.test.entity.MovimentoEntity;
-import com.java.test.entity.OrdineEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,4 +31,5 @@ public interface MovimentoRepository extends JpaRepository<MovimentoEntity,Long>
 			)
 	List<String> elencoProdottiOrdine(@Param("ordine") String ordine);
 
+	Page<MovimentoEntity> findByOrdine_OrdineId(String id, Pageable pageable);
 }
