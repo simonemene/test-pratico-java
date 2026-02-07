@@ -2,6 +2,7 @@ package com.java.test.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.java.test.dto.*;
+import com.java.test.entity.MovimentoEntity;
 import com.java.test.repository.OrdineRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -94,13 +95,13 @@ public class OrdineControllerIntegrationTest {
 				.query().singleValue())
 				.isEqualTo("N");
 		//when
-				template.exchange(
+		template.exchange(
 						"/api/ordine/{id}/prodotti",
 						HttpMethod.DELETE,
 						new HttpEntity<>(prodotti),
-						OrdineResponseDto.class,
+						Void.class,
 						id
-				);
+		);
 		//then
 		Assertions.assertThat(jdbcClient.sql("SELECT FLG_ANNULLO FROM MOVIMENTO WHERE " +
 								"ID_PRODOTTO = (SELECT ID FROM PRODOTTO WHERE ID_PUBBLICO_PRODOTTO =?)" +
@@ -122,9 +123,47 @@ public class OrdineControllerIntegrationTest {
 
 	}
 
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void cancellaOrdine()
 	{
+		//given
+		String id = "564W";
+		Assertions.assertThat(jdbcClient.sql("""
+								SELECT FLG_ANNULLO FROM ORDINE WHERE ORDINE_ID = ?
+								""")
+						.param(1,id)
+						.query().singleValue())
+				.isEqualTo("N");
+		List<String> flgMovimenti = jdbcClient.sql("""
+				SELECT M.FLG_ANNULLO FROM MOVIMENTO AS M JOIN ORDINE AS O ON O.ID =M.ID_ORDINE
+				WHERE O.ORDINE_ID = ?
+				""").param(1,id)
+				.query(String.class)
+						.list();
+		Assertions.assertThat(flgMovimenti).containsOnly("N");
 
+		//when
+		template.exchange(
+				"/api/ordine/{id}",
+				HttpMethod.DELETE,
+				null,
+				Void.class,
+				id
+		);
+		//then
+		Assertions.assertThat(jdbcClient.sql("""
+								SELECT FLG_ANNULLO FROM ORDINE WHERE ORDINE_ID = ?
+								""")
+						.param(1,id)
+						.query().singleValue())
+				.isEqualTo("S");
+		List<String> flgMovimentiModificato = jdbcClient.sql("""
+				SELECT M.FLG_ANNULLO FROM MOVIMENTO AS M JOIN ORDINE AS O ON O.ID =M.ID_ORDINE
+				WHERE O.ORDINE_ID = ?
+				""").param(1,id)
+				.query(String.class)
+				.list();
+		Assertions.assertThat(flgMovimentiModificato).containsOnly("S");
 	}
 }

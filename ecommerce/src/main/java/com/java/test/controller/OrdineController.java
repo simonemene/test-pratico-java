@@ -51,9 +51,10 @@ public class OrdineController {
 	}
 
 	@DeleteMapping("/{id}/prodotti")
-	public ResponseEntity<OrdineEliminatiProdottiResponseDto> eliminaProdotti(@PathVariable String id,@RequestBody OrdiniCancellatiRequestDto prodottiEliminati)
+	public ResponseEntity<Void> eliminaProdotti(@PathVariable String id,@RequestBody OrdiniCancellatiRequestDto prodottiEliminati)
 	{
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.eliminaProdotti(id,prodottiEliminati.prodotti()));
+		service.eliminaProdotti(id,prodottiEliminati.prodotti());
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@PostMapping("/{id}/prodotti")
@@ -63,9 +64,10 @@ public class OrdineController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> eliminaOrdine(@PathVariable String id)
+	public ResponseEntity<Void> eliminaOrdine(@PathVariable String id)
 	{
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.cancellazioneOrdine(id));
+		service.cancellazioneOrdine(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 }
