@@ -12,6 +12,9 @@ import com.java.test.repository.StockRepository;
 import com.java.test.service.IProdottoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -32,6 +35,11 @@ public class ProdottoService implements IProdottoService {
 
 	private final StockRepository stockRepository;
 
+	@CacheEvict(
+			cacheNames = "listaProdotti",
+			key = "#authentication.name",
+			allEntries = true
+	)
 	@Transactional
 	@Override
 	public ProdottoResponseDto inserisciUnProdotto(
@@ -54,6 +62,11 @@ public class ProdottoService implements IProdottoService {
 		return mapper.toDto(stock.getProdotto());
 	}
 
+	@Cacheable(
+			cacheNames = "listaProdotti",
+			key = "#authentication.name",
+			unless = "#result == null ||| #result.prodotti().isEmpty"
+	)
 	@ReadOnlyTransactional
 	@Override
 	public ProdottoListResponseDto prendiListaProdotti() {
