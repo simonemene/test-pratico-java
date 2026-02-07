@@ -26,6 +26,8 @@ public class UtenteRepoitorySliceTest {
 	public void trovaUtenteTramiteEmail()
 	{
 		//given
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+				.update();
 		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR","password", new RuoloEntity(RuoloEnum.USER));
 		repository.save(utente);
 		//when
@@ -42,8 +44,11 @@ public class UtenteRepoitorySliceTest {
 	public void trovaUtenteTramiteIdPubblico()
 	{
 		//given
-		jdbcClient.sql("INSERT INTO UTENTE(EMAIL,NOME,COGNOME,CODICE_FISCALE,UTENTE_ID,VERSION) VALUES" +
-				"(?,?,?,?,?,?)")
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+				.update();
+
+		jdbcClient.sql("INSERT INTO UTENTE(EMAIL,NOME,COGNOME,CODICE_FISCALE,UTENTE_ID,VERSION,PASSWORD,ID_RUOLO) VALUES" +
+				"(?,?,?,?,?,?,'{bcrypt}PASSWORD',(SELECT ID FROM RUOLO WHERE RUOLO = 'USER'))")
 				.param(1,"prova@prova.com")
 				.param(2,"Marco")
 				.param(3,"Rossi")

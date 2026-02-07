@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -21,12 +22,17 @@ import org.springframework.test.context.jdbc.Sql;
 public class UtenteControllerIntegrationTest {
 
 	@Autowired
+	private JdbcClient jdbcClient;
+
+	@Autowired
 	private TestRestTemplate template;
 
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
 	public void creazioneUtente() throws JsonProcessingException {
 		//given
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+				.update();
 		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova@prova.it","345TGFDCFGTR5462","password");
 		//when
 		ResponseEntity<UtenteResponseDto> response = template.postForEntity(
