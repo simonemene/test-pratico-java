@@ -21,8 +21,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 import java.util.Map;
 
-@Sql(scripts = "classpath:sql/service/ordini/insert-ordine.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -38,6 +37,8 @@ public class OrdineControllerIntegrationTest {
 	private JdbcClient jdbcClient;
 
 
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void creazioneOrdine() throws JsonProcessingException {
 		//given
@@ -54,6 +55,7 @@ public class OrdineControllerIntegrationTest {
 
 	}
 
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void modificaOrdine()
@@ -80,6 +82,7 @@ public class OrdineControllerIntegrationTest {
 		Assertions.assertThat(movimento.quantitaOrdinata()).isEqualTo(12);
 	}
 
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void cancellaProdottiOrdine()
@@ -117,12 +120,44 @@ public class OrdineControllerIntegrationTest {
 				.isEqualTo(22);
 	}
 
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void inserisciProdottoOrdine()
 	{
-
+         //given
+		String id = "564W";
+		OrdineRequestDto ordine = new OrdineRequestDto("dffgdfgfgbfgbgbgbfgb454534",
+				Map.of("rgvbdfgdf454345",3));
+		Assertions.assertThat(jdbcClient.sql(
+				"""
+						SELECT COUNT(*) FROM MOVIMENTO AS M JOIN ORDINE AS O 
+						ON O.ID = M.ID_ORDINE
+						WHERE O.ORDINE_ID = ?
+						"""
+		).param(1,id).query().singleValue()).isEqualTo(2L);
+		//when
+		ResponseEntity<OrdineResponseDto> response = template.postForEntity(
+				"/api/ordine/{id}/prodotti",ordine, OrdineResponseDto.class,id);
+		//then
+		Assertions.assertThat(jdbcClient.sql(
+				"""
+						SELECT COUNT(*) FROM MOVIMENTO AS M JOIN ORDINE AS O 
+						ON O.ID = M.ID_ORDINE
+						WHERE O.ORDINE_ID = ?
+						"""
+		).param(1,id).query().singleValue()).isEqualTo(3L);
+		Assertions.assertThat(jdbcClient.sql(
+				"""
+						SELECT QUANTITA FROM STOCK AS S JOIN PRODOTTO AS P
+						ON P.ID = S.PRODOTTO_ID
+						WHERE P.ID_PUBBLICO_PRODOTTO = ?
+						"""
+		).param(1,"rgvbdfgdf454345")
+				.query().singleValue()).isEqualTo(2);
 	}
 
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void cancellaOrdine()
