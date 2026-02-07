@@ -90,7 +90,6 @@ public class OrdineServiceUnitTest {
 	@Test
 	public void erroreRicercaProdotti()
 	{
-
 		//given
 		UtenteEntity utente = new UtenteEntity("prova@prova.it","Paolo","Rossi","fsdfgsdfsdfs");
 		Mockito.when(utenteRepository.findByUtenteId(Mockito.anyString())).thenReturn(

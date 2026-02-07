@@ -164,6 +164,7 @@ public class OrdineService implements IOrdineService {
 	@Transactional
 	@Override
 	public String cancellazioneOrdine(String id) {
+		controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
 		List<MovimentoEntity> movimenti = movimentoRepository.findByOrdine_OrdineId(id);
          List<String> prodottiOrdine = movimenti.stream().map(mov->mov.getProdotto().getProductId()).toList();
 		 for(MovimentoEntity movimento : movimenti)
