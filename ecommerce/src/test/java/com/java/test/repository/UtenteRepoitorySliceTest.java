@@ -24,7 +24,7 @@ public class UtenteRepoitorySliceTest {
 	public void trovaUtenteTramiteEmail()
 	{
 		//given
-		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR");
+		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR","password");
 		repository.save(utente);
 		//when
 		UtenteEntity utenteTrovato = repository.findByEmail(utente.getEmail()).get();

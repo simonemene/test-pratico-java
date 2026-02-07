@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name = "PRODOTTO")
+@Table(name = "RUOLO")
 public class RuoloEntity {
 
     @Id

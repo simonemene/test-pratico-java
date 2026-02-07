@@ -36,7 +36,7 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 	public void inserisciUtente()
 	{
 		//given
-		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S");
+		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
 		//when
 		UtenteResponseDto utenteSalvato = service.creazioneUtente(utente);
 		//then
@@ -72,8 +72,8 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 	public void inserisciUtenteRollback()
 	{
 		//given
-		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S");
-		UtenteRequestDto utenteRollback = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT9712");
+		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
+		UtenteRequestDto utenteRollback = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT9712","password");
 		//when
 		UtenteResponseDto utenteSalvato = service.creazioneUtente(utente);
 		//then

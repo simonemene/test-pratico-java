@@ -17,14 +17,13 @@ public class UtenteEntity  extends AuditEntity{
 
 	}
 
-	public UtenteEntity(String email,String nome,String cognome,String codiceFiscale,String password,RuoloEntity ruolo)
+	public UtenteEntity(String email,String nome,String cognome,String codiceFiscale,String password)
 	{
 		this.email = email;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codiceFiscale = codiceFiscale;
 		this.password = password;
-		this.ruolo = ruolo;
 	}
 
 	@Id

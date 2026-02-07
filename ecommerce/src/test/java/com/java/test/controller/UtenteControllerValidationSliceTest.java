@@ -32,7 +32,7 @@ public class UtenteControllerValidationSliceTest {
 	@Test
 	public void controlloValidazioneUtenteRequest() throws Exception {
 		//given
-		UtenteRequestDto request = new UtenteRequestDto("","","","345TGFDCFGTR546");
+		UtenteRequestDto request = new UtenteRequestDto("","","","345TGFDCFGTR546","password");
 		//when
 		//then
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/utente").content(
@@ -53,7 +53,7 @@ public class UtenteControllerValidationSliceTest {
 	@Test
 	public void controlloValidazioneUtenteRequestEmailErroreFormato() throws Exception {
 		//given
-		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova","345TGFDCFGTR5462");
+		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova","345TGFDCFGTR5462","password");
 		//when
 		//then
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/utente").content(

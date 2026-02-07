@@ -17,7 +17,7 @@ public class UtenteMapper {
 
 	public UtenteEntity toEntity(UtenteRequestDto dto)
 	{
-		return new UtenteEntity(dto.email(),dto.nome(),dto.cognome(),dto.codiceFiscale());
+		return new UtenteEntity(dto.email(),dto.nome(),dto.cognome(),dto.codiceFiscale(),dto.password());
 	}
 
 	public List<UtenteResponseDto> toListaDto(List<UtenteEntity> utenti)

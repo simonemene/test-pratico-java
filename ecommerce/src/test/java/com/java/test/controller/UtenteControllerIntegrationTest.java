@@ -27,7 +27,7 @@ public class UtenteControllerIntegrationTest {
 	@Test
 	public void creazioneUtente() throws JsonProcessingException {
 		//given
-		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova@prova.it","345TGFDCFGTR5462");
+		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova@prova.it","345TGFDCFGTR5462","password");
 		//when
 		ResponseEntity<UtenteResponseDto> response = template.postForEntity(
 				"/api/utente",request,UtenteResponseDto.class);
