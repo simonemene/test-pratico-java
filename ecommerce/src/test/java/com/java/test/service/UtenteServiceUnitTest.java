@@ -1,9 +1,12 @@
 package com.java.test.service;
 
 import com.java.test.dto.UtenteRequestDto;
+import com.java.test.entity.RuoloEntity;
 import com.java.test.entity.UtenteEntity;
+import com.java.test.enums.RuoloEnum;
 import com.java.test.exception.ApplicationException;
 import com.java.test.mapper.UtenteMapper;
+import com.java.test.repository.RuoloRepository;
 import com.java.test.repository.UtenteRepository;
 import com.java.test.service.impl.UtenteService;
 import org.assertj.core.api.Assertions;
@@ -21,6 +24,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.BadSqlGrammarException;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 @ExtendWith(OutputCaptureExtension.class)
 public class UtenteServiceUnitTest {
@@ -34,6 +38,9 @@ public class UtenteServiceUnitTest {
 	@InjectMocks
 	private UtenteService service;
 
+	@Mock
+	private RuoloRepository ruoloRepository;
+
 
 	@BeforeEach
 	public void init()
@@ -45,8 +52,9 @@ public class UtenteServiceUnitTest {
 	public void creazioneUtenteErrore(CapturedOutput capturedOutput)
 	{
 		//given
+		Mockito.when(ruoloRepository.findByRuolo(Mockito.any())).thenReturn(Optional.of(new RuoloEntity(RuoloEnum.USER)));
 		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
-		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S","password");
+		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S","password",new RuoloEntity(RuoloEnum.USER));
 		Mockito.when(mapper.toEntity(utente)).thenReturn(entity);
 		Mockito.when(repository.save(Mockito.any(UtenteEntity.class))).thenThrow(new DataIntegrityViolationException("Vincolo violato nella creazione utente"));
 		//when
@@ -64,7 +72,7 @@ public class UtenteServiceUnitTest {
 	{
 		//given
 		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
-		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S","password");
+		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S","password",new RuoloEntity(RuoloEnum.USER));
 		Mockito.when(mapper.toEntity(utente)).thenReturn(entity);
 		Mockito.when(repository.save(Mockito.any(UtenteEntity.class))).thenThrow(new BadSqlGrammarException("","",new SQLException()));
 		//when

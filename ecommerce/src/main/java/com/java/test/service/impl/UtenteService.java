@@ -5,10 +5,14 @@ import com.java.test.dto.PageResponseDto;
 import com.java.test.dto.UtenteListResponseDto;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
+import com.java.test.entity.RuoloEntity;
 import com.java.test.entity.UtenteEntity;
+import com.java.test.enums.RuoloEnum;
 import com.java.test.exception.ApplicationException;
+import com.java.test.exception.RuoloException;
 import com.java.test.exception.UtenteException;
 import com.java.test.mapper.UtenteMapper;
+import com.java.test.repository.RuoloRepository;
 import com.java.test.repository.UtenteRepository;
 import com.java.test.service.IUtenteService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +32,8 @@ public class UtenteService implements IUtenteService {
 	private final UtenteRepository repository;
 
 	private final UtenteMapper mapper;
+
+	private final RuoloRepository ruoloRepository;
 
 	@Transactional
 	@Override

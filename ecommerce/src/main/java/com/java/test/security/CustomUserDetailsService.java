@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         {
             UtenteEntity utente = repository.findByEmail(email).orElseThrow(()->new UsernameNotFoundException("User not found"));
             GrantedAuthority authorities =
-                                    new SimpleGrantedAuthority(utente.getRuolo().getRuolo());
+                                    new SimpleGrantedAuthority(utente.getRuolo().getRuolo().name());
             return new User(utente.getEmail(), utente.passwordHash(), List.of(authorities));
         }
         throw new UsernameNotFoundException("Utente non trovato");

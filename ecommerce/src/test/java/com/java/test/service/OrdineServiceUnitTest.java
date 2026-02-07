@@ -1,6 +1,8 @@
 package com.java.test.service;
 
+import com.java.test.entity.RuoloEntity;
 import com.java.test.entity.UtenteEntity;
+import com.java.test.enums.RuoloEnum;
 import com.java.test.exception.MagazzinoException;
 import com.java.test.exception.ProdottoException;
 import com.java.test.exception.UtenteException;
@@ -75,7 +77,7 @@ public class OrdineServiceUnitTest {
 	{
 
 		//given
-		UtenteEntity utente = new UtenteEntity("prova@prova.it","Paolo","Rossi","fsdfgsdfsdfs","password");
+		UtenteEntity utente = new UtenteEntity("prova@prova.it","Paolo","Rossi","fsdfgsdfsdfs","password",new RuoloEntity(RuoloEnum.USER));
 		Mockito.when(utenteRepository.findByUtenteId(Mockito.anyString())).thenReturn(
 				Optional.of(utente));
 		Mockito.when(repository.modificaQuantitaProdotto(Mockito.anyInt(),Mockito.anyString())).thenReturn(0);
@@ -91,7 +93,7 @@ public class OrdineServiceUnitTest {
 	public void erroreRicercaProdotti()
 	{
 		//given
-		UtenteEntity utente = new UtenteEntity("prova@prova.it","Paolo","Rossi","fsdfgsdfsdfs","password");
+		UtenteEntity utente = new UtenteEntity("prova@prova.it","Paolo","Rossi","fsdfgsdfsdfs","password",new RuoloEntity(RuoloEnum.USER));
 		Mockito.when(utenteRepository.findByUtenteId(Mockito.anyString())).thenReturn(
 				Optional.of(utente));
 		Mockito.when(repository.modificaQuantitaProdotto(Mockito.anyInt(),Mockito.anyString())).thenReturn(2);

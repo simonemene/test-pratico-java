@@ -1,5 +1,6 @@
 package com.java.test.entity;
 
+import com.java.test.repository.RuoloRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,13 +18,14 @@ public class UtenteEntity  extends AuditEntity{
 
 	}
 
-	public UtenteEntity(String email,String nome,String cognome,String codiceFiscale,String password)
+	public UtenteEntity(String email, String nome, String cognome, String codiceFiscale, String password, RuoloEntity ruolo)
 	{
 		this.email = email;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codiceFiscale = codiceFiscale;
 		this.password = password;
+		this.ruolo = ruolo;
 	}
 
 	@Id

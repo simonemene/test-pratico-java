@@ -3,6 +3,7 @@ package com.java.test.service.impl;
 import com.java.test.annotation.ReadOnlyTransactional;
 import com.java.test.dto.*;
 import com.java.test.entity.*;
+import com.java.test.enums.RuoloEnum;
 import com.java.test.enums.StatoOrdineEnum;
 import com.java.test.exception.*;
 import com.java.test.mapper.OrdineMapper;
@@ -34,6 +35,7 @@ public class OrdineService implements IOrdineService {
 	private final OrdineMapper ordineMapper;
 
 	private final ProdottoRepository prodottoRepository;
+
 	private final MovimentoRepository movimentoRepository;
 
 	@Transactional

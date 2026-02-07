@@ -1,6 +1,8 @@
 package com.java.test.repository;
 
+import com.java.test.entity.RuoloEntity;
 import com.java.test.entity.UtenteEntity;
+import com.java.test.enums.RuoloEnum;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class UtenteRepoitorySliceTest {
 	public void trovaUtenteTramiteEmail()
 	{
 		//given
-		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR","password");
+		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR","password", new RuoloEntity(RuoloEnum.USER));
 		repository.save(utente);
 		//when
 		UtenteEntity utenteTrovato = repository.findByEmail(utente.getEmail()).get();
