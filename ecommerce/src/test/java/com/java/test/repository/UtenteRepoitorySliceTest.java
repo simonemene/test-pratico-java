@@ -22,13 +22,17 @@ public class UtenteRepoitorySliceTest {
 	@Autowired
 	private JdbcClient jdbcClient;
 
+	@Autowired
+	private RuoloRepository ruoloRepository;
+
 	@Test
 	public void trovaUtenteTramiteEmail()
 	{
 		//given
 		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
 				.update();
-		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR","password", new RuoloEntity(RuoloEnum.USER));
+		RuoloEntity ruolo = ruoloRepository.findByRuolo(RuoloEnum.USER).get();
+		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR","password", ruolo);
 		repository.save(utente);
 		//when
 		UtenteEntity utenteTrovato = repository.findByEmail(utente.getEmail()).get();
