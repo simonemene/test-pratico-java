@@ -12,6 +12,8 @@ import com.java.test.service.IOrdineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -191,6 +193,14 @@ public class OrdineService implements IOrdineService {
 		 return id;
 	}
 
+	@ReadOnlyTransactional
+	@Override
+	public PageResponseDto<OrdineResponseDto> prendiOrdiniPaginati(Pageable pageable) {
+		Page<OrdineEntity> ordini = repository.findAll(pageable);
+		OrdiniResponseDto ordiniResponse = ordineMapper.toListaDto(ordini.getContent());
+		return new PageResponseDto<>(ordiniResponse.ordini(),ordini.getNumber(),
+				ordini.getSize(),ordini.getTotalElements(),ordini.getTotalPages());
+	}
 
 
 	private ProdottoConQuantitaResponseDto creazioneProdotto(MovimentoEntity movimento)

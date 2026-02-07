@@ -1,9 +1,7 @@
 package com.java.test.service;
 
-import com.java.test.dto.OrdineEffettuatoResponseDto;
-import com.java.test.dto.OrdineEliminatiProdottiResponseDto;
-import com.java.test.dto.OrdineResponseDto;
-import com.java.test.dto.OrdiniResponseDto;
+import com.java.test.dto.*;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
@@ -23,4 +21,6 @@ public interface IOrdineService {
 	OrdineResponseDto inserisciProdotti(String id,Map<String,Integer> prodotti);
 
 	String cancellazioneOrdine(String id);
+
+	PageResponseDto<OrdineResponseDto> prendiOrdiniPaginati(Pageable pageable);
 }

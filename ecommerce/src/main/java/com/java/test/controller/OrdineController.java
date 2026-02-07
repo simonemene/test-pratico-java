@@ -74,7 +74,7 @@ public class OrdineController {
 	}
 
 	@GetMapping
-	public ResponseEntity<PageResponseDto<OrdiniResponseDto>> prendiOrdini(
+	public ResponseEntity<PageResponseDto<OrdineResponseDto>> prendiOrdini(
 			@PageableDefault(
 					size = 20,
 					sort = "timestampInserimento",
@@ -83,7 +83,7 @@ public class OrdineController {
 			Pageable pageable
 	)
 	{
-		return null;
+		return ResponseEntity.ok(service.prendiOrdiniPaginati(pageable));
 	}
 
 }
