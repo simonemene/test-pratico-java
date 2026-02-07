@@ -1,10 +1,7 @@
 package com.java.test.service.impl;
 
 import com.java.test.annotation.ReadOnlyTransactional;
-import com.java.test.dto.ProdottoConQuantitaResponseDto;
-import com.java.test.dto.ProdottoListResponseDto;
-import com.java.test.dto.ProdottoRequestDto;
-import com.java.test.dto.ProdottoResponseDto;
+import com.java.test.dto.*;
 import com.java.test.entity.ProdottoEntity;
 import com.java.test.entity.StockEntity;
 import com.java.test.exception.ApplicationException;
@@ -17,8 +14,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -67,4 +68,20 @@ public class ProdottoService implements IProdottoService {
 				.orElseThrow(()->new ProdottoException(
 						"Prodotto non trovato",productId));
 	}
+
+	@ReadOnlyTransactional
+	@Override
+	public PageResponseDto<ProdottoResponseDto> prendiProdottiPageable(Pageable pageable) {
+		Page<ProdottoEntity> prodotti = repository.findAll(pageable);
+		return new PageResponseDto<>(
+				mapper.toListaDto(prodotti.getContent()).prodotti(),
+				prodotti.getNumber(),
+				prodotti.getSize()
+				,prodotti.getTotalElements()
+				,prodotti.getTotalPages()
+
+		);
+	}
+
+
 }

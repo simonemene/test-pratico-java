@@ -1,9 +1,7 @@
 package com.java.test.service;
 
-import com.java.test.dto.ProdottoConQuantitaResponseDto;
-import com.java.test.dto.ProdottoListResponseDto;
-import com.java.test.dto.ProdottoRequestDto;
-import com.java.test.dto.ProdottoResponseDto;
+import com.java.test.dto.*;
+import org.springframework.data.domain.Pageable;
 
 public interface IProdottoService {
 
@@ -12,4 +10,6 @@ public interface IProdottoService {
 	ProdottoListResponseDto prendiListaProdotti();
 
 	ProdottoConQuantitaResponseDto prendiInformazioniProdotto(String productId);
+
+	PageResponseDto<ProdottoResponseDto> prendiProdottiPageable(Pageable pageable);
 }

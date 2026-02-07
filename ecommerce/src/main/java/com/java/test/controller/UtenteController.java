@@ -1,5 +1,6 @@
 package com.java.test.controller;
 
+import com.java.test.dto.PageResponseDto;
 import com.java.test.dto.UtenteListResponseDto;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
@@ -7,6 +8,7 @@ import com.java.test.service.IUtenteService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -42,5 +44,11 @@ public class UtenteController {
 	public ResponseEntity<UtenteListResponseDto> prendiUtenti()
 	{
 		return ResponseEntity.ok(service.prendiListaClienti());
+	}
+
+	@GetMapping("/paginati")
+	public ResponseEntity<PageResponseDto<UtenteResponseDto>> prendiUtentiPaginati(Pageable pageable)
+	{
+		return ResponseEntity.ok(service.prendiUtentiPaginati(pageable));
 	}
 }

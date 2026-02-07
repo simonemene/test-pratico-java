@@ -1,6 +1,7 @@
 package com.java.test.service.impl;
 
 import com.java.test.annotation.ReadOnlyTransactional;
+import com.java.test.dto.PageResponseDto;
 import com.java.test.dto.UtenteListResponseDto;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,5 +60,18 @@ public class UtenteService implements IUtenteService {
 		return repository.findByUtenteId(idPubblico)
 				.map(mapper::toDto)
 				.orElseThrow(()->new UtenteException("Utente non trovato",idPubblico));
+	}
+
+	@Override
+	public PageResponseDto<UtenteResponseDto> prendiUtentiPaginati(Pageable pageable) {
+		Page<UtenteEntity> utenti = repository.findAll(pageable);
+		return new PageResponseDto<>(
+				mapper.toListaDto(utenti.getContent()),
+				utenti.getNumber(),
+				utenti.getSize(),
+				utenti.getTotalElements(),
+				utenti.getTotalPages()
+
+		);
 	}
 }

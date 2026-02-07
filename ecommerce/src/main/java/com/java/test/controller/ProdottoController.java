@@ -1,14 +1,12 @@
 package com.java.test.controller;
 
-import com.java.test.dto.ProdottoConQuantitaResponseDto;
-import com.java.test.dto.ProdottoListResponseDto;
-import com.java.test.dto.ProdottoRequestDto;
-import com.java.test.dto.ProdottoResponseDto;
+import com.java.test.dto.*;
 import com.java.test.service.IProdottoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -48,5 +46,11 @@ public class ProdottoController {
 	        @NotBlank(message = "L'id del prodotto non può essere vuoto") String id)
 	{
 		return ResponseEntity.ok(service.prendiInformazioniProdotto(id));
+	}
+
+	@GetMapping("/paginati")
+	public ResponseEntity<PageResponseDto<ProdottoResponseDto>> prendiProdottiPaginati(Pageable pageable)
+	{
+		return ResponseEntity.ok(service.prendiProdottiPageable(pageable));
 	}
 }
