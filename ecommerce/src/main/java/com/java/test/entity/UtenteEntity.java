@@ -17,12 +17,14 @@ public class UtenteEntity  extends AuditEntity{
 
 	}
 
-	public UtenteEntity(String email,String nome,String cognome,String codiceFiscale)
+	public UtenteEntity(String email,String nome,String cognome,String codiceFiscale,String password,RuoloEntity ruolo)
 	{
 		this.email = email;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codiceFiscale = codiceFiscale;
+		this.password = password;
+		this.ruolo = ruolo;
 	}
 
 	@Id
@@ -39,8 +41,16 @@ public class UtenteEntity  extends AuditEntity{
 
 	private String cognome;
 
+	@Getter(AccessLevel.NONE)
+	@Column(nullable = false)
+	private String password;
+
 	@Column(unique = true,nullable = false)
 	private String codiceFiscale;
+
+	@ManyToOne(optional = false)
+	@JoinColumn(name="ID_RUOLO",nullable = false)
+	private RuoloEntity ruolo;
 
 	@Version
 	private int version;
@@ -52,5 +62,10 @@ public class UtenteEntity  extends AuditEntity{
 	public void persist()
 	{
 		this.utenteId = UUID.randomUUID().toString();
+	}
+
+	public String passwordHash()
+	{
+		return this.password;
 	}
 }
