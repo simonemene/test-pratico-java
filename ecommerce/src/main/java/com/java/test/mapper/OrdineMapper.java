@@ -25,8 +25,8 @@ public class OrdineMapper {
 		List<OrdineResponseDto> ordineLista = new ArrayList<>();
 		for(OrdineEntity ordine : ordini)
 		{
-			ordineLista.add(this.toDto(ordine.getOrdineId(),ordine.getMovimento().stream()
-					.toList()));
+				ordineLista.add(this.toDto(ordine.getOrdineId(),ordine.getMovimento().stream()
+						.toList()));
 		}
 		return new OrdiniResponseDto(ordineLista);
 	}

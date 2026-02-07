@@ -73,7 +73,7 @@ public class OrdineController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
-	@GetMapping
+	@GetMapping("/paginati")
 	public ResponseEntity<PageResponseDto<OrdineResponseDto>> prendiOrdini(
 			@PageableDefault(
 					size = 20,
@@ -84,6 +84,18 @@ public class OrdineController {
 	)
 	{
 		return ResponseEntity.ok(service.prendiOrdiniPaginati(pageable));
+	}
+
+	@GetMapping("/{id}/paginati")
+	public ResponseEntity<PageResponseDto<OrdineResponseDto>> prendiOrdiniPerUtente(@PathVariable String  id,
+																					@PageableDefault(
+																							size = 20,
+																							sort = "timestampInserimento",
+																							direction = Sort.Direction.DESC
+																					)
+																					Pageable pageable)
+	{
+         return ResponseEntity.ok(service.prendiOrdiniPerUtentePaginati(id,pageable));
 	}
 
 }

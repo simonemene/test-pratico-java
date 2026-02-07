@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -201,4 +203,82 @@ public class OrdineControllerIntegrationTest {
 				.list();
 		Assertions.assertThat(flgMovimentiModificato).containsOnly("S");
 	}
+
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-paginato.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Test
+	public void prendiOrdiniPageableDefault()
+	{
+		//given
+		//when
+		ResponseEntity<PageResponseDto<OrdineResponseDto>> response =
+				template.exchange(
+						"/api/ordine/paginati",
+						HttpMethod.GET,
+						null,
+						new ParameterizedTypeReference<PageResponseDto<OrdineResponseDto>>() {}
+				);
+		//then
+		Assertions.assertThat(response.getBody().contenuto().size()).isEqualTo(20);
+		PageResponseDto<OrdineResponseDto> page = response.getBody();
+		Assertions.assertThat(page.elementiTotali()).isEqualTo(22L);
+		Assertions.assertThat(page.pagina()).isEqualTo(0);
+		Assertions.assertThat(page.pagineTotali()).isEqualTo(2);
+		Assertions.assertThat(page.dimensione()).isEqualTo(20);
+
+	}
+
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-paginato.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Test
+	public void prendiOrdiniPageableParametri()
+	{
+		//given
+		//when
+		ResponseEntity<PageResponseDto<OrdineResponseDto>> response =
+				template.exchange(
+						"/api/ordine/{id}/paginati?page=2&size=2",
+						HttpMethod.GET,
+						null,
+						new ParameterizedTypeReference<PageResponseDto<OrdineResponseDto>>() {},
+						"UTENTE_1"
+				);
+		//then
+		Assertions.assertThat(response.getBody().contenuto().size()).isEqualTo(2);
+		PageResponseDto<OrdineResponseDto> page = response.getBody();
+		Assertions.assertThat(page.elementiTotali()).isEqualTo(8L);
+		Assertions.assertThat(page.pagina()).isEqualTo(2);
+		Assertions.assertThat(page.pagineTotali()).isEqualTo(4);
+		Assertions.assertThat(page.dimensione()).isEqualTo(2L);
+
+		Assertions.assertThat(page.contenuto().stream().filter(p->p.idPubblicoOrdine().equals("ORD-10"))).isNotNull();
+		Assertions.assertThat(page.contenuto().stream().filter(p->p.idPubblicoOrdine().equals("ORD-07"))).isNotNull();
+
+	}
+
+	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-paginato.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Test
+	public void prendiOrdiniPerUtentePageable()
+	{
+		//given
+		//when
+		ResponseEntity<PageResponseDto<OrdineResponseDto>> response =
+				template.exchange(
+						"/api/ordine/{id}/paginati",
+						HttpMethod.GET,
+						null,
+						new ParameterizedTypeReference<PageResponseDto<OrdineResponseDto>>() {},
+						"UTENTE_1"
+				);
+		//then
+		Assertions.assertThat(response.getBody().contenuto().size()).isEqualTo(8);
+		PageResponseDto<OrdineResponseDto> page = response.getBody();
+		Assertions.assertThat(page.elementiTotali()).isEqualTo(8L);
+		Assertions.assertThat(page.pagina()).isEqualTo(0);
+		Assertions.assertThat(page.pagineTotali()).isEqualTo(1);
+		Assertions.assertThat(page.dimensione()).isEqualTo(20L);
+	}
+
+
 }

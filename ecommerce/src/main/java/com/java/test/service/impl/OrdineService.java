@@ -197,9 +197,14 @@ public class OrdineService implements IOrdineService {
 	@Override
 	public PageResponseDto<OrdineResponseDto> prendiOrdiniPaginati(Pageable pageable) {
 		Page<OrdineEntity> ordini = repository.findAll(pageable);
-		OrdiniResponseDto ordiniResponse = ordineMapper.toListaDto(ordini.getContent());
-		return new PageResponseDto<>(ordiniResponse.ordini(),ordini.getNumber(),
-				ordini.getSize(),ordini.getTotalElements(),ordini.getTotalPages());
+		return componiOrdinePaginato(ordini);
+	}
+
+	@ReadOnlyTransactional
+	@Override
+	public PageResponseDto<OrdineResponseDto> prendiOrdiniPerUtentePaginati(String id, Pageable pageable) {
+		Page<OrdineEntity> ordini = repository.findByUtente_UtenteId(id,pageable);
+		return componiOrdinePaginato(ordini);
 	}
 
 
@@ -231,6 +236,13 @@ public class OrdineService implements IOrdineService {
 		{
 			throw new MovimentoException("Il prodotto è già presente nell'ordine, non puoi aggiungerlo",idOrdine,idProdotto);
 		}
+	}
+
+	private PageResponseDto<OrdineResponseDto> componiOrdinePaginato(Page<OrdineEntity> ordini)
+	{
+		OrdiniResponseDto ordiniResponse = ordineMapper.toListaDto(ordini.getContent());
+		return new PageResponseDto<>(ordiniResponse.ordini(),ordini.getNumber(),
+				ordini.getSize(),ordini.getTotalElements(),ordini.getTotalPages());
 	}
 
 }

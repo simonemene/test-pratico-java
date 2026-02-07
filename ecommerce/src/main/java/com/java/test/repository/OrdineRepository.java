@@ -41,4 +41,6 @@ public interface OrdineRepository extends JpaRepository<OrdineEntity,Long> {
 	int eliminaOrdine(String idOrdine);
 
 	Page<OrdineEntity> findAll(Pageable pageable);
+
+	Page<OrdineEntity> findByUtente_UtenteId(String id,Pageable pageable);
 }

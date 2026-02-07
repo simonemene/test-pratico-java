@@ -23,4 +23,6 @@ public interface IOrdineService {
 	String cancellazioneOrdine(String id);
 
 	PageResponseDto<OrdineResponseDto> prendiOrdiniPaginati(Pageable pageable);
+
+	PageResponseDto<OrdineResponseDto> prendiOrdiniPerUtentePaginati(String id,Pageable pageable);
 }

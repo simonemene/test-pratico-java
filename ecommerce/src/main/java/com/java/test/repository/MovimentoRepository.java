@@ -30,6 +30,4 @@ public interface MovimentoRepository extends JpaRepository<MovimentoEntity,Long>
 					"""
 			)
 	List<String> elencoProdottiOrdine(@Param("ordine") String ordine);
-
-	Page<MovimentoEntity> findByOrdine_OrdineId(String id, Pageable pageable);
 }
