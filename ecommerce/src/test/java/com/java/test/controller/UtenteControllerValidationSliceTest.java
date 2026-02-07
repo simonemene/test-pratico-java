@@ -8,6 +8,7 @@ import com.java.test.service.IUtenteService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -17,7 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(value = UtenteController.class)
-@Import({SecurityConfiguration.class})
+@AutoConfigureMockMvc(addFilters = false)
 public class UtenteControllerValidationSliceTest {
 
 	@Autowired
@@ -32,7 +33,7 @@ public class UtenteControllerValidationSliceTest {
 	@Test
 	public void controlloValidazioneUtenteRequest() throws Exception {
 		//given
-		UtenteRequestDto request = new UtenteRequestDto("","","","345TGFDCFGTR546","password");
+		UtenteRequestDto request = new UtenteRequestDto("","","","345TGFDCFGTR546","passwordffdsfdsfsdffdfds");
 		//when
 		//then
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/utente").content(
@@ -53,7 +54,7 @@ public class UtenteControllerValidationSliceTest {
 	@Test
 	public void controlloValidazioneUtenteRequestEmailErroreFormato() throws Exception {
 		//given
-		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova","345TGFDCFGTR5462","password");
+		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova","345TGFDCFGTR5462","passwordfsdfsdfdsfdsfsfsdf");
 		//when
 		//then
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/utente").content(

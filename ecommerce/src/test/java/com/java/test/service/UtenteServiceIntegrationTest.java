@@ -13,6 +13,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +31,16 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 	@Autowired
 	private IUtenteService service;
 
+	@Autowired
+	private JdbcClient jdbcClient;
 
 	@Transactional
 	@Test
 	public void inserisciUtente()
 	{
 		//given
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+				.update();
 		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
 		//when
 		UtenteResponseDto utenteSalvato = service.creazioneUtente(utente);
@@ -72,6 +77,8 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 	public void inserisciUtenteRollback()
 	{
 		//given
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+				.update();
 		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
 		UtenteRequestDto utenteRollback = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT9712","password");
 		//when
