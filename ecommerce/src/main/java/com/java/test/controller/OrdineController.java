@@ -5,6 +5,9 @@ import com.java.test.service.IOrdineService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +71,19 @@ public class OrdineController {
 	{
 		service.cancellazioneOrdine(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@GetMapping
+	public ResponseEntity<PageResponseDto<OrdiniResponseDto>> prendiOrdini(
+			@PageableDefault(
+					size = 20,
+					sort = "timestampInserimento",
+					direction = Sort.Direction.DESC
+			)
+			Pageable pageable
+	)
+	{
+		return null;
 	}
 
 }
