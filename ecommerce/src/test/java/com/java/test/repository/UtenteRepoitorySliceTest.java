@@ -31,7 +31,7 @@ public class UtenteRepoitorySliceTest {
 		//given
 		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
 				.update();
-		RuoloEntity ruolo = ruoloRepository.findByRuolo(RuoloEnum.USER).get();
+		RuoloEntity ruolo = ruoloRepository.findByRuolo(RuoloEnum.ROLE_USER).get();
 		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR","password", ruolo);
 		repository.save(utente);
 		//when

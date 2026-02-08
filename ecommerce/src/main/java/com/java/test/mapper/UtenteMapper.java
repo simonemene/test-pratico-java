@@ -25,8 +25,8 @@ public class UtenteMapper {
 
 	public UtenteEntity toEntity(UtenteRequestDto dto)
 	{
-		RuoloEntity ruolo = ruoloRepository.findByRuolo(RuoloEnum.USER).orElseThrow(
-				()->new RuoloException("Il ruolo non esiste",RuoloEnum.USER.name())
+		RuoloEntity ruolo = ruoloRepository.findByRuolo(RuoloEnum.ROLE_USER).orElseThrow(
+				()->new RuoloException("Il ruolo non esiste",RuoloEnum.ROLE_USER.name())
 		);
 		return new UtenteEntity(dto.email(),dto.nome(),dto.cognome(),dto.codiceFiscale(),dto.password(),ruolo);
 	}

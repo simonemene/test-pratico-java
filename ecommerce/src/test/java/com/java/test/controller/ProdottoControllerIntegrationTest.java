@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -23,13 +24,16 @@ public class ProdottoControllerIntegrationTest {
 	@Autowired
 	private TestRestTemplate template;
 
+	@Sql(scripts = "classpath:sql/service/prodotti/insert-prodotti.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
 	public void creazioneProdotto() throws JsonProcessingException {
 		//given
 		ProdottoRequestDto request = new ProdottoRequestDto(new BigDecimal("1.2"),"computer");
 		//when
-		ResponseEntity<ProdottoResponseDto> response = template.postForEntity(
+		ResponseEntity<ProdottoResponseDto> response = template
+				.withBasicAuth("admin@prova.com","prova")
+				.postForEntity(
 				"/api/prodotto",request,ProdottoResponseDto.class);
 		//then
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -46,7 +50,9 @@ public class ProdottoControllerIntegrationTest {
 	{
 		//given
 		//when
-		ResponseEntity<ProdottoListResponseDto> response = template.getForEntity("/api/prodotto",ProdottoListResponseDto.class);
+		ResponseEntity<ProdottoListResponseDto> response = template
+				.withBasicAuth("prova1@prova.com","prova")
+				.getForEntity("/api/prodotto",ProdottoListResponseDto.class);
 		//then
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		ProdottoListResponseDto body = response.getBody();
@@ -65,7 +71,9 @@ public class ProdottoControllerIntegrationTest {
 	{
 		//given
 		//when
-		ResponseEntity<ProdottoResponseDto> response = template.getForEntity("/api/prodotto/{id}",ProdottoResponseDto.class,"rgvbdfgdf454345");
+		ResponseEntity<ProdottoResponseDto> response = template
+				.withBasicAuth("prova@prova.com","prova")
+				.getForEntity("/api/prodotto/{id}",ProdottoResponseDto.class,"rgvbdfgdf454345");
 		//then
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		ProdottoResponseDto prodottoDaControllare = response.getBody();

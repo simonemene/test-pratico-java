@@ -52,9 +52,9 @@ public class UtenteServiceUnitTest {
 	public void creazioneUtenteErrore(CapturedOutput capturedOutput)
 	{
 		//given
-		Mockito.when(ruoloRepository.findByRuolo(Mockito.any())).thenReturn(Optional.of(new RuoloEntity(RuoloEnum.USER)));
+		Mockito.when(ruoloRepository.findByRuolo(Mockito.any())).thenReturn(Optional.of(new RuoloEntity(RuoloEnum.ROLE_USER)));
 		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
-		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S","password",new RuoloEntity(RuoloEnum.USER));
+		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S","password",new RuoloEntity(RuoloEnum.ROLE_USER));
 		Mockito.when(mapper.toEntity(utente)).thenReturn(entity);
 		Mockito.when(repository.save(Mockito.any(UtenteEntity.class))).thenThrow(new DataIntegrityViolationException("Vincolo violato nella creazione utente"));
 		//when
@@ -72,7 +72,7 @@ public class UtenteServiceUnitTest {
 	{
 		//given
 		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
-		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S","password",new RuoloEntity(RuoloEnum.USER));
+		UtenteEntity entity = new UtenteEntity("prova@prova.com","Paolo","Rossi","DRI456JHKGIT976S","password",new RuoloEntity(RuoloEnum.ROLE_USER));
 		Mockito.when(mapper.toEntity(utente)).thenReturn(entity);
 		Mockito.when(repository.save(Mockito.any(UtenteEntity.class))).thenThrow(new BadSqlGrammarException("","",new SQLException()));
 		//when

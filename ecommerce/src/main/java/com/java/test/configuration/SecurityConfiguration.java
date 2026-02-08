@@ -5,10 +5,13 @@ import com.java.test.security.CustomAuthenticationProvider;
 import com.java.test.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,10 +25,15 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity security)
 			throws Exception {
 
-		return security.authorizeHttpRequests(auth->
-						auth.anyRequest().permitAll())
+			return security.authorizeHttpRequests(auth->
+					auth.requestMatchers(HttpMethod.POST,"/api/prodotto").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.GET,"/api/prodotto/**").hasAnyRole("ADMIN","USER")
+							.anyRequest().permitAll())
 		.formLogin(AbstractHttpConfigurer::disable)
+				.httpBasic(Customizer.withDefaults())
 				.csrf(AbstractHttpConfigurer::disable)
+				.sessionManagement(session->
+						session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.build();
 	}
 
