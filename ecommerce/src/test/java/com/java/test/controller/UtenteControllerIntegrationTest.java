@@ -33,7 +33,7 @@ public class UtenteControllerIntegrationTest {
 		//given
 		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
 				.update();
-		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova@prova.it","345TGFDCFGTR5462","password");
+		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova@prova.it","345TGFDCFGTR5462","passwordfsdfdsfdfdsds");
 		//when
 		ResponseEntity<UtenteResponseDto> response = template.postForEntity(
 				"/api/utente",request,UtenteResponseDto.class);
