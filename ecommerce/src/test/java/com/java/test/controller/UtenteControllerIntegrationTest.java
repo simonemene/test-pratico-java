@@ -31,7 +31,7 @@ public class UtenteControllerIntegrationTest {
 	@Test
 	public void creazioneUtente() throws JsonProcessingException {
 		//given
-		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('ROLE_USER','USER')")
 				.update();
 		UtenteRequestDto request = new UtenteRequestDto("Paolo","Rossi","prova@prova.it","345TGFDCFGTR5462","passwordfsdfdsfdfdsds");
 		//when

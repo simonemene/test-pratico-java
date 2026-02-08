@@ -29,7 +29,7 @@ public class UtenteRepoitorySliceTest {
 	public void trovaUtenteTramiteEmail()
 	{
 		//given
-		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('ROLE_USER','USER')")
 				.update();
 		RuoloEntity ruolo = ruoloRepository.findByRuolo(RuoloEnum.ROLE_USER).get();
 		UtenteEntity utente = new UtenteEntity("prova@prova.com","Paolo","Rossi","DFRTGFV4563EDSFR","password", ruolo);
@@ -48,11 +48,11 @@ public class UtenteRepoitorySliceTest {
 	public void trovaUtenteTramiteIdPubblico()
 	{
 		//given
-		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('ROLE_USER','USER')")
 				.update();
 
 		jdbcClient.sql("INSERT INTO UTENTE(EMAIL,NOME,COGNOME,CODICE_FISCALE,UTENTE_ID,VERSION,PASSWORD,ID_RUOLO) VALUES" +
-				"(?,?,?,?,?,?,'{bcrypt}PASSWORD',(SELECT ID FROM RUOLO WHERE RUOLO = 'USER'))")
+				"(?,?,?,?,?,?,'{bcrypt}PASSWORD',(SELECT ID FROM RUOLO WHERE RUOLO = 'ROLE_USER'))")
 				.param(1,"prova@prova.com")
 				.param(2,"Marco")
 				.param(3,"Rossi")

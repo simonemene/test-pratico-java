@@ -39,9 +39,9 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 	public void inserisciUtente()
 	{
 		//given
-		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('ROLE_USER','USER')")
 				.update();
-		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
+		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","passworddfsdfdsfsd");
 		//when
 		UtenteResponseDto utenteSalvato = service.creazioneUtente(utente);
 		//then
@@ -77,10 +77,10 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 	public void inserisciUtenteRollback()
 	{
 		//given
-		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('USER','USER')")
+		jdbcClient.sql("INSERT INTO RUOLO(RUOLO,RUOLO_ID) VALUES('ROLE_USER','USER')")
 				.update();
-		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","password");
-		UtenteRequestDto utenteRollback = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT9712","password");
+		UtenteRequestDto utente = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT976S","passwordfdsfsdsfdf");
+		UtenteRequestDto utenteRollback = new UtenteRequestDto("Paolo","Rossi","prova@prova.com","DRI456JHKGIT9712","passworddfsdfsdfdsfdsfsd");
 		//when
 		UtenteResponseDto utenteSalvato = service.creazioneUtente(utente);
 		//then
