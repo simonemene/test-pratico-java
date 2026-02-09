@@ -148,7 +148,9 @@ public class OrdineController {
 			description = "API per l'estrazione paginata di ordini appartenenti ad un utente"
 	)
 	@GetMapping("/{id}/paginati")
-	public ResponseEntity<PageResponseDto<OrdineResponseDto>> prendiOrdiniPerUtenteConId(@PathVariable String  id,
+	public ResponseEntity<PageResponseDto<OrdineResponseDto>> prendiOrdiniPerUtenteConId(
+			@NotBlank(message = "L'id dell'ordine non può essere vuoto")
+			@PathVariable String  id,
 			@PageableDefault(
 					size = 20,
 					sort = "timestampInserimento",
@@ -179,7 +181,7 @@ public class OrdineController {
 	)
 	@PatchMapping("/{id}/stato/{stato}")
 	public ResponseEntity<OrdineResponseDto> modificaStatoOrdine(
-			@PathVariable String id,
+			@NotBlank(message = "L'id dell'ordine non può essere vuoto")  @PathVariable String id,
 			@PathVariable StatoOrdineEnum stato
 	) {
 		return ResponseEntity.ok(

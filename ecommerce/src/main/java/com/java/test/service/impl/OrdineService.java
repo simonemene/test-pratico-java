@@ -273,7 +273,12 @@ public class OrdineService implements IOrdineService {
 	}
 
 	@Transactional
+	@Override
 	public OrdineResponseDto modificaStatoOrdine(String ordineId, StatoOrdineEnum stato) {
+		if(repository.existsByOrdineIdAndStatoOrdine(ordineId,StatoOrdineEnum.CONSEGNATO))
+		{
+			throw new OrdineException("Ordine già consegnato, non è possibile modificarlo",ordineId);
+		}
 		OrdineEntity ordine = repository.findByOrdineId(ordineId)
 				.orElseThrow(() -> new OrdineException("Ordine non trovato",ordineId));
 

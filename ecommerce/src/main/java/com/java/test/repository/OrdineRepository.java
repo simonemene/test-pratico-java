@@ -20,6 +20,8 @@ public interface OrdineRepository extends JpaRepository<OrdineEntity,Long> {
 
 	Optional<OrdineEntity> findByOrdineIdAndFlgAnnullo(String id,String annullo);
 
+	boolean existsByOrdineIdAndStatoOrdine(String id ,StatoOrdineEnum stato);
+
 
 	Optional<OrdineEntity> findByOrdineIdAndStatoOrdine(String id, StatoOrdineEnum stato);
 
