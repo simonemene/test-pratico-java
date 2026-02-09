@@ -1,5 +1,6 @@
 package com.java.test.controller;
 
+import com.java.test.annotation.CurrentUser;
 import com.java.test.dto.PageResponseDto;
 import com.java.test.dto.UtenteListResponseDto;
 import com.java.test.dto.UtenteRequestDto;
@@ -34,8 +35,8 @@ public class UtenteController {
 		return ResponseEntity.created(path).body(utenteCreato);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<UtenteResponseDto> prendiInformazioniUtente(@PathVariable @NotBlank(message = "L'id dell'utente non può essere vuoto") String id)
+	@GetMapping("/informazioni")
+	public ResponseEntity<UtenteResponseDto> prendiInformazioniUtente(@CurrentUser String id)
 	{
 		return ResponseEntity.ok(service.prendiInformazionUtente(id));
 	}

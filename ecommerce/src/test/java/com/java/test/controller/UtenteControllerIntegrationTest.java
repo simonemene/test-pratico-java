@@ -71,7 +71,7 @@ public class UtenteControllerIntegrationTest {
 	{
 		//given
 		//when
-		ResponseEntity<UtenteResponseDto> response = template.getForEntity("/api/utente/{id}",UtenteResponseDto.class,"dffgdfdddddgbgbfgb454534");
+		ResponseEntity<UtenteResponseDto> response = template.getForEntity("/api/utente/informazioni",UtenteResponseDto.class,"dffgdfdddddgbgbfgb454534");
 		//then
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		UtenteResponseDto utenteDaControllare = response.getBody();
