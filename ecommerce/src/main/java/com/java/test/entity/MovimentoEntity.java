@@ -39,6 +39,9 @@ public class MovimentoEntity extends AuditEntity{
 	@Column(nullable = false)
 	private int quantita;
 
+	@Version
+	private int version;
+
 	public void modificaQuantita(int quantita)
 	{
 		this.quantita = quantita;

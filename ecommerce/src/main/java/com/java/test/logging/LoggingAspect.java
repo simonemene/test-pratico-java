@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -86,7 +87,23 @@ public class LoggingAspect {
 					joinPoint.getSignature(),
 					Arrays.toString(Arrays.stream(joinPoint.getArgs()).toArray()),
 					Arrays.toString(p.getProductId()));
-		default->
+
+		case ObjectOptimisticLockingFailureException ole ->
+
+								log.warn("""
+					[OPTIMISTIC LOCK]
+					[MESSAGGIO] -> {}
+					[CLASSE] -> {}
+					[METODO] -> {}
+					[PARAMETRI METODO] -> {}
+					""",
+							ole.getMessage(),
+							joinPoint.getTarget().getClass().getSimpleName(),
+							joinPoint.getSignature(),
+							Arrays.toString(joinPoint.getArgs())
+					);
+
+			default->
 			log.error("""
 					[ATTENZIONE] ERRORE NON PREVISTO
 					""",ex);

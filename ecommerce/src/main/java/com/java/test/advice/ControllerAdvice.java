@@ -3,6 +3,7 @@ package com.java.test.advice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -51,4 +52,18 @@ public class ControllerAdvice {
 		problemDetail.setProperty("errori",errori);
 		return ResponseEntity.badRequest().body(problemDetail);
 	}
+
+	@ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+	public ResponseEntity<ProblemDetail> optimisticLockException(
+			ObjectOptimisticLockingFailureException exception) {
+
+		ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+		problemDetail.setTitle("Conflitto di concorrenza");
+		problemDetail.setDetail("La risorsa è stata modificata da un'altra operazione. Riprova.");
+
+		problemDetail.setProperty("exception", "OptimisticLockException");
+
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
+	}
+
 }
