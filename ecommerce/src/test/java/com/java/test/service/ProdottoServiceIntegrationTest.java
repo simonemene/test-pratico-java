@@ -11,6 +11,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +47,7 @@ public class ProdottoServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(prodottoSalvato.nome()).isEqualTo(prodottoSalvatoEntity.getNome());
 	}
 
+	@WithMockUser(username = "prova@prova.com")
 	@Transactional
 	@Sql(scripts = "classpath:sql/service/prodotti/insert-prodotti.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
 			,config = @SqlConfig(transactionMode = SqlConfig.TransactionMode.INFERRED))

@@ -38,7 +38,6 @@ public class ProdottoService implements IProdottoService {
 
 	@CacheEvict(
 			cacheNames = "listaProdotti",
-			key = "#authentication.name",
 			allEntries = true
 	)
 	@Transactional
@@ -65,8 +64,8 @@ public class ProdottoService implements IProdottoService {
 
 	@Cacheable(
 			cacheNames = "listaProdotti",
-			key = "#authentication.name",
-			unless = "#result == null ||| #result.prodotti().isEmpty"
+			key = "T(org.springframework.security.core.context.SecurityContextHolder).context.authentication.name",
+			unless = "#result == null || #result.prodotti().isEmpty"
 	)
 	@ReadOnlyTransactional
 	@Override
