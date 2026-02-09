@@ -1,8 +1,13 @@
 package com.java.test.testcontainer;
 
 import com.java.test.dto.DiminuisciProdottoOrdineRequestDto;
+import com.java.test.entity.ProdottoEntity;
+import com.java.test.entity.StockEntity;
+import com.java.test.enums.AnnulloEnum;
+import com.java.test.repository.ProdottoRepository;
+import com.java.test.repository.StockRepository;
+import jakarta.persistence.OptimisticLockException;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,76 +17,56 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.concurrent.*;
 
 
-@Disabled
-@ActiveProfiles("test")
+@ActiveProfiles("container")
 @Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:sql/service/ordini/ordini-concorrenza.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Import({TestContainerConfiguration.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ConcorrenzaEcommerceTest {
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    private static final String PRODOTTO_ID = "dgfgdfgdf45mnbv";
 
-    private static final String ORDINE_ID = "123A";
-    private static final String PRODOTTO_ID = "rgvbdfgdf454345";
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
+    @Autowired
+    private StockRepository stockRepository;
 
     @Test
-    void dueThread_concorrenza_diminuzioneProdotto_lanciaOptimisticLock() throws Exception {
+    void optimistic_lock_scoppia_sicuramente_con_due_transazioni() {
 
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        CountDownLatch start = new CountDownLatch(1);
-        CountDownLatch end = new CountDownLatch(2);
+        TransactionTemplate tx1 = new TransactionTemplate(transactionManager);
+        TransactionTemplate tx2 = new TransactionTemplate(transactionManager);
 
-        Callable<ResponseEntity<String>> task = () -> {
-            start.await();
+        StockEntity prodotto1 = tx1.execute(status ->
+                stockRepository.findByProdotto_ProductIdAndProdotto_FlgAnnullo(PRODOTTO_ID, AnnulloEnum.N.name()).orElseThrow()
+        );
 
-            DiminuisciProdottoOrdineRequestDto request =
-                    new DiminuisciProdottoOrdineRequestDto(PRODOTTO_ID, 1);
+        StockEntity prodotto2 = tx2.execute(status ->
+                stockRepository.findByProdotto_ProductIdAndProdotto_FlgAnnullo(PRODOTTO_ID, AnnulloEnum.N.name()).orElseThrow()
+        );
 
-            HttpEntity<DiminuisciProdottoOrdineRequestDto> entity =
-                    new HttpEntity<>(request);
+        tx1.execute(status -> {
+            prodotto1.aumentaQuantitaMagazzino(1);
+            stockRepository.saveAndFlush(prodotto1);
+            return null;
+        });
 
-            ResponseEntity<String> response =
-                    restTemplate.exchange(
-                            "/api/ordine/" + ORDINE_ID + "/prodotti/diminuisci",
-                            HttpMethod.PATCH,
-                            entity,
-                            String.class
-                    );
-
-            end.countDown();
-            return response;
-        };
-
-        Future<ResponseEntity<String>> f1 = executor.submit(task);
-        Future<ResponseEntity<String>> f2 = executor.submit(task);
-
-        start.countDown();
-        end.await();
-
-        ResponseEntity<String> r1 = f1.get();
-        ResponseEntity<String> r2 = f2.get();
-
-        boolean unoOk =
-                r1.getStatusCode().is2xxSuccessful()
-                        || r2.getStatusCode().is2xxSuccessful();
-
-        boolean unoOptimisticLock =
-                (r1.getStatusCode() == HttpStatus.CONFLICT
-                        && r1.getBody().contains("OptimisticLockException"))
-                        || (r2.getStatusCode() == HttpStatus.CONFLICT
-                        && r2.getBody().contains("OptimisticLockException"));
-
-        Assertions.assertThat(unoOk).isTrue();
-        Assertions.assertThat(unoOptimisticLock).isTrue();
-
-        executor.shutdown();
+        Assertions.assertThatThrownBy(() ->
+                tx2.execute(status -> {
+                    prodotto2.aumentaQuantitaMagazzino(1);
+                    stockRepository.saveAndFlush(prodotto2);
+                    return null;
+                })
+        ).isInstanceOf(ObjectOptimisticLockingFailureException.class);
     }
 }

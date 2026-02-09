@@ -15,6 +15,9 @@ public class StockEntity  extends AuditEntity{
 
 	private int quantita;
 
+	@Version
+	private int version;
+
 	@OneToOne(optional = false,cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "PRODOTTO_ID",unique = true,nullable = false)
 	private ProdottoEntity prodotto;
