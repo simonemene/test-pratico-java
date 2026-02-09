@@ -15,7 +15,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 				version = ""
 		)
 )
-@EnableCaching
 @SpringBootApplication
 public class TestjavaApplication {
 
