@@ -110,6 +110,9 @@ public class OrdineService implements IOrdineService {
 	@Transactional
 	@Override
 	public OrdineResponseDto modificaProdotti(@P("id") String id, Map<String, Integer> prodotti) {
+		for(var valore : prodotti.entrySet()) {
+			controlloEsistenzaProdottoOrdine(id, valore.getKey());
+		}
 		OrdineEntity ordine = controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
 		Set<MovimentoEntity> movimenti = ordine.getMovimento();
 		for(MovimentoEntity movimento: movimenti)
@@ -143,6 +146,10 @@ public class OrdineService implements IOrdineService {
 	@Override
 	public OrdineEliminatiProdottiResponseDto eliminaProdotti(@P("id") String id, List<String> idPubbliciProdotti) {
 		controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
+		for(String prodotto:idPubbliciProdotti)
+		{
+			controlloEsistenzaProdottoOrdine(id,prodotto);
+		}
 		int modificati = repository.eliminaProdottiOrdine(id,idPubbliciProdotti);
 		if(modificati != idPubbliciProdotti.size())
 		{
@@ -253,6 +260,14 @@ public class OrdineService implements IOrdineService {
 		if(movimentoRepository.existsByOrdine_OrdineIdAndProdotto_ProductId(idOrdine,idProdotto))
 		{
 			throw new MovimentoException("Il prodotto è già presente nell'ordine, non puoi aggiungerlo",idOrdine,idProdotto);
+		}
+	}
+
+	private void controlloEsistenzaProdottoOrdine(String idOrdine,String idProdotto)
+	{
+		if(!movimentoRepository.existsByOrdine_OrdineIdAndProdotto_ProductId(idOrdine,idProdotto))
+		{
+			throw new MovimentoException("Il prodotto non è presente nell'ordine, non puoi aggiungerlo",idOrdine,idProdotto);
 		}
 	}
 

@@ -45,7 +45,7 @@ public class OrdineEntity  extends AuditEntity{
 	private StatoOrdineEnum statoOrdine;
 
 	@PrePersist
-	public void init()
+	public void persist()
 	{
 		this.ordineId = UUID.randomUUID().toString();
 		this.statoOrdine = StatoOrdineEnum.CREATO;
