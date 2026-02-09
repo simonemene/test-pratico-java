@@ -12,9 +12,10 @@ import java.util.Optional;
 
 public interface MovimentoRepository extends JpaRepository<MovimentoEntity,Long> {
 
-	boolean existsByOrdine_OrdineIdAndProdotto_ProductId(
+	boolean existsByOrdine_OrdineIdAndProdotto_ProductIdAndFlgAnnullo(
 			String idOrdine,
-			String idProdotto
+			String idProdotto,
+			String annullo
 	);
 
 	Optional<MovimentoEntity> findByOrdine_OrdineIdAndProdotto_ProductId(String id,String prodotto);

@@ -298,7 +298,7 @@ public class OrdineService implements IOrdineService {
 
 	private void esistenzaProdottoOrdine(String idOrdine,String idProdotto)
 	{
-		if(movimentoRepository.existsByOrdine_OrdineIdAndProdotto_ProductId(idOrdine,idProdotto))
+		if(movimentoRepository.existsByOrdine_OrdineIdAndProdotto_ProductIdAndFlgAnnullo(idOrdine,idProdotto,AnnulloEnum.N.name()))
 		{
 			throw new MovimentoException("Il prodotto è già presente nell'ordine, non puoi aggiungerlo",idOrdine,idProdotto);
 		}
@@ -306,7 +306,7 @@ public class OrdineService implements IOrdineService {
 
 	private void controlloEsistenzaProdottoOrdine(String idOrdine,String idProdotto)
 	{
-		if(!movimentoRepository.existsByOrdine_OrdineIdAndProdotto_ProductId(idOrdine,idProdotto))
+		if(!movimentoRepository.existsByOrdine_OrdineIdAndProdotto_ProductIdAndFlgAnnullo(idOrdine,idProdotto,AnnulloEnum.N.name()))
 		{
 			throw new MovimentoException("Il prodotto non è presente nell'ordine, non puoi aggiungerlo",idOrdine,idProdotto);
 		}
