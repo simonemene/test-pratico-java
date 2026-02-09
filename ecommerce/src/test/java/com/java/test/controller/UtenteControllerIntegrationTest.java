@@ -1,25 +1,20 @@
 package com.java.test.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.java.test.baseconfig.ControllerBaseConfig;
 import com.java.test.dto.UtenteListResponseDto;
 import com.java.test.dto.UtenteRequestDto;
 import com.java.test.dto.UtenteResponseDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-@ActiveProfiles("test")
-@AutoConfigureTestDatabase
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UtenteControllerIntegrationTest {
+public class UtenteControllerIntegrationTest  extends ControllerBaseConfig {
 
 	@Autowired
 	private JdbcClient jdbcClient;
