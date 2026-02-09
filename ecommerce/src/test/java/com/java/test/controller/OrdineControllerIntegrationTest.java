@@ -47,7 +47,9 @@ public class OrdineControllerIntegrationTest {
 		OrdineRequestDto request = new OrdineRequestDto("dffgdfgfgbfgbgbgbfgb454534",
 				Map.of("dgfgdwwdf454345",2,"rgvbdfgdf454345",1));
 		//when
-		ResponseEntity<OrdineEffettuatoResponseDto> response = template.postForEntity(
+		ResponseEntity<OrdineEffettuatoResponseDto> response = template
+				.withBasicAuth("prova1@prova.com","prova")
+				.postForEntity(
 				"/api/ordine",request, OrdineEffettuatoResponseDto.class);
 		//then
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -69,7 +71,9 @@ public class OrdineControllerIntegrationTest {
 
 		//when
 		ResponseEntity<OrdineResponseDto> response =
-				template.exchange(
+				template
+						.withBasicAuth("prova1@prova.com","prova")
+						.exchange(
 						"/api/ordine/{id}/prodotti",
 						HttpMethod.PUT,
 						new HttpEntity<>(request),
@@ -100,7 +104,9 @@ public class OrdineControllerIntegrationTest {
 				.query().singleValue())
 				.isEqualTo("N");
 		//when
-		template.exchange(
+		template
+				.withBasicAuth("prova1@prova.com","prova")
+				.exchange(
 						"/api/ordine/{id}/prodotti",
 						HttpMethod.DELETE,
 						new HttpEntity<>(prodotti),
@@ -139,7 +145,9 @@ public class OrdineControllerIntegrationTest {
 						"""
 		).param(1,id).query().singleValue()).isEqualTo(2L);
 		//when
-		ResponseEntity<OrdineResponseDto> response = template.postForEntity(
+		ResponseEntity<OrdineResponseDto> response = template
+				.withBasicAuth("prova1@prova.com","prova")
+				.postForEntity(
 				"/api/ordine/{id}/prodotti",ordine, OrdineResponseDto.class,id);
 		//then
 		Assertions.assertThat(jdbcClient.sql(
@@ -181,7 +189,9 @@ public class OrdineControllerIntegrationTest {
 		Assertions.assertThat(flgMovimenti).containsOnly("N");
 
 		//when
-		template.exchange(
+		template
+				.withBasicAuth("prova1@prova.com","prova")
+				.exchange(
 				"/api/ordine/{id}",
 				HttpMethod.DELETE,
 				null,
@@ -212,7 +222,9 @@ public class OrdineControllerIntegrationTest {
 		//given
 		//when
 		ResponseEntity<PageResponseDto<OrdineResponseDto>> response =
-				template.exchange(
+				template
+						.withBasicAuth("admin@prova.com","prova")
+						.exchange(
 						"/api/ordine/paginati",
 						HttpMethod.GET,
 						null,
@@ -236,7 +248,9 @@ public class OrdineControllerIntegrationTest {
 		//given
 		//when
 		ResponseEntity<PageResponseDto<OrdineResponseDto>> response =
-				template.exchange(
+				template
+						.withBasicAuth("admin@prova.com","prova")
+						.exchange(
 						"/api/ordine/{id}/paginati?page=2&size=2",
 						HttpMethod.GET,
 						null,
@@ -264,7 +278,9 @@ public class OrdineControllerIntegrationTest {
 		//given
 		//when
 		ResponseEntity<PageResponseDto<OrdineResponseDto>> response =
-				template.exchange(
+				template
+						.withBasicAuth("admin@prova.com","prova")
+						.exchange(
 						"/api/ordine/{id}/paginati",
 						HttpMethod.GET,
 						null,

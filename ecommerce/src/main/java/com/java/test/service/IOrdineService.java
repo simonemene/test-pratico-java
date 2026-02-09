@@ -25,4 +25,6 @@ public interface IOrdineService {
 	PageResponseDto<OrdineResponseDto> prendiOrdiniPaginati(Pageable pageable);
 
 	PageResponseDto<OrdineResponseDto> prendiOrdiniPerUtentePaginati(String id,Pageable pageable);
+
+	PageResponseDto<OrdineResponseDto> prendiOrdiniPerUtentePaginatiUtente(String id, Pageable pageable);
 }

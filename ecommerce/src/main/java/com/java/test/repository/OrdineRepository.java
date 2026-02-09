@@ -14,6 +14,8 @@ import java.util.Optional;
 
 public interface OrdineRepository extends JpaRepository<OrdineEntity,Long> {
 
+	boolean existsByOrdineIdAndUtente_Email(String ordineId,String email);
+
 	Optional<OrdineEntity> findByOrdineId(String id);
 
 	Optional<OrdineEntity> findByOrdineIdAndStatoOrdine(String id, StatoOrdineEnum stato);
@@ -41,6 +43,8 @@ public interface OrdineRepository extends JpaRepository<OrdineEntity,Long> {
 	int eliminaOrdine(String idOrdine);
 
 	Page<OrdineEntity> findAll(Pageable pageable);
+
+	Page<OrdineEntity> findByUtente_Email(String id,Pageable pageable);
 
 	Page<OrdineEntity> findByUtente_UtenteId(String id,Pageable pageable);
 }

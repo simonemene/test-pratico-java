@@ -78,7 +78,7 @@ public class OrdineServiceUnitTest {
 
 		//given
 		UtenteEntity utente = new UtenteEntity("prova@prova.it","Paolo","Rossi","fsdfgsdfsdfs","password",new RuoloEntity(RuoloEnum.ROLE_USER));
-		Mockito.when(utenteRepository.findByUtenteId(Mockito.anyString())).thenReturn(
+		Mockito.when(utenteRepository.findByEmail(Mockito.anyString())).thenReturn(
 				Optional.of(utente));
 		Mockito.when(repository.modificaQuantitaProdotto(Mockito.anyInt(),Mockito.anyString())).thenReturn(0);
 
@@ -94,7 +94,7 @@ public class OrdineServiceUnitTest {
 	{
 		//given
 		UtenteEntity utente = new UtenteEntity("prova@prova.it","Paolo","Rossi","fsdfgsdfsdfs","password",new RuoloEntity(RuoloEnum.ROLE_USER));
-		Mockito.when(utenteRepository.findByUtenteId(Mockito.anyString())).thenReturn(
+		Mockito.when(utenteRepository.findByEmail(Mockito.anyString())).thenReturn(
 				Optional.of(utente));
 		Mockito.when(repository.modificaQuantitaProdotto(Mockito.anyInt(),Mockito.anyString())).thenReturn(2);
 		Mockito.when(repository.findByProdotto_ProductIdIn(Mockito.anyList())).thenReturn(

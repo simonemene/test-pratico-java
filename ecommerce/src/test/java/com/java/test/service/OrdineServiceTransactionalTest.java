@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -48,6 +49,7 @@ public class OrdineServiceTransactionalTest  extends TestjavaApplicationTests {
 		MockitoAnnotations.openMocks(this);
 	}
 
+	@WithMockUser(username = "prova1@prova.com",roles = "USER")
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Test
 	public void effettuaOrdineRoolback() {
@@ -57,7 +59,7 @@ public class OrdineServiceTransactionalTest  extends TestjavaApplicationTests {
 		Mockito.when(ordineRepository.save(Mockito.any(OrdineEntity.class))).thenThrow(new DataIntegrityViolationException("errore"));
 		//when
 		Assertions.assertThatThrownBy(()->service.effettuaOrdine(
-				utente.getUtenteId(), Map.of("dgfgdfgdfaaa4345", 2, "dgfgdwwdf454345", 1
+				utente.getEmail(), Map.of("dgfgdfgdfaaa4345", 2, "dgfgdwwdf454345", 1
 
 				))).isInstanceOf(ApplicationException.class)
 				.hasMessageContaining("Vincolo violato nella creazione l'ordine");

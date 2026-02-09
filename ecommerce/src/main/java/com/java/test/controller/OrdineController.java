@@ -1,5 +1,6 @@
 package com.java.test.controller;
 
+import com.java.test.annotation.CurrentUser;
 import com.java.test.dto.*;
 import com.java.test.service.IOrdineService;
 import jakarta.validation.Valid;
@@ -24,9 +25,9 @@ public class OrdineController {
 
 	@PostMapping
 	public ResponseEntity<OrdineEffettuatoResponseDto> effettuaOrdine(@RequestBody @Valid
-			OrdineRequestDto ordineRequestDto)
+			OrdineRequestDto ordineRequestDto,@CurrentUser String userId)
 	{
-		OrdineEffettuatoResponseDto response = service.effettuaOrdine(ordineRequestDto.utenteId(),ordineRequestDto.prodotti());
+		OrdineEffettuatoResponseDto response = service.effettuaOrdine(userId,ordineRequestDto.prodotti());
 		URI path = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
@@ -86,8 +87,8 @@ public class OrdineController {
 		return ResponseEntity.ok(service.prendiOrdiniPaginati(pageable));
 	}
 
-	@GetMapping("/{id}/paginati")
-	public ResponseEntity<PageResponseDto<OrdineResponseDto>> prendiOrdiniPerUtente(@PathVariable String  id,
+	@GetMapping("/utente/paginati")
+	public ResponseEntity<PageResponseDto<OrdineResponseDto>> prendiOrdiniPerUtente(@CurrentUser String  id,
 																					@PageableDefault(
 																							size = 20,
 																							sort = "timestampInserimento",
@@ -96,6 +97,18 @@ public class OrdineController {
 																					Pageable pageable)
 	{
          return ResponseEntity.ok(service.prendiOrdiniPerUtentePaginati(id,pageable));
+	}
+
+	@GetMapping("/{id}/paginati")
+	public ResponseEntity<PageResponseDto<OrdineResponseDto>> prendiOrdiniPerUtenteConId(@PathVariable String  id,
+			@PageableDefault(
+					size = 20,
+					sort = "timestampInserimento",
+					direction = Sort.Direction.DESC
+			)
+			Pageable pageable)
+	{
+		return ResponseEntity.ok(service.prendiOrdiniPerUtentePaginatiUtente(id,pageable));
 	}
 
 }

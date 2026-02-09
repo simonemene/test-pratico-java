@@ -1,5 +1,6 @@
 package com.java.test.service.impl;
 
+import com.java.test.annotation.CheckRoleAndOrder;
 import com.java.test.annotation.ReadOnlyTransactional;
 import com.java.test.dto.*;
 import com.java.test.entity.*;
@@ -15,6 +16,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +49,7 @@ public class OrdineService implements IOrdineService {
 		{
 			throw new ProdottoException("Nessun prodotto per l'ordine effettuato dall'utente","");
 		}
-		UtenteEntity utente = utenteRepository.findByUtenteId(utenteId)
+		UtenteEntity utente = utenteRepository.findByEmail(utenteId)
 				.orElseThrow(()->new UtenteException("Nessun utente trovato",utenteId));
 		OrdineEntity ordine = new OrdineEntity(utente);
 		OrdineEffettuatoResponseDto dto;
@@ -88,6 +91,7 @@ public class OrdineService implements IOrdineService {
         return dto;
 	}
 
+	@CheckRoleAndOrder
 	@ReadOnlyTransactional
 	@Override
 	public OrdineResponseDto ricercaOrdinePerId(String id) {
@@ -101,9 +105,10 @@ public class OrdineService implements IOrdineService {
 		return ordineMapper.toListaDto(repository.findAll().stream().toList());
 	}
 
+	@CheckRoleAndOrder
 	@Transactional
 	@Override
-	public OrdineResponseDto modificaProdotti(String id, Map<String, Integer> prodotti) {
+	public OrdineResponseDto modificaProdotti(@P("id") String id, Map<String, Integer> prodotti) {
 		OrdineEntity ordine = controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
 		Set<MovimentoEntity> movimenti = ordine.getMovimento();
 		for(MovimentoEntity movimento: movimenti)
@@ -132,9 +137,10 @@ public class OrdineService implements IOrdineService {
 		return ordineMapper.toDto(ordine.getOrdineId(),movimenti.stream().toList());
 	}
 
+	@CheckRoleAndOrder
 	@Transactional
 	@Override
-	public OrdineEliminatiProdottiResponseDto eliminaProdotti(String id, List<String> idPubbliciProdotti) {
+	public OrdineEliminatiProdottiResponseDto eliminaProdotti(@P("id") String id, List<String> idPubbliciProdotti) {
 		controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
 		int modificati = repository.eliminaProdottiOrdine(id,idPubbliciProdotti);
 		if(modificati != idPubbliciProdotti.size())
@@ -150,9 +156,10 @@ public class OrdineService implements IOrdineService {
 		return new OrdineEliminatiProdottiResponseDto(id,idPubbliciProdotti);
 	}
 
+	@CheckRoleAndOrder
 	@Transactional
 	@Override
-	public OrdineResponseDto inserisciProdotti(String id, Map<String, Integer> prodotti) {
+	public OrdineResponseDto inserisciProdotti(@P("id") String id, Map<String, Integer> prodotti) {
 		OrdineEntity ordine = controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
 		for(var valore : prodotti.entrySet())
 		{
@@ -165,9 +172,10 @@ public class OrdineService implements IOrdineService {
 		return ordineMapper.toDto(ordine.getOrdineId(), ordine.getMovimento().stream().toList());
 	}
 
+	@CheckRoleAndOrder
 	@Transactional
 	@Override
-	public String cancellazioneOrdine(String id) {
+	public String cancellazioneOrdine(@P("id") String id) {
 		controlloEsistenzaOrdine(id,StatoOrdineEnum.CREATO);
 		List<MovimentoEntity> movimenti = movimentoRepository.findByOrdine_OrdineId(id);
          List<String> prodottiOrdine = movimenti.stream().map(mov->mov.getProdotto().getProductId()).toList();
@@ -205,6 +213,13 @@ public class OrdineService implements IOrdineService {
 	@ReadOnlyTransactional
 	@Override
 	public PageResponseDto<OrdineResponseDto> prendiOrdiniPerUtentePaginati(String id, Pageable pageable) {
+		Page<OrdineEntity> ordini = repository.findByUtente_Email(id,pageable);
+		return componiOrdinePaginato(ordini);
+	}
+
+	@ReadOnlyTransactional
+	@Override
+	public PageResponseDto<OrdineResponseDto> prendiOrdiniPerUtentePaginatiUtente(String id, Pageable pageable) {
 		Page<OrdineEntity> ordini = repository.findByUtente_UtenteId(id,pageable);
 		return componiOrdinePaginato(ordini);
 	}

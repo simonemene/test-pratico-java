@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
@@ -37,6 +38,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 	private JdbcClient jdbcClient;
 
 
+	@WithMockUser(username = "prova2@prova.com",roles = "USER")
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
@@ -45,7 +47,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		//given
 		UtenteEntity utente = utenteRepository.findByUtenteId("dffgdfdddddgbgbfgb454534").get();
 		//when
-		OrdineEffettuatoResponseDto response = service.effettuaOrdine(utente.getUtenteId(),
+		OrdineEffettuatoResponseDto response = service.effettuaOrdine(utente.getEmail(),
 				Map.of(
 						"dgfgdfgdfaaa4345",2,
 						"dgfgdwwdf454345",1
@@ -71,7 +73,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 
 	}
 
-
+	@WithMockUser(username = "prova@prova.com",roles = "USER")
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-singolo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
@@ -93,6 +95,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(response.utenteId()).isEqualTo("dffgdfgfgbfgbgbgbfgb454534");
 	}
 
+	@WithMockUser(username = "admin@prova.com",roles = "ADMIN")
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
@@ -126,6 +129,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(ordine2.utenteId()).isEqualTo("dffgdfgfgbfttttgb454534");
 	}
 
+	@WithMockUser(username = "prova1@prova.com",roles = "USER")
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
@@ -148,6 +152,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(stock.getQuantita()).isEqualTo(10);
 	}
 
+	@WithMockUser(username = "prova1@prova.com",roles = "USER")
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
@@ -170,6 +175,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(stock.getQuantita()).isEqualTo(22);
 	}
 
+	@WithMockUser(username = "prova1@prova.com",roles = "USER")
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
@@ -202,6 +208,7 @@ public class OrdineServiceIntegrationTest extends TestjavaApplicationTests {
 		Assertions.assertThat(stock.getQuantita()).isEqualTo(3);
 	}
 
+	@WithMockUser(username = "prova1@prova.com",roles = "USER")
 	@Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	@Test
