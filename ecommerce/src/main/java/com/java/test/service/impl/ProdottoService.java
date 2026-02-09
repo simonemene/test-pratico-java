@@ -4,6 +4,7 @@ import com.java.test.annotation.ReadOnlyTransactional;
 import com.java.test.dto.*;
 import com.java.test.entity.ProdottoEntity;
 import com.java.test.entity.StockEntity;
+import com.java.test.enums.AnnulloEnum;
 import com.java.test.exception.ApplicationException;
 import com.java.test.exception.ProdottoException;
 import com.java.test.mapper.ProdottoMapper;
@@ -76,7 +77,7 @@ public class ProdottoService implements IProdottoService {
 	@ReadOnlyTransactional
 	@Override
 	public ProdottoConQuantitaResponseDto prendiInformazioniProdotto(String productId) {
-		return stockRepository.findByProdotto_ProductId(productId)
+		return stockRepository.findByProdotto_ProductIdAndProdotto_FlgAnnullo(productId, AnnulloEnum.N.name())
 				.map(prodotto->mapper.toDtoStock(prodotto.getProdotto(),prodotto))
 				.orElseThrow(()->new ProdottoException(
 						"Prodotto non trovato",productId));
@@ -85,7 +86,7 @@ public class ProdottoService implements IProdottoService {
 	@ReadOnlyTransactional
 	@Override
 	public PageResponseDto<ProdottoResponseDto> prendiProdottiPageable(Pageable pageable) {
-		Page<ProdottoEntity> prodotti = repository.findAll(pageable);
+		Page<ProdottoEntity> prodotti = repository.findByFlgAnnullo(AnnulloEnum.N.name(),pageable);
 		return new PageResponseDto<>(
 				mapper.toListaDto(prodotti.getContent()).prodotti(),
 				prodotti.getNumber(),

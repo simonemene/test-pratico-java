@@ -12,6 +12,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -28,8 +29,9 @@ public class SecurityConfiguration {
 			throws Exception {
 
 			return security.authorizeHttpRequests(auth->
-					auth.requestMatchers(HttpMethod.POST,"/api/prodotto").hasRole("ADMIN")
-					.requestMatchers(HttpMethod.GET,"/api/prodotto/**").hasAnyRole("ADMIN","USER")
+					auth.requestMatchers("/h2-console/**").permitAll()
+							.requestMatchers(HttpMethod.POST,"/api/prodotto").hasRole("ADMIN")
+					        .requestMatchers(HttpMethod.GET,"/api/prodotto/**").hasAnyRole("ADMIN","USER")
 							.requestMatchers(HttpMethod.GET, "/api/ordine").hasRole("ADMIN")
 							.requestMatchers(HttpMethod.GET, "/api/ordine/paginati").hasRole("ADMIN")
 							.requestMatchers(HttpMethod.GET, "/api/ordine/*/paginati").hasRole("ADMIN")
@@ -44,8 +46,12 @@ public class SecurityConfiguration {
 		.formLogin(AbstractHttpConfigurer::disable)
 				.httpBasic(Customizer.withDefaults())
 				.csrf(AbstractHttpConfigurer::disable)
+
 				.sessionManagement(session->
 						session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.headers(headers -> headers
+							.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+					)
 				.build();
 	}
 

@@ -8,6 +8,7 @@ import com.java.test.enums.RuoloEnum;
 import com.java.test.exception.RuoloException;
 import com.java.test.repository.RuoloRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class UtenteMapper {
+
+	private final PasswordEncoder passwordEncoder;
 
 	private final RuoloRepository ruoloRepository;
 
@@ -28,7 +31,7 @@ public class UtenteMapper {
 		RuoloEntity ruolo = ruoloRepository.findByRuolo(RuoloEnum.ROLE_USER).orElseThrow(
 				()->new RuoloException("Il ruolo non esiste",RuoloEnum.ROLE_USER.name())
 		);
-		return new UtenteEntity(dto.email(),dto.nome(),dto.cognome(),dto.codiceFiscale(),dto.password(),ruolo);
+		return new UtenteEntity(dto.email(),dto.nome(),dto.cognome(),dto.codiceFiscale(),passwordEncoder.encode(dto.password()),ruolo);
 	}
 
 	public List<UtenteResponseDto> toListaDto(List<UtenteEntity> utenti)

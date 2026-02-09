@@ -11,5 +11,7 @@ public interface ProdottoRepository  extends JpaRepository<ProdottoEntity,Long> 
 
 	Optional<ProdottoEntity> findByProductId(String productId);
 
+	Page<ProdottoEntity> findByFlgAnnullo(String annullo,Pageable pageable);
+
 	Page<ProdottoEntity> findAll(Pageable pageable);
 }

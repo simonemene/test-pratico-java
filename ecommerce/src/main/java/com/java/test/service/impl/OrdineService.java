@@ -4,6 +4,7 @@ import com.java.test.annotation.CheckRoleAndOrder;
 import com.java.test.annotation.ReadOnlyTransactional;
 import com.java.test.dto.*;
 import com.java.test.entity.*;
+import com.java.test.enums.AnnulloEnum;
 import com.java.test.enums.RuoloEnum;
 import com.java.test.enums.StatoOrdineEnum;
 import com.java.test.exception.*;
@@ -95,7 +96,7 @@ public class OrdineService implements IOrdineService {
 	@ReadOnlyTransactional
 	@Override
 	public OrdineResponseDto ricercaOrdinePerId(String id) {
-		OrdineEntity ordine = repository.findByOrdineId(id).orElseThrow(()->new OrdineException("Nessun ordine presente",id));
+		OrdineEntity ordine = repository.findByOrdineIdAndFlgAnnullo(id, AnnulloEnum.N.name()).orElseThrow(()->new OrdineException("Nessun ordine presente",id));
 		return ordineMapper.toDto(id,ordine.getMovimento().stream().toList());
 	}
 

@@ -15,6 +15,8 @@ public interface StockRepository extends JpaRepository<StockEntity,Long> {
 
 	Optional<StockEntity>findByProdotto_ProductId(String id);
 
+	Optional<StockEntity>findByProdotto_ProductIdAndProdotto_FlgAnnullo(String id,String annullo);
+
 	List<StockEntity>findByProdotto_ProductIdIn(List<String> id);
 
 	@Modifying

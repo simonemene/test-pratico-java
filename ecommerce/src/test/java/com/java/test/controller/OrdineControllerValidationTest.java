@@ -45,7 +45,7 @@ public class OrdineControllerValidationTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("Uno o più campi sono invalidi"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.instance").value("/api/ordine"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.length()").value(2))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.utenteId").value("l'utente non può essere vuoto"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.ordineId").value("l'ordine non può essere vuoto"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.prodotti").value(
 						Matchers.allOf(Matchers.containsString(
 						"L'elenco dei prodotti non può essere vuoto"),
@@ -67,7 +67,7 @@ public class OrdineControllerValidationTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.detail").value("Uno o più campi sono invalidi"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.instance").value("/api/ordine"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.length()").value(2))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.utenteId").value("l'utente non può essere vuoto"))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.errori.ordineId").value("l'ordine non può essere vuoto"))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.errori['prodotti[prodotto]']").value(
 						"La quantità di prodotto non può essere minore di 0"));
 	}
