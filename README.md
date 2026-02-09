@@ -2,6 +2,122 @@
 
 ## Scelte Architetturali
 
+## Entità del Dominio
+
+### AuditEntity (MappedSuperclass)
+
+- Classe base estesa da tutte le entità principali
+- Gestisce automaticamente le informazioni di auditing tramite JPA Auditing
+- Responsabilità:
+  - Tracciamento dell’utente che ha inserito il record
+  - Tracciamento della data di inserimento
+  - Tracciamento dell’utente che ha modificato il record
+  - Tracciamento della data di modifica
+  - Gestione del flag di annullo logico
+- Il flag di annullo (`FLG_ANNULLO`) viene inizializzato automaticamente a `N` alla creazione
+- Permette di centralizzare logica comune ed evitare duplicazioni
+
+---
+
+### UtenteEntity
+
+- Rappresenta l’utente del sistema
+- È utilizzato per l’autenticazione e l’autorizzazione tramite Spring Security
+- Ogni utente è associato a un ruolo
+- Un utente può effettuare più ordini
+- Campi principali:
+  - email (univoca)
+  - utenteId pubblico (UUID)
+  - nome e cognome
+  - codice fiscale (univoco)
+  - password (gestita in modo sicuro)
+  - ruolo
+  - campo `@Version` per il controllo di concorrenza
+  - campi di auditing
+  - flag di annullo logico
+
+---
+
+### RuoloEntity
+
+- Rappresenta il ruolo associato a un utente
+- Utilizzato da Spring Security per la gestione delle autorizzazioni
+- I ruoli sono definiti tramite enum
+- Campi principali:
+  - ruolo (ENUM)
+  - ruoloId pubblico (UUID)
+- I ruoli amministrativi vengono inizializzati di default
+
+---
+
+### OrdineEntity
+
+- Rappresenta un ordine effettuato da un utente
+- Non contiene direttamente i prodotti
+- I prodotti sono collegati tramite l’entità Movimento
+- Alla creazione:
+  - viene generato automaticamente un identificativo pubblico ordine
+  - lo stato iniziale è impostato a `CREATO`
+- Campi principali:
+  - ordineId pubblico (UUID)
+  - riferimento all’utente
+  - stato dell’ordine
+  - lista dei movimenti associati
+  - campo `@Version` per il controllo di concorrenza
+  - campi di auditing
+  - flag di annullo logico
+
+---
+
+### MovimentoEntity
+
+- Rappresenta una riga d’ordine
+- È l’entità di collegamento tra Ordine e Prodotto
+- Permette di modellare una relazione molti-a-molti con attributi
+- Esiste un vincolo di unicità su coppia ordine–prodotto
+- Campi principali:
+  - riferimento all’ordine
+  - riferimento al prodotto
+  - quantità ordinata
+  - campo `@Version` per il controllo di concorrenza
+  - campi di auditing
+  - flag di annullo logico
+
+---
+
+### ProdottoEntity
+
+- Rappresenta il prodotto acquistabile
+- Non contiene informazioni sul magazzino
+- È separato dallo stock per isolare la logica di concorrenza
+- Ha un identificativo pubblico distinto dall’ID tecnico
+- Campi principali:
+  - productId pubblico (UUID)
+  - nome (univoco)
+  - prezzo
+  - riferimento allo stock
+  - campo `@Version` per il controllo di concorrenza
+  - campi di auditing
+  - flag di annullo logico
+
+---
+
+### StockEntity
+
+- Rappresenta il magazzino associato a un singolo prodotto
+- Contiene la quantità disponibile
+- È una delle entità critiche per la concorrenza
+- Utilizza il controllo di concorrenza ottimistico tramite `@Version`
+- Implementa la logica di aumento e diminuzione della quantità
+- In caso di quantità insufficiente viene sollevata un’eccezione di dominio
+- Campi principali:
+  - riferimento al prodotto
+  - quantità disponibile
+  - campo `@Version`
+  - campi di auditing
+  - flag di annullo logico
+
+
 ### Modello di Dominio
 
 - Utente e Ordine sono modellati come entità distinte
