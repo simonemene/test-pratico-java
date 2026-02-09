@@ -1,0 +1,716 @@
+{
+  "info": {
+    "_postman_id": "4848ca52-0ef5-4bc7-a924-fb6597ebca47",
+    "name": "ECOMMERCE",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40633856"
+  },
+  "item": [
+    {
+      "name": "creazione-utente",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"mario.rossi@example.com\",\n  \"nome\": \"Mario\",\n  \"cognome\": \"Rossi\",\n  \"codiceFiscale\": \"RSSMRA90A01H501Z\",\n  \"password\": \"PasswordSicura123!\",\n  \"ruolo\": \"USER\"\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/utente",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "utente"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "informazioni-utente",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "PasswordSicura123!",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "mario.rossi@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/utente/informazioni",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "utente",
+            "informazioni"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "admin-informazioni-utente",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "admin",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin@test.it",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/utente/mario.rossi@example.com/informazioni",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "utente",
+            "mario.rossi@example.com",
+            "informazioni"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "admin-utenti",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "admin",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin@test.it",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/utente",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "utente"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "admin-utenti-paginati",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "admin",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin@test.it",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/utente/paginati?page=1&size=1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "utente",
+            "paginati"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "size",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "admin-creazione-prodotto",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "admin",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin@test.it",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\n{\n  \"prezzo\": 10.99,\n  \"nome\": \"Tablet\",\n  \"quantita\": 10\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/prodotto",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "prodotto"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "prendi-prodotti",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "PasswordSicura123!",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "mario.rossi@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\n{\n  \"prezzo\": 199.99,\n  \"nome\": \"Monitor 27 pollici\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/prodotto",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "prodotto"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "prendi-prodotto(da modificare id)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "PasswordSicura123!",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "mario.rossi@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\n{\n  \"prezzo\": 199.99,\n  \"nome\": \"Monitor 27 pollici\"\n}\n"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/prodotto/3eb7ac39-0acd-494f-bf86-756e190be7df",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "prodotto",
+            "3eb7ac39-0acd-494f-bf86-756e190be7df"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "prodotti-paginati",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "PasswordSicura123!",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "mario.rossi@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/prodotto/paginati?page=0&size=2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "prodotto",
+            "paginati"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "creazione-ordine",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "PasswordSicura123!",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "mario.rossi@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ordineId\": \"ORD-2026-0001\",\n  \"prodotti\": {\n    \"45094007-994e-4383-b147-21be6bebf78f\": 2,\n    \"2e331fa3-9840-46e7-a8ad-1c28d28c3554\": 1\n  }\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/ordine",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ordine"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "prendi-ordini",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "admin",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin@test.it",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/ordine",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ordine"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "prendi-ordine(da modificare id)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "admin",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin@test.it",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/ordine/0479127d-50a9-490c-90a7-a7e90a819ff2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ordine",
+            "0479127d-50a9-490c-90a7-a7e90a819ff2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "aumenta-quantita-prodotti",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "PasswordSicura123!",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "mario.rossi@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ordineId\": null,\n  \"prodotti\": {\n    \"5ef5fe4c-4490-424f-ac18-d378edd544c7\":1\n  }\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/ordine/d1659910-91d6-4f05-abf5-264945c14583/prodotti",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ordine",
+            "d1659910-91d6-4f05-abf5-264945c14583",
+            "prodotti"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "diminuzione-prodotti",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "PasswordSicura123!",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "mario.rossi@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"prodottoId\": \"5ef5fe4c-4490-424f-ac18-d378edd544c7\",\n  \"quantita\": 5\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/ordine/d1659910-91d6-4f05-abf5-264945c14583/prodotti/diminuisci",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ordine",
+            "d1659910-91d6-4f05-abf5-264945c14583",
+            "prodotti",
+            "diminuisci"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "aggiungi-prodotto-ordine",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "PasswordSicura123!",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "mario.rossi@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ordineId\": null,\n  \"prodotti\": {\n    \"9f5973c1-b4c2-4881-871f-27eb7be764ba\":20\n  }\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/ordine/d1659910-91d6-4f05-abf5-264945c14583/prodotti",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ordine",
+            "d1659910-91d6-4f05-abf5-264945c14583",
+            "prodotti"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "elimina-prodotto",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "PasswordSicura123!",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "mario.rossi@example.com",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"prodotti\": [\n    \"5ef5fe4c-4490-424f-ac18-d378edd544c7\"\n  ]\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/ordine/d1659910-91d6-4f05-abf5-264945c14583/prodotti",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "ordine",
+            "d1659910-91d6-4f05-abf5-264945c14583",
+            "prodotti"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
