@@ -36,7 +36,7 @@ public class SecurityConfiguration {
 							.requestMatchers(HttpMethod.GET, "/api/ordine/utente/paginati").hasAnyRole("USER","ADMIN")
 							.requestMatchers("/api/ordine/**").hasAnyRole("ADMIN","USER")
 							.requestMatchers("/api/utente/informazioni").hasRole("USER")
-							.requestMatchers("/api/utente/paginati").hasRole("ADMIN")
+							.requestMatchers("/api/utente/*/informazioni").hasRole("ADMIN")
 							.requestMatchers(HttpMethod.GET,"/api/utente").hasRole("ADMIN")
 							.requestMatchers(HttpMethod.POST,"/api/utente").permitAll()
 							.requestMatchers("/api/**").authenticated()

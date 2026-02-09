@@ -14,6 +14,8 @@ public interface IUtenteService {
 
 	UtenteResponseDto prendiInformazionUtente(String idPubblico);
 
+	UtenteResponseDto prendiInformazionUtenteId(String idPubblico);
+
 	PageResponseDto<UtenteResponseDto> prendiUtentiPaginati(Pageable pageable);
 
 

@@ -74,7 +74,7 @@ public class UtenteControllerValidationSliceTest {
 		//given
 		//when
 		//then
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/utente/{id}"," ")
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/utente/{id}/informazioni"," ")
 						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Errore nella validazione dei campi"))

@@ -64,7 +64,7 @@ public class UtenteServiceIntegrationTest extends TestjavaApplicationTests {
 		//when
 		UtenteListResponseDto utenti = service.prendiListaClienti();
 		//then
-		Assertions.assertThat(utenti.utenti().size()).isEqualTo(3);
+		Assertions.assertThat(utenti.utenti().size()).isEqualTo(4);
 		UtenteResponseDto utentePaoloRossi = utenti.utenti().stream().filter(utente->utente.email().equals("prova@prova.com")).findFirst().get();
 		Assertions.assertThat(utentePaoloRossi.nome()).isEqualTo("Paolo");
 		Assertions.assertThat(utentePaoloRossi.cognome()).isEqualTo("Rossi");

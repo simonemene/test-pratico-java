@@ -41,6 +41,12 @@ public class UtenteController {
 		return ResponseEntity.ok(service.prendiInformazionUtente(id));
 	}
 
+	@GetMapping("/{id}/informazioni")
+	public ResponseEntity<UtenteResponseDto> prendiInformazioniUtenteId(@NotBlank(message = "L'id dell'utente non può essere vuoto") @PathVariable String id)
+	{
+		return ResponseEntity.ok(service.prendiInformazionUtente(id));
+	}
+
 	@GetMapping
 	public ResponseEntity<UtenteListResponseDto> prendiUtenti()
 	{

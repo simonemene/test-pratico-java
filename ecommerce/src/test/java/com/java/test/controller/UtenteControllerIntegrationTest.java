@@ -52,11 +52,13 @@ public class UtenteControllerIntegrationTest {
 	{
 		//given
 		//when
-		ResponseEntity<UtenteListResponseDto> response = template.getForEntity("/api/utente",UtenteListResponseDto.class);
+		ResponseEntity<UtenteListResponseDto> response = template
+				.withBasicAuth("admin@prova.com","prova")
+				.getForEntity("/api/utente",UtenteListResponseDto.class);
 		//then
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		UtenteListResponseDto body = response.getBody();
-		Assertions.assertThat(body.utenti().size()).isEqualTo(3);
+		Assertions.assertThat(body.utenti().size()).isEqualTo(4);
 		UtenteResponseDto utentePaoloRossi = body.utenti().stream().filter(utente->utente.email().equals("prova@prova.com")).findFirst().get();
 		Assertions.assertThat(utentePaoloRossi.nome()).isEqualTo("Paolo");
 		Assertions.assertThat(utentePaoloRossi.cognome()).isEqualTo("Rossi");
@@ -71,7 +73,9 @@ public class UtenteControllerIntegrationTest {
 	{
 		//given
 		//when
-		ResponseEntity<UtenteResponseDto> response = template.getForEntity("/api/utente/informazioni",UtenteResponseDto.class,"dffgdfdddddgbgbfgb454534");
+		ResponseEntity<UtenteResponseDto> response = template
+				.withBasicAuth("prova2@prova.com","prova")
+				.getForEntity("/api/utente/informazioni",UtenteResponseDto.class);
 		//then
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		UtenteResponseDto utenteDaControllare = response.getBody();
