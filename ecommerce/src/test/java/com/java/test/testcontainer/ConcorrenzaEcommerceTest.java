@@ -1,29 +1,20 @@
 package com.java.test.testcontainer;
 
-import com.java.test.dto.DiminuisciProdottoOrdineRequestDto;
-import com.java.test.entity.ProdottoEntity;
+
 import com.java.test.entity.StockEntity;
 import com.java.test.enums.AnnulloEnum;
-import com.java.test.repository.ProdottoRepository;
 import com.java.test.repository.StockRepository;
-import jakarta.persistence.OptimisticLockException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.concurrent.*;
 
 
 @ActiveProfiles("container")
