@@ -117,7 +117,7 @@
   - campi di auditing
   - flag di annullo logico
 
---
+---
 
 ### Modello di Dominio
 
