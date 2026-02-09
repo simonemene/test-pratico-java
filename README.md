@@ -33,7 +33,7 @@
   - Evitare aggiornamenti persi
   - Gestire correttamente accessi concorrenti
 - È stato sviluppato un test di concorrenza utilizzando Testcontainers
-- Il test verifica il comportamento in caso di due thread che modificano contemporaneamente ordini o stock
+- Il test verifica il comportamento in caso di due thread che modificano contemporaneamente lo stock
 - Per eseguire i test di concorrenza è necessario avere Docker attivo
 
 ---
