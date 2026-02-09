@@ -2,6 +2,8 @@ package com.java.test.controller;
 
 import com.java.test.dto.*;
 import com.java.test.service.IProdottoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
@@ -13,6 +15,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+
+@Tag(
+		name = "Controller Prodotti",
+		description = "API per la gestione dei prodotti all'interno del negozio"
+)
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/prodotto")
@@ -21,6 +28,10 @@ public class ProdottoController {
 	private final IProdottoService service;
 
 
+	@Operation(
+			summary="Creazione prodotto",
+			description = "API per la creazione di un prodotto"
+	)
 	@PostMapping
 	public ResponseEntity<ProdottoResponseDto> inserisciUnProdotto(@RequestBody @Valid
 			ProdottoRequestDto prodotto)
@@ -34,12 +45,20 @@ public class ProdottoController {
 		return ResponseEntity.created(path).body(prodottoCreato);
 	}
 
+	@Operation(
+			summary="Estrazione prodotti",
+			description = "API per l'estrazione di tutti i prodotti"
+	)
 	@GetMapping
 	public ResponseEntity<ProdottoListResponseDto> prendiProdotti()
 	{
 		return ResponseEntity.ok(service.prendiListaProdotti());
 	}
 
+	@Operation(
+			summary="Informazioni prodotto",
+			description = "API per l'estrazione di tutte le informazioni di uno specifico prodotto"
+	)
 	@GetMapping("/{id}")
 	public ResponseEntity<ProdottoConQuantitaResponseDto> prendiInformazioniProdotto(
 			@PathVariable
@@ -48,6 +67,10 @@ public class ProdottoController {
 		return ResponseEntity.ok(service.prendiInformazioniProdotto(id));
 	}
 
+	@Operation(
+			summary="Estrazione paginata prodotti",
+			description = "API per l'estrazione paginata di tutti i prodotti"
+	)
 	@GetMapping("/paginati")
 	public ResponseEntity<PageResponseDto<ProdottoResponseDto>> prendiProdottiPaginati(Pageable pageable)
 	{

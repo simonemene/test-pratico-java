@@ -30,6 +30,11 @@ public class SecurityConfiguration {
 
 			return security.authorizeHttpRequests(auth->
 					auth.requestMatchers("/h2-console/**").permitAll()
+							.requestMatchers(
+									"/swagger-ui/**",
+									"/v3/api-docs/**",
+									"/swagger-ui.html"
+							).permitAll()
 							.requestMatchers(HttpMethod.POST,"/api/prodotto").hasRole("ADMIN")
 					        .requestMatchers(HttpMethod.GET,"/api/prodotto/**").hasAnyRole("ADMIN","USER")
 							.requestMatchers(HttpMethod.GET, "/api/ordine").hasRole("ADMIN")
