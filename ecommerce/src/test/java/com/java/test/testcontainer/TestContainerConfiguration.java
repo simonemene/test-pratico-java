@@ -1,8 +1,10 @@
 package com.java.test.testcontainer;
 
+import org.junit.jupiter.api.Disabled;
 import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.MySQLContainer;
 
+@Disabled
 @Configuration
 public class TestContainerConfiguration {
 

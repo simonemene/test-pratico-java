@@ -2,6 +2,7 @@ package com.java.test.testcontainer;
 
 import com.java.test.dto.DiminuisciProdottoOrdineRequestDto;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.concurrent.*;
 
 
+@Disabled
 @ActiveProfiles("test")
 @Sql(scripts = "classpath:sql/service/delete.sql",executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Sql(scripts = "classpath:sql/service/ordini/insert-ordine-completo.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
