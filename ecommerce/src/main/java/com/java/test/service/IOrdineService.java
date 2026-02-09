@@ -1,6 +1,7 @@
 package com.java.test.service;
 
 import com.java.test.dto.*;
+import com.java.test.enums.StatoOrdineEnum;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface IOrdineService {
 	PageResponseDto<OrdineResponseDto> prendiOrdiniPerUtentePaginatiUtente(String id, Pageable pageable);
 
 	OrdineResponseDto diminuisciQuantitaProdotto(String idOrdine, String idProdotto, int quantita);
+
+	OrdineResponseDto modificaStatoOrdine(String ordineId, StatoOrdineEnum stato);
 }

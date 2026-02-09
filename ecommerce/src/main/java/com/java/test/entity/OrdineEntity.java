@@ -67,4 +67,9 @@ public class OrdineEntity  extends AuditEntity{
 	{
 		this.movimento = listaMovimenti;
 	}
+
+	public void modificaStato(StatoOrdineEnum statoOrdine)
+	{
+		this.statoOrdine = statoOrdine;
+	}
 }

@@ -272,6 +272,16 @@ public class OrdineService implements IOrdineService {
 		return ordineMapper.toDto(ordine.getOrdineId(), ordine.getMovimento().stream().toList());
 	}
 
+	@Transactional
+	public OrdineResponseDto modificaStatoOrdine(String ordineId, StatoOrdineEnum stato) {
+		OrdineEntity ordine = repository.findByOrdineId(ordineId)
+				.orElseThrow(() -> new OrdineException("Ordine non trovato",ordineId));
+
+		ordine.modificaStato(stato);
+
+		return ordineMapper.toDto(ordineId,ordine.getMovimento().stream().toList());
+	}
+
 
 
 	private ProdottoConQuantitaResponseDto creazioneProdotto(MovimentoEntity movimento)

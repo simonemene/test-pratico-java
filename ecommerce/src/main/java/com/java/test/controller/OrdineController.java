@@ -2,6 +2,7 @@ package com.java.test.controller;
 
 import com.java.test.annotation.CurrentUser;
 import com.java.test.dto.*;
+import com.java.test.enums.StatoOrdineEnum;
 import com.java.test.service.IOrdineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -170,6 +171,20 @@ public class OrdineController {
 		return ResponseEntity.ok(
 				service.diminuisciQuantitaProdotto(id, request.prodottoId(), request.quantita())
 		);
+	}
+
+	@Operation(
+			summary="Modifica stato ordine",
+			description = "API per la modifica dello stato di un ordine"
+	)
+	@PatchMapping("/{id}/stato/{stato}")
+	public ResponseEntity<OrdineResponseDto> modificaStatoOrdine(
+			@PathVariable String id,
+			@PathVariable StatoOrdineEnum stato
+	) {
+		return ResponseEntity.ok(
+				service.modificaStatoOrdine(id,stato));
+
 	}
 
 

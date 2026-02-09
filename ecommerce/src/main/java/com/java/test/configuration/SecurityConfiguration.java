@@ -37,6 +37,8 @@ public class SecurityConfiguration {
 							).permitAll()
 							.requestMatchers(HttpMethod.POST,"/api/prodotto").hasRole("ADMIN")
 					        .requestMatchers(HttpMethod.GET,"/api/prodotto/**").hasAnyRole("ADMIN","USER")
+							.requestMatchers(HttpMethod.PATCH, "/api/ordine/*/stato/*")
+							.hasRole("ADMIN")
 							.requestMatchers(HttpMethod.GET, "/api/ordine").hasRole("ADMIN")
 							.requestMatchers(HttpMethod.GET, "/api/ordine/paginati").hasRole("ADMIN")
 							.requestMatchers(HttpMethod.GET, "/api/ordine/*/paginati").hasRole("ADMIN")
