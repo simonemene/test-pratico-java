@@ -56,7 +56,7 @@ public class ProdottoServiceUnitTest {
 	public void creazioneProdottoErrore(CapturedOutput capturedOutput)
 	{
 		//given
-		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer");
+		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer",10);
 		ProdottoEntity entity = new ProdottoEntity(new BigDecimal("1.2"),"computer");
 		Mockito.when(mapper.toEntity(prodotto)).thenReturn(entity);
 		Mockito.when(stockRepository.save(Mockito.any(StockEntity.class)))
@@ -75,7 +75,7 @@ public class ProdottoServiceUnitTest {
 	public void creazioneProdottoErroreGenerico(CapturedOutput capturedOutput)
 	{
 		//given
-		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer");
+		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer",10);
 		ProdottoEntity entity = new ProdottoEntity(new BigDecimal("1.2"),"computer");
 		Mockito.when(mapper.toEntity(prodotto)).thenReturn(entity);
 		Mockito.when(stockRepository.save(Mockito.any(StockEntity.class))).thenThrow(new BadSqlGrammarException("","",new SQLException()));

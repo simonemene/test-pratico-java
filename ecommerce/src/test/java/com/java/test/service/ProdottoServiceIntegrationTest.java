@@ -34,7 +34,7 @@ public class ProdottoServiceIntegrationTest extends TestjavaApplicationTests {
 	public void inserisciProdotto()
 	{
 		//given
-		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer");
+		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer",10);
 		//when
 		ProdottoResponseDto prodottoSalvato = service.inserisciUnProdotto(prodotto);
 		//then
@@ -69,8 +69,8 @@ public class ProdottoServiceIntegrationTest extends TestjavaApplicationTests {
 	public void inserisciProdottoRollback()
 	{
 		//given
-		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer");
-		ProdottoRequestDto prodottoPerRollback = new ProdottoRequestDto(new BigDecimal("2.0"),"computer");
+		ProdottoRequestDto prodotto = new ProdottoRequestDto(new BigDecimal("1.2"),"computer",10);
+		ProdottoRequestDto prodottoPerRollback = new ProdottoRequestDto(new BigDecimal("2.0"),"computer",10);
 		//when
 		service.inserisciUnProdotto(prodotto);
 		//then

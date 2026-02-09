@@ -37,7 +37,7 @@ public class ProdottoControllerValidationSliceTest {
 		@Test
 		public void controlloValidazioneProdottoRequest() throws Exception {
 			//given
-			ProdottoRequestDto request = new ProdottoRequestDto(new BigDecimal("0.00"),"");
+			ProdottoRequestDto request = new ProdottoRequestDto(new BigDecimal("0.00"),"",10);
 			//when
 			//then
 			mockMvc.perform(MockMvcRequestBuilders.post("/api/prodotto").content(

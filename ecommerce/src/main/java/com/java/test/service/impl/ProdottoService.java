@@ -48,7 +48,7 @@ public class ProdottoService implements IProdottoService {
 		ProdottoEntity prodottoDaSalvare = mapper.toEntity(prodottoDaInserire);
 		StockEntity stock;
 		try {
-			StockEntity aggiuntaProdotto = new StockEntity(1);
+			StockEntity aggiuntaProdotto = new StockEntity(prodottoDaInserire.quantita());
 			aggiuntaProdotto.collegaProdotto(prodottoDaSalvare);
 			stock = stockRepository.save(aggiuntaProdotto);
 		}catch(DataIntegrityViolationException e)

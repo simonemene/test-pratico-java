@@ -26,7 +26,7 @@ public class ProdottoControllerSecurityIntegrationTest  extends ControllerBaseCo
 	public void creazioneProdotto401() throws JsonProcessingException {
 		//given
 		ProdottoRequestDto request = new ProdottoRequestDto(new BigDecimal("1.2"),
-				"computer");
+				"computer",10);
 		//when
 		ResponseEntity<ProdottoResponseDto> response = template.withBasicAuth(
 						"no-auth@prova.com", "prova")
@@ -41,7 +41,7 @@ public class ProdottoControllerSecurityIntegrationTest  extends ControllerBaseCo
 	public void creazioneProdotto403() throws JsonProcessingException {
 		//given
 		ProdottoRequestDto request = new ProdottoRequestDto(new BigDecimal("1.2"),
-				"computer");
+				"computer",10);
 		//when
 		ResponseEntity<ProdottoResponseDto> response = template.withBasicAuth(
 						"prova@prova.com", "prova")

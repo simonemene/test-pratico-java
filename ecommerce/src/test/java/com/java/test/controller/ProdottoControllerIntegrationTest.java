@@ -25,7 +25,7 @@ public class ProdottoControllerIntegrationTest  extends ControllerBaseConfig {
 	@Test
 	public void creazioneProdotto() throws JsonProcessingException {
 		//given
-		ProdottoRequestDto request = new ProdottoRequestDto(new BigDecimal("1.2"),"computer");
+		ProdottoRequestDto request = new ProdottoRequestDto(new BigDecimal("1.2"),"computer",10);
 		//when
 		ResponseEntity<ProdottoResponseDto> response = template
 				.withBasicAuth("admin@prova.com","prova")
