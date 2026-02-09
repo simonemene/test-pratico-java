@@ -1,7 +1,5 @@
 # Ecommerce – Test Pratico Java
 
-## Scelte Architetturali
-
 ## Entità del Dominio
 
 ### AuditEntity (MappedSuperclass)
@@ -118,6 +116,9 @@
   - flag di annullo logico
 
 ---
+
+
+## Scelte Architetturali
 
 ### Modello di Dominio
 
