@@ -27,4 +27,6 @@ public interface IOrdineService {
 	PageResponseDto<OrdineResponseDto> prendiOrdiniPerUtentePaginati(String id,Pageable pageable);
 
 	PageResponseDto<OrdineResponseDto> prendiOrdiniPerUtentePaginatiUtente(String id, Pageable pageable);
+
+	OrdineResponseDto diminuisciQuantitaProdotto(String idOrdine, String idProdotto, int quantita);
 }

@@ -48,7 +48,7 @@ public class OrdineController {
 		return ResponseEntity.ok(service.ricercaOrdinePerId(id));
 	}
 
-	@PutMapping("/{id}/prodotti")
+	@PatchMapping("/{id}/prodotti")
 	public ResponseEntity<OrdineResponseDto> modificaProdotti(@PathVariable String id,@RequestBody OrdineRequestDto prodottiModificati)
 	{
 		return ResponseEntity.ok(service.modificaProdotti(id,prodottiModificati.prodotti()));
@@ -110,5 +110,16 @@ public class OrdineController {
 	{
 		return ResponseEntity.ok(service.prendiOrdiniPerUtentePaginatiUtente(id,pageable));
 	}
+
+	@PatchMapping("/{id}/prodotti/diminuisci")
+	public ResponseEntity<OrdineResponseDto> diminuisciQuantitaProdotto(
+			@PathVariable String id,
+			@RequestBody @Valid DiminuisciProdottoOrdineRequestDto request
+	) {
+		return ResponseEntity.ok(
+				service.diminuisciQuantitaProdotto(id, request.prodottoId(), request.quantita())
+		);
+	}
+
 
 }

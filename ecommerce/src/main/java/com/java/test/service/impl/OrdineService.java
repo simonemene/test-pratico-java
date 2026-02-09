@@ -232,6 +232,47 @@ public class OrdineService implements IOrdineService {
 		return componiOrdinePaginato(ordini);
 	}
 
+	@CheckRoleAndOrder
+	@Transactional
+	@Override
+	public OrdineResponseDto diminuisciQuantitaProdotto(@P("id") String idOrdine, String idProdotto, int quantita) {
+
+		if (quantita <= 0) {
+			throw new ProdottoException("La quantità da diminuire deve essere maggiore di 0", idProdotto);
+		}
+
+		OrdineEntity ordine = controlloEsistenzaOrdine(idOrdine, StatoOrdineEnum.CREATO);
+
+		controlloEsistenzaProdottoOrdine(idOrdine, idProdotto);
+
+		MovimentoEntity movimento = movimentoRepository
+				.findByOrdine_OrdineIdAndProdotto_ProductId(idOrdine, idProdotto)
+				.orElseThrow(() -> new MovimentoException("Non trovo il movimento da diminuire", idOrdine, idProdotto));
+
+		int attuale = movimento.getQuantita();
+		if (quantita > attuale) {
+			throw new ProdottoException("Non puoi diminuire più della quantità presente nell'ordine", idProdotto);
+		}
+
+		int aggiunta = stockRepository.aggiungiQuantitaProdotto(quantita, idProdotto);
+		if (aggiunta == 0) {
+			throw new MagazzinoException("Non sono riuscito a ripristinare il magazzino durante la diminuzione prodotto",
+					idProdotto, quantita);
+		}
+
+		int nuovaQuantita = attuale - quantita;
+
+		if (nuovaQuantita == 0) {
+			movimentoRepository.delete(movimento);
+			ordine.getMovimento().remove(movimento);
+		} else {
+			movimento.modificaQuantita(nuovaQuantita);
+		}
+
+		return ordineMapper.toDto(ordine.getOrdineId(), ordine.getMovimento().stream().toList());
+	}
+
+
 
 	private ProdottoConQuantitaResponseDto creazioneProdotto(MovimentoEntity movimento)
 	{

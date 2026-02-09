@@ -67,7 +67,7 @@ public class OrdineControllerIntegrationTest extends ControllerBaseConfig {
 						.withBasicAuth("prova1@prova.com","prova")
 						.exchange(
 						"/api/ordine/{id}/prodotti",
-						HttpMethod.PUT,
+						HttpMethod.PATCH,
 						new HttpEntity<>(request),
 						OrdineResponseDto.class,
 						id
