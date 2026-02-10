@@ -152,7 +152,6 @@
   - Gestire correttamente accessi concorrenti
 - È stato sviluppato un test di concorrenza
 - Il test verifica il comportamento in caso di due thread che modificano contemporaneamente lo stock
-- Per eseguire i test di concorrenza è necessario avere Docker attivo
 
 ---
 
