@@ -1,4 +1,4 @@
-# Ecommerce – Test Pratico Java
+# Ecommerce
 
 ## Entità del Dominio
 
